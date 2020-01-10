@@ -1,6 +1,7 @@
 /[Aa]ssets/Mods/*
 /[Aa]ssets/ShaderForge/
 /[Aa]ssets/ShaderForge.meta
+/[Aa]ssets/Shaders/*.meta
 
 # This .gitignore file should be placed at the root of your Unity project directory
 #
