@@ -1,0 +1,5 @@
+<mod_settings>
+  <assetBundles>
+    <bundle path="chara\mt_eye_00.unity3d" randomizeCAB="true" />
+  </assetBundles>
+</mod_settings>
