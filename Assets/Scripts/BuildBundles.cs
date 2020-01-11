@@ -3,13 +3,14 @@ using Ionic.Zip;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
+using System.Xml.Linq;
 using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
-using System.Xml;
-using System.Xml.Linq;
 
 namespace IllusionMods.KoikatuModdingTools
 {
@@ -24,9 +25,11 @@ namespace IllusionMods.KoikatuModdingTools
 
         const string BuildPath = @"Build\abdata";
         const string ModsPath = @"Assets\Mods";
+        const string ExamplesPath = @"Assets\Examples";
         const string SB3UtilityScriptPath = @"Tools\SB3UGS\SB3UtilityScript.exe";
         private static readonly Dictionary<string, string> ShaderABs = new Dictionary<string, string>() { { "Shader Forge/main_item", "chara/ao_arm_00.unity3d" } };
         private static readonly HashSet<string> GameNameList = new HashSet<string>() { "koikatsu", "koikatu", "コイカツ" };
+        private static readonly RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
 
         [MenuItem("Assets/Build All Asset Bundles")]
         [MenuItem("Build/Build All Asset Bundles")]
@@ -41,11 +44,11 @@ namespace IllusionMods.KoikatuModdingTools
             BuildPipeline.BuildAssetBundles(BuildPath, BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.ForceRebuildAssetBundle, BuildTarget.StandaloneWindows64);
 
             //Generate and run the script to replace shader references            
-            Debug.Log("Generating shader replacement script...");
+            Debug.Log("Generating SB3UGS script...");
             string script = GenerateScript();
             if (script != "")
             {
-                Debug.Log("Running shader replacement script...");
+                Debug.Log("Running SB3UGS script...");
                 RunScript(script);
             }
 
@@ -218,6 +221,7 @@ namespace IllusionMods.KoikatuModdingTools
         private static string GenerateScript()
         {
             bool wroteScript = false;
+            var bundlesToRandomize = GetBundlesToRandomize();
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("LoadPlugin(PluginDirectory+\"UnityPlugin.dll\")");
 
@@ -226,9 +230,14 @@ namespace IllusionMods.KoikatuModdingTools
 
             foreach (var file in di.GetFiles("*.unity3d", SearchOption.AllDirectories))
             {
+                bool doCABRandomization = false;
                 var bundlePath = file.FullName;
                 var bundle = AssetBundle.LoadFromFile(bundlePath);
                 var gameObjects = bundle.LoadAllAssets<GameObject>();
+
+                var bundlePathShort = bundlePath.Remove(0, bundlePath.IndexOf(BuildPath)).Replace(BuildPath + @"\", "");
+                if (bundlesToRandomize.Contains(bundlePathShort))
+                    doCABRandomization = true;
 
                 foreach (var gameObject in gameObjects)
                 {
@@ -266,6 +275,12 @@ namespace IllusionMods.KoikatuModdingTools
                                 sb.AppendLine("");
                                 sb.AppendLine("sh = unityEditorShaderAB.LoadWhenNeeded(componentIndex=shaderIndexShaderAB)");
                                 sb.AppendLine("animatorEditorMainAB.SetMaterialShader(id=0, shader=sh)");
+                                if (doCABRandomization)
+                                {
+                                    var cab = GetRandomCABString();
+                                    sb.AppendLine("unityEditorMainAB.RenameCabinet(cabinetIndex=0, name=\"" + cab + "\")");
+                                    doCABRandomization = false;
+                                }
                                 sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
                                 wroteScript = true;
                             }
@@ -273,12 +288,20 @@ namespace IllusionMods.KoikatuModdingTools
                     }
                     UnityEngine.Object.DestroyImmediate(go);
                 }
+                if (doCABRandomization)
+                {
+                    var cab = GetRandomCABString();
+                    sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + bundlePath + "\")");
+                    sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
+                    sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
+                    sb.AppendLine("unityEditorMainAB.RenameCabinet(cabinetIndex=0, name=\"" + cab + "\")");
+                    sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
+
+                }
             }
 
             if (wroteScript)
                 return sb.ToString();
-            else
-                Debug.Log("No shaders found to replace.");
 
             return "";
         }
@@ -292,6 +315,40 @@ namespace IllusionMods.KoikatuModdingTools
             string sb3u = root + SB3UtilityScriptPath;
 
             System.Diagnostics.Process.Start("\"" + sb3u + "\"", "\"" + output + "\"");
+        }
+
+        private static HashSet<string> GetBundlesToRandomize()
+        {
+            HashSet<string> randomizedBundles = new HashSet<string>();
+            var di = new DirectoryInfo(ModsPath);
+            foreach (var file in di.GetFiles("mod_settings.xml", SearchOption.AllDirectories))
+            {
+                XDocument mod_settings = XDocument.Load(file.FullName);
+                foreach (var element in mod_settings.Root.Element("assetBundles").Elements("bundle"))
+                    if (element.Attribute("path") != null && element.Attribute("randomizeCAB") != null)
+                        if (element.Attribute("randomizeCAB").Value.ToLower() == "true" && element.Attribute("path").Value != "")
+                            randomizedBundles.Add(element.Attribute("path").Value.Replace("/", @"\"));
+            }
+
+            di = new DirectoryInfo(ExamplesPath);
+            foreach (var file in di.GetFiles("mod_settings.xml", SearchOption.AllDirectories))
+            {
+                XDocument mod_settings = XDocument.Load(file.FullName);
+                foreach (var element in mod_settings.Root.Element("assetBundles").Elements("bundle"))
+                    if (element.Attribute("path") != null && element.Attribute("randomizeCAB") != null)
+                        if (element.Attribute("randomizeCAB").Value.ToLower() == "true" && element.Attribute("path").Value != "")
+                            randomizedBundles.Add(element.Attribute("path").Value.Replace("/", @"\"));
+            }
+
+            return randomizedBundles;
+        }
+
+        private static string GetRandomCABString()
+        {
+            var rnbuf = new byte[16];
+            rng.GetBytes(rnbuf);
+            string CAB = "CAB-" + string.Concat(rnbuf.Select((x) => ((int)x).ToString("X2")).ToArray()).ToLower();
+            return CAB;
         }
 
         public static string GetProjectPath()
