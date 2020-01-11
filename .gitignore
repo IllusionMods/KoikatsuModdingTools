@@ -1,4 +1,5 @@
 /[Aa]ssets/Mods/*
+!/[Aa]ssets/Mods/readme.txt
 /[Aa]ssets/ShaderForge/
 /[Aa]ssets/ShaderForge.meta
 /[Aa]ssets/Shaders/*.meta
