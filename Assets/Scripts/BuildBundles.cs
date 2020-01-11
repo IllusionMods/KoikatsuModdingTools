@@ -138,6 +138,7 @@ namespace IllusionMods.KoikatuModdingTools
             }
             else
                 zipFileName = modGUID;
+            string zipFileNamePrexix = zipFileName;
             if (modVersion != "")
                 zipFileName += " v" + modVersion;
             zipFileName += ".zipmod";
@@ -190,10 +191,22 @@ namespace IllusionMods.KoikatuModdingTools
 
             if (CopyModToGameFolder)
             {
-                string copyPath = Path.Combine(KoikatsuInstallPath, "mods");
-                copyPath = Path.Combine(copyPath, zipFileName);
-                File.Delete(copyPath);
-                File.Copy(zipPath, copyPath);
+                var modsFolder = Path.Combine(KoikatsuInstallPath, "mods");
+                var copyPath = Path.Combine(modsFolder, zipFileName);
+                di = new DirectoryInfo(modsFolder);
+                if (di.Exists)
+                {
+                    Debug.Log(zipFileNamePrexix);
+                    foreach (var file in di.GetFiles("*.zipmod"))
+                    {
+                        Debug.Log(file.Name);
+                        if (file.Name.StartsWith(zipFileNamePrexix))
+                            file.Delete();
+                    }
+                    File.Copy(zipPath, copyPath);
+                }
+                else
+                    Debug.Log("Mods folder not found, could not copy .zipmod files to game install.");
             }
 
             Debug.Log("Mod built sucessfully.");
