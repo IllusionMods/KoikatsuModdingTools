@@ -84,6 +84,10 @@ namespace IllusionMods.KoikatuModdingTools
             }
         }
 
+        /// <summary>
+        /// Packs up a mod including its manifest.xml, list files, and asset bundles. Copies the mod to the user's install folder.
+        /// </summary>
+        /// <param name="projectPath">Path of the project containing the mod, manifest.xml should be in the root.</param>
         private static void BuildSingleMod(string projectPath)
         {
             string manifestPath = Path.Combine(projectPath, "manifest.xml");
@@ -216,7 +220,8 @@ namespace IllusionMods.KoikatuModdingTools
         }
 
         /// <summary>
-        /// Look through the asset bundles, find all materials that have a Koikatsu shader, generate a script that will replace it with a reference to the real shader
+        /// Look through the asset bundles, find all materials that have a Koikatsu shader, generate a script that will replace it with a reference to the real shader.
+        /// Also randomized CAB-strings if necessary.
         /// </summary>
         private static string GenerateScript()
         {
@@ -306,6 +311,10 @@ namespace IllusionMods.KoikatuModdingTools
             return "";
         }
 
+        /// <summary>
+        /// Sends a string to SB3UGS to be run.
+        /// </summary>
+        /// <param name="script">String containing the script.</param>
         private static void RunScript(string script)
         {
             string output = BuildPath + "/output.txt";
@@ -317,6 +326,9 @@ namespace IllusionMods.KoikatuModdingTools
             System.Diagnostics.Process.Start("\"" + sb3u + "\"", "\"" + output + "\"");
         }
 
+        /// <summary>
+        /// Get a list of asset bundles that need to have their CAB-string randomized
+        /// </summary>
         private static HashSet<string> GetBundlesToRandomize()
         {
             HashSet<string> randomizedBundles = new HashSet<string>();
@@ -343,6 +355,9 @@ namespace IllusionMods.KoikatuModdingTools
             return randomizedBundles;
         }
 
+        /// <summary>
+        /// Generate a random CAB string.
+        /// </summary>
         private static string GetRandomCABString()
         {
             var rnbuf = new byte[16];
@@ -351,6 +366,9 @@ namespace IllusionMods.KoikatuModdingTools
             return CAB;
         }
 
+        /// <summary>
+        /// Get the path of the currently selected folder.
+        /// </summary>
         public static string GetProjectPath()
         {
             try
