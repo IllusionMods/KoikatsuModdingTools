@@ -1,26 +1,21 @@
 using AssetBundleBrowser.AssetBundleDataSource;
+using IllusionMods.KoikatuModdingTools;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEditor;
 using UnityEngine;
-using IllusionMods.KoikatuModdingTools;
 
 namespace AssetBundleBrowser
 {
     [System.Serializable]
     internal class AssetBundleBuildTab
     {
-        const string k_BuildPrefPrefix = "ABBBuild:";
-
-        private readonly string m_streamingPath = "Assets/StreamingAssets";
-
         [SerializeField]
         private bool m_AdvancedSettings;
 
         [SerializeField]
         private Vector2 m_ScrollPosition;
-
 
         class ToggleData
         {
@@ -37,8 +32,6 @@ namespace AssetBundleBrowser
                 content = new GUIContent(title, tooltip);
                 option = opt;
             }
-            //internal string prefsKey
-            //{ get { return k_BuildPrefPrefix + content.text; } }
             internal bool state;
             internal GUIContent content;
             internal BuildAssetBundleOptions option;
@@ -51,9 +44,8 @@ namespace AssetBundleBrowser
 
         List<ToggleData> m_ToggleData;
         ToggleData m_ForceRebuild;
-        ToggleData m_CopyToStreaming;
-        GUIContent m_TargetContent;
         GUIContent m_CompressionContent;
+
         internal enum CompressOptions
         {
             Uncompressed = 0,
@@ -68,7 +60,6 @@ namespace AssetBundleBrowser
             new GUIContent("Chunk Based Compression (LZ4)")
         };
         readonly int[] m_CompressionValues = { 0, 1, 2 };
-
 
         internal AssetBundleBuildTab()
         {
@@ -131,12 +122,6 @@ namespace AssetBundleBrowser
                 BuildAssetBundleOptions.IgnoreTypeTreeChanges));
             m_ToggleData.Add(new ToggleData(
                 false,
-                "Append Hash",
-                "Append the hash to the assetBundle name.",
-                m_UserData.m_OnToggles,
-                BuildAssetBundleOptions.AppendHashToAssetBundleName));
-            m_ToggleData.Add(new ToggleData(
-                false,
                 "Strict Mode",
                 "Do not allow the build to succeed if any errors are reporting during it.",
                 m_UserData.m_OnToggles,
@@ -152,15 +137,9 @@ namespace AssetBundleBrowser
             m_ForceRebuild = new ToggleData(
                 false,
                 "Clear Folders",
-                "Will wipe out all contents of build directory as well as StreamingAssets/AssetBundles if you are choosing to copy build there.",
-                m_UserData.m_OnToggles);
-            m_CopyToStreaming = new ToggleData(
-                false,
-                "Copy to StreamingAssets",
-                "After build completes, will copy all build content to " + m_streamingPath + " for use in stand-alone player.",
+                "Will wipe out all contents of build directory.",
                 m_UserData.m_OnToggles);
 
-            m_TargetContent = new GUIContent("Build Target", "Choose target platform to build for.");
             m_CompressionContent = new GUIContent("Compression", "Choose no compress, standard (LZMA), or chunk based (LZ4)");
 
             if (m_UserData.m_UseDefaultPath)
@@ -180,24 +159,7 @@ namespace AssetBundleBrowser
             EditorGUILayout.Space();
             GUILayout.BeginVertical();
 
-            // build target
-            using (new EditorGUI.DisabledScope(!AssetBundleModel.Model.DataSource.CanSpecifyBuildTarget))
-            {
-                ValidBuildTarget tgt = (ValidBuildTarget)EditorGUILayout.EnumPopup(m_TargetContent, m_UserData.m_BuildTarget);
-                if (tgt != m_UserData.m_BuildTarget)
-                {
-                    m_UserData.m_BuildTarget = tgt;
-                    if (m_UserData.m_UseDefaultPath)
-                    {
-                        m_UserData.m_OutputPath = "AssetBundles/";
-                        m_UserData.m_OutputPath += m_UserData.m_BuildTarget.ToString();
-                        //EditorUserBuildSettings.SetPlatformSettings(EditorUserBuildSettings.activeBuildTarget.ToString(), "AssetBundleOutputPath", m_OutputPath);
-                    }
-                }
-            }
-
-
-            ////output path
+            //output path
             using (new EditorGUI.DisabledScope(!AssetBundleModel.Model.DataSource.CanSpecifyBuildOutputDirectory))
             {
                 EditorGUILayout.Space();
@@ -207,7 +169,6 @@ namespace AssetBundleBrowser
                 {
                     m_UserData.m_UseDefaultPath = false;
                     m_UserData.m_OutputPath = newPath;
-                    //EditorUserBuildSettings.SetPlatformSettings(EditorUserBuildSettings.activeBuildTarget.ToString(), "AssetBundleOutputPath", m_OutputPath);
                 }
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();
@@ -216,8 +177,6 @@ namespace AssetBundleBrowser
                     BrowseForFolder();
                 if (GUILayout.Button("Reset", GUILayout.MaxWidth(75f)))
                     ResetPathToDefault();
-                //if (string.IsNullOrEmpty(m_OutputPath))
-                //    m_OutputPath = EditorUserBuildSettings.GetPlatformSettings(EditorUserBuildSettings.activeBuildTarget.ToString(), "AssetBundleOutputPath");
                 GUILayout.EndHorizontal();
                 EditorGUILayout.Space();
 
@@ -231,17 +190,6 @@ namespace AssetBundleBrowser
                     else
                         m_UserData.m_OnToggles.Remove(m_ForceRebuild.content.text);
                     m_ForceRebuild.state = newState;
-                }
-                newState = GUILayout.Toggle(
-                    m_CopyToStreaming.state,
-                    m_CopyToStreaming.content);
-                if (newState != m_CopyToStreaming.state)
-                {
-                    if (newState)
-                        m_UserData.m_OnToggles.Add(m_CopyToStreaming.content.text);
-                    else
-                        m_UserData.m_OnToggles.Remove(m_CopyToStreaming.content.text);
-                    m_CopyToStreaming.state = newState;
                 }
             }
 
@@ -308,20 +256,13 @@ namespace AssetBundleBrowser
 
                 if (m_ForceRebuild.state)
                 {
-                    string message = "Do you want to delete all files in the directory " + m_UserData.m_OutputPath;
-                    if (m_CopyToStreaming.state)
-                        message += " and " + m_streamingPath;
-                    message += "?";
+                    string message = "Do you want to delete all files in the directory " + m_UserData.m_OutputPath + "?";
                     if (EditorUtility.DisplayDialog("File delete confirmation", message, "Yes", "No"))
                     {
                         try
                         {
                             if (Directory.Exists(m_UserData.m_OutputPath))
                                 Directory.Delete(m_UserData.m_OutputPath, true);
-
-                            if (m_CopyToStreaming.state)
-                                if (Directory.Exists(m_streamingPath))
-                                    Directory.Delete(m_streamingPath, true);
                         }
                         catch (System.Exception e)
                         {
@@ -352,7 +293,7 @@ namespace AssetBundleBrowser
 
             buildInfo.outputDirectory = m_UserData.m_OutputPath;
             buildInfo.options = opt;
-            buildInfo.buildTarget = (BuildTarget)m_UserData.m_BuildTarget;
+            buildInfo.buildTarget = BuildTarget.StandaloneWindows;
             buildInfo.onBuild = (assetBundleName) =>
             {
                 if (m_InspectTab == null)
@@ -365,34 +306,7 @@ namespace AssetBundleBrowser
 
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
 
-            if (m_CopyToStreaming.state)
-                DirectoryCopy(m_UserData.m_OutputPath, m_streamingPath);
-
             SB3UScript.BuildAndRunScripts();
-        }
-
-        private static void DirectoryCopy(string sourceDirName, string destDirName)
-        {
-            // If the destination directory doesn't exist, create it.
-            if (!Directory.Exists(destDirName))
-            {
-                Directory.CreateDirectory(destDirName);
-            }
-
-            foreach (string folderPath in Directory.GetDirectories(sourceDirName, "*", SearchOption.AllDirectories))
-            {
-                if (!Directory.Exists(folderPath.Replace(sourceDirName, destDirName)))
-                    Directory.CreateDirectory(folderPath.Replace(sourceDirName, destDirName));
-            }
-
-            foreach (string filePath in Directory.GetFiles(sourceDirName, "*.*", SearchOption.AllDirectories))
-            {
-                var fileDirName = Path.GetDirectoryName(filePath).Replace("\\", "/");
-                var fileName = Path.GetFileName(filePath);
-                string newFilePath = Path.Combine(fileDirName.Replace(sourceDirName, destDirName), fileName);
-
-                File.Copy(filePath, newFilePath, true);
-            }
         }
 
         private void BrowseForFolder()
@@ -413,9 +327,7 @@ namespace AssetBundleBrowser
         private void ResetPathToDefault()
         {
             m_UserData.m_UseDefaultPath = true;
-            m_UserData.m_OutputPath = "AssetBundles/";
-            m_UserData.m_OutputPath += m_UserData.m_BuildTarget.ToString();
-            //EditorUserBuildSettings.SetPlatformSettings(EditorUserBuildSettings.activeBuildTarget.ToString(), "AssetBundleOutputPath", m_OutputPath);
+            m_UserData.m_OutputPath = "Build/abdata";
         }
 
         //Note: this is the provided BuildTarget enum with some entries removed as they are invalid in the dropdown
