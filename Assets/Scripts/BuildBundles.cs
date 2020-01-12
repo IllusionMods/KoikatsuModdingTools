@@ -41,7 +41,7 @@ namespace IllusionMods.KoikatuModdingTools
 
             //Build the asset bundles
             Debug.Log("Building asset bundles...");
-            BuildPipeline.BuildAssetBundles(BuildPath, BuildAssetBundleOptions.ChunkBasedCompression | BuildAssetBundleOptions.ForceRebuildAssetBundle, BuildTarget.StandaloneWindows64);
+            BuildPipeline.BuildAssetBundles(BuildPath, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows64);
 
             //Generate and run the script to replace shader references            
             Debug.Log("Generating SB3UGS script...");
@@ -51,15 +51,6 @@ namespace IllusionMods.KoikatuModdingTools
                 Debug.Log("Running SB3UGS script...");
                 RunScript(script);
             }
-
-            Debug.Log("Cleaning up...");
-            //Delete ABs containing dummy shaders
-            foreach (var ab in ShaderABs.Values)
-                File.Delete(Path.Combine(BuildPath, ab));
-
-            //Delete useless .manifest files
-            foreach (var file in di.GetFiles("*.manifest", SearchOption.AllDirectories))
-                file.Delete();
 
             Debug.Log("Finished building asset bundles.");
         }
