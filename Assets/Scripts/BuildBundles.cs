@@ -27,7 +27,7 @@ namespace IllusionMods.KoikatuModdingTools
         const string ModsPath = @"Assets\Mods";
         const string ExamplesPath = @"Assets\Examples";
         const string SB3UtilityScriptPath = @"Tools\SB3UGS\SB3UtilityScript.exe";
-        private static readonly Dictionary<string, string> ShaderABs = new Dictionary<string, string>() { { "Shader Forge/main_item", "chara/ao_arm_00.unity3d" } };
+        private static readonly Dictionary<string, string> ShaderABs = new Dictionary<string, string>() { { "Shader Forge/main_item", @"chara\ao_arm_00.unity3d" } };
         private static readonly HashSet<string> GameNameList = new HashSet<string>() { "koikatsu", "koikatu", "コイカツ" };
         private static readonly RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
 
@@ -221,79 +221,60 @@ namespace IllusionMods.KoikatuModdingTools
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("LoadPlugin(PluginDirectory+\"UnityPlugin.dll\")");
 
-            var di = new DirectoryInfo(BuildPath);
-            if (!di.Exists) return "";
-
-            foreach (var file in di.GetFiles("*.unity3d", SearchOption.AllDirectories))
+            foreach (var assetguid in AssetDatabase.FindAssets("t:Prefab", new string[] { ModsPath, ExamplesPath }))
             {
-                bool doCABRandomization = false;
-                var bundlePath = file.FullName;
-                var bundle = AssetBundle.LoadFromFile(bundlePath);
-                var gameObjects = bundle.LoadAllAssets<GameObject>();
+                string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
+                string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
+                string mainABPath = new FileInfo(Path.Combine(BuildPath, modAB)).FullName;
+                var go = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
 
-                var bundlePathShort = bundlePath.Remove(0, bundlePath.IndexOf(BuildPath)).Replace(BuildPath + @"\", "");
-                if (bundlesToRandomize.Contains(bundlePathShort))
-                    doCABRandomization = true;
-
-                foreach (var gameObject in gameObjects)
+                var renderers = go.GetComponentsInChildren<Renderer>();
+                foreach (var renderer in renderers)
                 {
-                    GameObject go = UnityEngine.Object.Instantiate(bundle.LoadAsset<GameObject>(gameObject.name));
-                    go.name = go.name.Replace("(Clone)", "");
-
-                    var renderers = go.GetComponentsInChildren<Renderer>();
-                    foreach (var renderer in renderers)
+                    foreach (var material in renderer.sharedMaterials)
                     {
-                        foreach (var material in renderer.sharedMaterials)
+                        string materialName = material.name;
+                        string shaderName = material.shader.name;
+
+                        string shaderAB;
+                        if (ShaderABs.TryGetValue(shaderName, out shaderAB))
                         {
-                            string materialName = material.name;
-                            string shaderName = material.shader.name;
+                            string shaderABPath = KoikatsuInstallPath + "/" + "abdata" + "/" + shaderAB;
 
-                            string shaderAB;
-                            if (ShaderABs.TryGetValue(shaderName, out shaderAB))
-                            {
-                                string shaderABPath = KoikatsuInstallPath + "/" + "abdata" + "/" + shaderAB;
+                            sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
+                            sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
+                            sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
+                            sb.AppendLine("animatorIndexMainAB = unityEditorMainAB.ComponentIndex(name=\"" + go.name + "\", clsIDname=\"GameObject\")");
 
-                                sb.AppendLine();
-                                sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + bundlePath + "\")");
-                                sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
-                                sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
-                                sb.AppendLine("animatorIndexMainAB = unityEditorMainAB.ComponentIndex(name=\"" + go.name + "\", clsIDname=\"GameObject\")");
-                                sb.AppendLine("");
-                                sb.AppendLine("unityParserShaderAB = OpenUnity3d(path=\"" + shaderABPath + "\")");
-                                sb.AppendLine("unityEditorShaderAB = Unity3dEditor(parser=unityParserShaderAB)");
-                                sb.AppendLine("unityEditorShaderAB.GetAssetNames(filter=True)");
-                                sb.AppendLine("shaderIndexShaderAB = unityEditorShaderAB.ComponentIndex(name=\"" + shaderName + "\", clsIDname=\"Shader\")");
-                                sb.AppendLine("");
-                                sb.AppendLine("virtualAnimatorMainAB = unityEditorMainAB.OpenVirtualAnimator(componentIndex=animatorIndexMainAB)");
-                                sb.AppendLine("animatorEditorMainAB = AnimatorEditor(parser=virtualAnimatorMainAB)");
-                                sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
-                                sb.AppendLine("unityEditorShaderAB.GetAssetNames(filter=True)");
-                                sb.AppendLine("");
-                                sb.AppendLine("sh = unityEditorShaderAB.LoadWhenNeeded(componentIndex=shaderIndexShaderAB)");
-                                sb.AppendLine("animatorEditorMainAB.SetMaterialShader(id=0, shader=sh)");
-                                if (doCABRandomization)
-                                {
-                                    var cab = GetRandomCABString();
-                                    sb.AppendLine("unityEditorMainAB.RenameCabinet(cabinetIndex=0, name=\"" + cab + "\")");
-                                    doCABRandomization = false;
-                                }
-                                sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
-                                wroteScript = true;
-                            }
+                            sb.AppendLine("unityParserShaderAB = OpenUnity3d(path=\"" + shaderABPath + "\")");
+                            sb.AppendLine("unityEditorShaderAB = Unity3dEditor(parser=unityParserShaderAB)");
+                            sb.AppendLine("unityEditorShaderAB.GetAssetNames(filter=True)");
+                            sb.AppendLine("shaderIndexShaderAB = unityEditorShaderAB.ComponentIndex(name=\"" + shaderName + "\", clsIDname=\"Shader\")");
+
+                            sb.AppendLine("virtualAnimatorMainAB = unityEditorMainAB.OpenVirtualAnimator(componentIndex=animatorIndexMainAB)");
+                            sb.AppendLine("animatorEditorMainAB = AnimatorEditor(parser=virtualAnimatorMainAB)");
+                            sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
+                            sb.AppendLine("unityEditorShaderAB.GetAssetNames(filter=True)");
+
+                            sb.AppendLine("sh = unityEditorShaderAB.LoadWhenNeeded(componentIndex=shaderIndexShaderAB)");
+                            sb.AppendLine("animatorEditorMainAB.SetMaterialShader(id=0, shader=sh)");
+                            sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
+                            wroteScript = true;
                         }
                     }
-                    UnityEngine.Object.DestroyImmediate(go);
                 }
-                if (doCABRandomization)
-                {
-                    var cab = GetRandomCABString();
-                    sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + bundlePath + "\")");
-                    sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
-                    sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
-                    sb.AppendLine("unityEditorMainAB.RenameCabinet(cabinetIndex=0, name=\"" + cab + "\")");
-                    sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
+            }
 
-                }
+            foreach (var modAB in bundlesToRandomize)
+            {
+                string mainABPath = new FileInfo(Path.Combine(BuildPath, modAB)).FullName;
+                var cab = GetRandomCABString();
+                sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
+                sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
+                sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
+                sb.AppendLine("unityEditorMainAB.RenameCabinet(cabinetIndex=0, name=\"" + cab + "\")");
+                sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
+                wroteScript = true;
             }
 
             if (wroteScript)
