@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using Ionic.Zip;
+﻿using Ionic.Zip;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,28 +10,56 @@ using Debug = UnityEngine.Debug;
 
 namespace IllusionMods.KoikatuModdingTools
 {
-    /// <summary>
-    /// Adds a menu item to build asset bundles
-    /// </summary>
-    public class MenuItems
+    public static class Zipmod
     {
-        [MenuItem("Assets/Build Mod")]
-        internal static void BuildMod()
+        private static string BuildPath;
+        private static string KoikatsuPath;
+        private static bool CopyMods;
+
+        public static void BuildSingleMod(string buildPath, string koikatsuPath, bool copyMods)
         {
+            BuildPath = buildPath;
+            KoikatsuPath = koikatsuPath;
+            CopyMods = copyMods;
+
             string projectPath = GetProjectPath();
-            BuildSingleMod(projectPath);
+            if (BuildSingleModInternal(projectPath))
+                Debug.Log("Mod built sucessfully.");
         }
 
-        [MenuItem("Assets/Build All Mods")]
-        [MenuItem("Build/Build All Mods")]
-        internal static void BuildMods()
+        /// <summary>
+        /// Pack up all mods including their manifest.xml, list files, and asset bundles.
+        /// </summary>
+        /// <param name="buildPath"></param>
+        public static void BuildAllMods(string buildPath, string koikatsuPath, bool copyMods)
         {
+            BuildPath = buildPath;
+            KoikatsuPath = koikatsuPath;
+            CopyMods = copyMods;
+
+            bool success = true;
+            int count = 0;
             var di = new DirectoryInfo(Constants.ModsPath);
             foreach (var file in di.GetFiles("manifest.xml", SearchOption.AllDirectories))
             {
                 string projectPath = file.Directory.FullName;
                 projectPath = projectPath.Substring(projectPath.IndexOf(Constants.ModsPath));
-                BuildSingleMod(projectPath);
+                bool built = BuildSingleModInternal(projectPath);
+                if (built)
+                    count++;
+                else
+                    success = false;
+            }
+
+            if (count == 0)
+                Debug.Log("No mods were built.");
+            else if (success)
+            {
+                string s = " was";
+                if (count > 1)
+                    s = "s were";
+
+                Debug.Log(count + " mod" + s + " built sucessfully.");
             }
         }
 
@@ -40,7 +67,7 @@ namespace IllusionMods.KoikatuModdingTools
         /// Packs up a mod including its manifest.xml, list files, and asset bundles. Copies the mod to the user's install folder.
         /// </summary>
         /// <param name="projectPath">Path of the project containing the mod, manifest.xml should be in the root.</param>
-        private static void BuildSingleMod(string projectPath)
+        private static bool BuildSingleModInternal(string projectPath)
         {
             string manifestPath = Path.Combine(projectPath, "manifest.xml");
             string makerListPath = Path.Combine(projectPath, @"List\Maker");
@@ -50,11 +77,10 @@ namespace IllusionMods.KoikatuModdingTools
             HashSet<string> makerListFiles = new HashSet<string>();
             HashSet<string> studioListFiles = new HashSet<string>();
 
-            Debug.Log("Building zipmod...");
             if (!File.Exists(manifestPath))
             {
                 Debug.Log("manifest.xml does not exist in the directory, mod creation aborted.");
-                return;
+                return false;
             }
 
             //Read the manifest.xml
@@ -78,7 +104,7 @@ namespace IllusionMods.KoikatuModdingTools
                 if (!Constants.GameNameList.Contains(modGame.ToLower().Replace("!", "")))
                 {
                     Debug.Log("The manifest.xml lists a game other than Koikatsu, this mod will not be built.");
-                    return;
+                    return false;
                 }
                 else
                     modGame = "KK";
@@ -109,7 +135,7 @@ namespace IllusionMods.KoikatuModdingTools
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
                 string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
                 if (modAB != string.Empty)
-                    modABs.Add(Path.Combine(Constants.BuildPath, modAB));
+                    modABs.Add(Path.Combine(BuildPath, modAB));
             }
 
             var di = new DirectoryInfo(makerListPath);
@@ -148,17 +174,15 @@ namespace IllusionMods.KoikatuModdingTools
             zipFile.Save();
             zipFile.Dispose();
 
-            if (Constants.CopyModToGameFolder)
+            if (CopyMods)
             {
-                var modsFolder = Path.Combine(Constants.KoikatsuInstallPath, "mods");
+                var modsFolder = Path.Combine(KoikatsuPath, "mods");
                 var copyPath = Path.Combine(modsFolder, zipFileName);
                 di = new DirectoryInfo(modsFolder);
                 if (di.Exists)
                 {
-                    Debug.Log(zipFileNamePrexix);
                     foreach (var file in di.GetFiles("*.zipmod"))
                     {
-                        Debug.Log(file.Name);
                         if (file.Name.StartsWith(zipFileNamePrexix))
                             file.Delete();
                     }
@@ -167,8 +191,7 @@ namespace IllusionMods.KoikatuModdingTools
                 else
                     Debug.Log("Mods folder not found, could not copy .zipmod files to game install.");
             }
-
-            Debug.Log("Mod built sucessfully.");
+            return true;
         }
 
         /// <summary>
@@ -192,4 +215,3 @@ namespace IllusionMods.KoikatuModdingTools
         }
     }
 }
-#endif

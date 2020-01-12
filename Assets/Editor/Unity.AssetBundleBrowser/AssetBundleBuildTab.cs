@@ -11,6 +11,8 @@ namespace AssetBundleBrowser
     [System.Serializable]
     internal class AssetBundleBuildTab
     {
+        const string KoikatsuPathDefault = "C:/Illusion/Koikatu";
+
         [SerializeField]
         private bool m_AdvancedSettings;
 
@@ -67,11 +69,13 @@ namespace AssetBundleBrowser
             m_UserData = new BuildTabData();
             m_UserData.m_OnToggles = new List<string>();
             m_UserData.m_UseDefaultPath = true;
+            if (m_UserData.m_KoikatsuPath == null || m_UserData.m_KoikatsuPath == "")
+                m_UserData.m_KoikatsuPath = KoikatsuPathDefault;
         }
 
         internal void OnDisable()
         {
-            var dataPath = System.IO.Path.GetFullPath(".");
+            var dataPath = Path.GetFullPath(".");
             dataPath = dataPath.Replace("\\", "/");
             dataPath += "/Library/AssetBundleBrowserBuild.dat";
 
@@ -87,7 +91,7 @@ namespace AssetBundleBrowser
             m_InspectTab = (parent as AssetBundleBrowserMain).m_InspectTab;
 
             //LoadData...
-            var dataPath = System.IO.Path.GetFullPath(".");
+            var dataPath = Path.GetFullPath(".");
             dataPath = dataPath.Replace("\\", "/");
             dataPath += "/Library/AssetBundleBrowserBuild.dat";
 
@@ -150,18 +154,21 @@ namespace AssetBundleBrowser
 
         internal void OnGUI()
         {
+            if (m_UserData.m_KoikatsuPath == null || m_UserData.m_KoikatsuPath == "")
+                m_UserData.m_KoikatsuPath = KoikatsuPathDefault;
+
             m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition);
             bool newState = false;
             var centeredStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
             centeredStyle.alignment = TextAnchor.UpperCenter;
-            GUILayout.Label(new GUIContent("Example build setup"), centeredStyle);
+            GUILayout.Label(new GUIContent("Asset Bundle And Mod Build Setup"), centeredStyle);
             //basic options
             EditorGUILayout.Space();
             GUILayout.BeginVertical();
 
-            //output path
             using (new EditorGUI.DisabledScope(!AssetBundleModel.Model.DataSource.CanSpecifyBuildOutputDirectory))
             {
+                //output path
                 EditorGUILayout.Space();
                 GUILayout.BeginHorizontal();
                 var newPath = EditorGUILayout.TextField("Output Path", m_UserData.m_OutputPath);
@@ -173,10 +180,25 @@ namespace AssetBundleBrowser
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                if (GUILayout.Button("Browse", GUILayout.MaxWidth(75f)))
-                    BrowseForFolder();
                 if (GUILayout.Button("Reset", GUILayout.MaxWidth(75f)))
                     ResetPathToDefault();
+                if (GUILayout.Button("Browse", GUILayout.MaxWidth(75f)))
+                    BrowseForFolder();
+                GUILayout.EndHorizontal();
+                EditorGUILayout.Space();
+
+                //Koikatsu path
+                GUILayout.BeginHorizontal();
+                var newKKPath = EditorGUILayout.TextField("Koikatsu Path", m_UserData.m_KoikatsuPath);
+                if (!string.IsNullOrEmpty(newKKPath) && newKKPath != m_UserData.m_KoikatsuPath)
+                {
+                    m_UserData.m_KoikatsuPath = newKKPath;
+                }
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+                if (GUILayout.Button("Browse", GUILayout.MaxWidth(75f)))
+                    BrowseForKoikatsuFolder();
                 GUILayout.EndHorizontal();
                 EditorGUILayout.Space();
 
@@ -191,6 +213,12 @@ namespace AssetBundleBrowser
                         m_UserData.m_OnToggles.Remove(m_ForceRebuild.content.text);
                     m_ForceRebuild.state = newState;
                 }
+
+                bool copyMods = GUILayout.Toggle(
+                    m_UserData.m_CopyMods,
+                    new GUIContent("Copy Mods", "Copy built zipmods to the Koikatsu mods folder"));
+                if (copyMods != m_UserData.m_CopyMods)
+                    m_UserData.m_CopyMods = copyMods;
             }
 
             // advanced options
@@ -237,6 +265,17 @@ namespace AssetBundleBrowser
             {
                 EditorApplication.delayCall += ExecuteBuild;
             }
+
+            if (GUILayout.Button("Build All Zipmods"))
+            {
+                EditorApplication.delayCall += delegate { Zipmod.BuildAllMods(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath, m_UserData.m_CopyMods); };
+            }
+
+            if (GUILayout.Button("Build Zipmod (Current Folder)"))
+            {
+                EditorApplication.delayCall += delegate { Zipmod.BuildSingleMod(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath, m_UserData.m_CopyMods); };
+            }
+
             GUILayout.EndVertical();
             EditorGUILayout.EndScrollView();
         }
@@ -306,7 +345,7 @@ namespace AssetBundleBrowser
 
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
 
-            SB3UScript.BuildAndRunScripts();
+            SB3UScript.BuildAndRunScripts(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath);
         }
 
         private void BrowseForFolder()
@@ -322,6 +361,14 @@ namespace AssetBundleBrowser
                 m_UserData.m_OutputPath = newPath;
                 //EditorUserBuildSettings.SetPlatformSettings(EditorUserBuildSettings.activeBuildTarget.ToString(), "AssetBundleOutputPath", m_OutputPath);
             }
+        }
+
+        private void BrowseForKoikatsuFolder()
+        {
+            m_UserData.m_UseDefaultPath = false;
+            var newPath = EditorUtility.OpenFolderPanel("Koikatsu Folder", m_UserData.m_KoikatsuPath, string.Empty);
+            if (!string.IsNullOrEmpty(newPath))
+                m_UserData.m_KoikatsuPath = newPath;
         }
 
         private void ResetPathToDefault()
@@ -375,6 +422,8 @@ namespace AssetBundleBrowser
             internal CompressOptions m_Compression = CompressOptions.ChunkBasedCompression;
             internal string m_OutputPath = "Build/abdata";
             internal bool m_UseDefaultPath = false;
+            internal string m_KoikatsuPath = KoikatsuPathDefault;
+            internal bool m_CopyMods = true;
         }
     }
 }

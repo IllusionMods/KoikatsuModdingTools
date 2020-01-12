@@ -12,9 +12,14 @@ namespace IllusionMods.KoikatuModdingTools
     public static class SB3UScript
     {
         private static readonly RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+        private static string BuildPath;
+        private static string KoikatsuPath;
 
-        public static bool BuildAndRunScripts()
+        public static bool BuildAndRunScripts(string buildPath, string koikatsuPath)
         {
+            BuildPath = buildPath;
+            KoikatsuPath = koikatsuPath;
+
             string script = GenerateScript();
             if (script == "")
                 return false;
@@ -38,7 +43,7 @@ namespace IllusionMods.KoikatuModdingTools
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
                 string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
-                string mainABPath = new FileInfo(Path.Combine(Constants.BuildPath, modAB)).FullName;
+                string mainABPath = new FileInfo(Path.Combine(BuildPath, modAB)).FullName;
                 var go = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
 
                 var renderers = go.GetComponentsInChildren<Renderer>();
@@ -52,7 +57,7 @@ namespace IllusionMods.KoikatuModdingTools
                         string shaderAB;
                         if (Constants.ShaderABs.TryGetValue(shaderName, out shaderAB))
                         {
-                            string shaderABPath = Constants.KoikatsuInstallPath + "/" + "abdata" + "/" + shaderAB;
+                            string shaderABPath = KoikatsuPath + "/" + "abdata" + "/" + shaderAB;
 
                             sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
                             sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
@@ -80,7 +85,7 @@ namespace IllusionMods.KoikatuModdingTools
 
             foreach (var modAB in bundlesToRandomize)
             {
-                string mainABPath = new FileInfo(Path.Combine(Constants.BuildPath, modAB)).FullName;
+                string mainABPath = new FileInfo(Path.Combine(BuildPath, modAB)).FullName;
                 var cab = GetRandomCABString();
                 sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
                 sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
@@ -102,7 +107,7 @@ namespace IllusionMods.KoikatuModdingTools
         /// <param name="script">String containing the script.</param>
         private static void RunScript(string script)
         {
-            string output = Constants.BuildPath + "/output.txt";
+            string output = BuildPath + "/output.txt";
             File.WriteAllText(output, script);
             string root = Application.dataPath.Replace("/Assets", "/");
             output = root + output;

@@ -4,11 +4,6 @@ namespace IllusionMods.KoikatuModdingTools
 {
     internal static class Constants
     {
-        //User defined stuff, needs a better home
-        internal const string KoikatsuInstallPath = @"C:\Illusion\Koikatu";
-        internal const bool CopyModToGameFolder = true;
-
-        internal const string BuildPath = @"Build\abdata";
         internal const string ModsPath = @"Assets\Mods";
         internal const string ExamplesPath = @"Assets\Examples";
         internal const string SB3UtilityScriptPath = @"Tools\SB3UGS\SB3UtilityScript.exe";
