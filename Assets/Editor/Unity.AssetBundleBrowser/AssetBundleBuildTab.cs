@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEditor;
 using UnityEngine;
+using IllusionMods.KoikatuModdingTools;
 
 namespace AssetBundleBrowser
 {
@@ -283,9 +284,8 @@ namespace AssetBundleBrowser
                 }
             }
 
-            // build.
             EditorGUILayout.Space();
-            if (GUILayout.Button("Build"))
+            if (GUILayout.Button("Build Asset Bundles"))
             {
                 EditorApplication.delayCall += ExecuteBuild;
             }
@@ -367,6 +367,8 @@ namespace AssetBundleBrowser
 
             if (m_CopyToStreaming.state)
                 DirectoryCopy(m_UserData.m_OutputPath, m_streamingPath);
+
+            SB3UScript.BuildAndRunScripts();
         }
 
         private static void DirectoryCopy(string sourceDirName, string destDirName)
