@@ -148,9 +148,6 @@ namespace IllusionMods.KoikatuModdingTools
                 foreach (var file in di.GetFiles("*.csv", SearchOption.AllDirectories))
                     studioListFiles.Add(file.FullName);
 
-            if (makerListFiles.Count == 0 && studioListFiles.Count == 0)
-                Debug.Log("No list files were found for this mod. If this mod is overriding vanilla assets, no list files are required. Any mod adding new content to maker or studio requires list files");
-
             //Build the zip file
             File.Delete(zipPath);
             ZipFile zipFile = new ZipFile(zipPath, Encoding.UTF8);
@@ -169,7 +166,7 @@ namespace IllusionMods.KoikatuModdingTools
 
             //Add list files
             foreach (var listFile in makerListFiles)
-                zipFile.AddFile(listFile, @"abdata\list\characustom\00\");
+                zipFile.AddFile(listFile, @"abdata\list\characustom\" + modAuthor.ToLower() + @"\");
 
             zipFile.Save();
             zipFile.Dispose();
