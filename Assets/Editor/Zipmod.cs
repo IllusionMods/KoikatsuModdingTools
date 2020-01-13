@@ -1,8 +1,6 @@
 ﻿using Ionic.Zip;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 using UnityEditor;
@@ -22,7 +20,7 @@ namespace IllusionMods.KoikatuModdingTools
             KoikatsuPath = koikatsuPath;
             CopyMods = copyMods;
 
-            string projectPath = GetProjectPath();
+            string projectPath = Shared.GetProjectPath();
             if (BuildSingleModInternal(projectPath))
                 Debug.Log("Mod built sucessfully.");
         }
@@ -189,26 +187,6 @@ namespace IllusionMods.KoikatuModdingTools
                     Debug.Log("Mods folder not found, could not copy .zipmod files to game install.");
             }
             return true;
-        }
-
-        /// <summary>
-        /// Get the path of the currently selected folder.
-        /// </summary>
-        public static string GetProjectPath()
-        {
-            try
-            {
-                var projectBrowserType = Type.GetType("UnityEditor.ProjectBrowser,UnityEditor");
-                var projectBrowser = projectBrowserType.GetField("s_LastInteractedProjectBrowser", BindingFlags.Static | BindingFlags.Public).GetValue(null);
-                var invokeMethod = projectBrowserType.GetMethod("GetActiveFolderPath", BindingFlags.NonPublic | BindingFlags.Instance);
-                return (string)invokeMethod.Invoke(projectBrowser, new object[] { });
-            }
-            catch (Exception exception)
-            {
-                Debug.LogWarning("Error while trying to get current project path.");
-                Debug.LogWarning(exception.Message);
-                return string.Empty;
-            }
         }
     }
 }
