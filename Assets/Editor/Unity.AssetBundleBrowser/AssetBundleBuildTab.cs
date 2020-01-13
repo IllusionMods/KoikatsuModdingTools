@@ -2,6 +2,7 @@ using AssetBundleBrowser.AssetBundleDataSource;
 using IllusionMods.KoikatuModdingTools;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEditor;
 using UnityEngine;
@@ -282,6 +283,8 @@ namespace AssetBundleBrowser
 
         private void ExecuteBuild()
         {
+            var prebuildTime = System.DateTime.Now;
+
             if (AssetBundleModel.Model.DataSource.CanSpecifyBuildOutputDirectory)
             {
                 if (string.IsNullOrEmpty(m_UserData.m_OutputPath))
@@ -343,9 +346,12 @@ namespace AssetBundleBrowser
 
             AssetBundleModel.Model.DataSource.BuildAssetBundles(buildInfo);
 
+            DirectoryInfo di = new DirectoryInfo(buildInfo.outputDirectory);
+            List<string> changedFiles = di.GetFiles("*.unity3d", SearchOption.AllDirectories).Where(x => x.LastWriteTime >= prebuildTime).Select(x => x.FullName).ToList();
+
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
 
-            SB3UScript.BuildAndRunScripts(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath);
+            SB3UScript.BuildAndRunScripts(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath, changedFiles);
         }
 
         private void BrowseForFolder()

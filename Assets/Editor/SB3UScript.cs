@@ -15,12 +15,12 @@ namespace IllusionMods.KoikatuModdingTools
         private static string BuildPath;
         private static string KoikatsuPath;
 
-        public static bool BuildAndRunScripts(string buildPath, string koikatsuPath)
+        public static bool BuildAndRunScripts(string buildPath, string koikatsuPath, List<string> changedFiles)
         {
             BuildPath = buildPath;
             KoikatsuPath = koikatsuPath;
 
-            string script = GenerateScript();
+            string script = GenerateScript(changedFiles);
             if (script == "")
                 return false;
             else
@@ -32,20 +32,23 @@ namespace IllusionMods.KoikatuModdingTools
         /// Look through the asset bundles, find all materials that have a Koikatsu shader, generate a script that will replace it with a reference to the real shader.
         /// Also randomized CAB-strings if necessary.
         /// </summary>
-        private static string GenerateScript()
+        private static string GenerateScript(List<string> changedFiles)
         {
             bool wroteScript = false;
             var bundlesToRandomize = GetBundlesToRandomize();
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("LoadPlugin(PluginDirectory+\"UnityPlugin.dll\")");
 
+            //Perform shader replacement for anything using a dummy shader
             foreach (var assetguid in AssetDatabase.FindAssets("t:Prefab", new string[] { Constants.ModsPath, Constants.ExamplesPath }))
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
                 string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
                 string mainABPath = new FileInfo(Path.Combine(BuildPath, modAB)).FullName;
-                var go = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+                if (!changedFiles.Contains(mainABPath))
+                    continue;
 
+                var go = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
                 var renderers = go.GetComponentsInChildren<Renderer>();
                 foreach (var renderer in renderers)
                 {
@@ -83,9 +86,13 @@ namespace IllusionMods.KoikatuModdingTools
                 }
             }
 
+            //Randomize asset bundle CAB strings where configured in the mod settings
             foreach (var modAB in bundlesToRandomize)
             {
                 string mainABPath = new FileInfo(Path.Combine(BuildPath, modAB)).FullName;
+                if (!changedFiles.Contains(mainABPath))
+                    continue;
+
                 var cab = GetRandomCABString();
                 sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
                 sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
