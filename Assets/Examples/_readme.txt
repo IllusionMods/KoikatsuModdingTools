@@ -1,0 +1,1 @@
+Example projects should serve as an example of how mod projects are structured. Copy one to the Mods folder as a base for a new mod. 

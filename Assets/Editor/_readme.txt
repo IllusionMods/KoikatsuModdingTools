@@ -1,0 +1,1 @@
+Editor scripts create the UI for the KoikatsuModdingTools project. Try not to mess around with these unless you know what you're doing.

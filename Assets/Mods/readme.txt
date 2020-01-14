@@ -1,1 +1,0 @@
-Project folders go here. You can start by copying a project folder from the Examples folder to use as a base for your mod.
