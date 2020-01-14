@@ -1,4 +1,10 @@
-﻿[20.1.3]
+﻿[20.1.4]
+  - Fixed crash when AnimatorController editor was used after Animation editor was closed
+  - Fixed crash in "Replace" in Texture editor when no image was selected from the Image window
+  - Fixed remaining .resS file when saving is aborted because of wrong path
+  - Added CopyInPlace script function
+
+[20.1.3]
   - Fixed crash in FBX animation import which aborted the import completely for negative keyframe times
   - Added support for importing compressed TGAs, fixed flipping TGAs
   - Fixed a possible crash when "Docking" is changed
