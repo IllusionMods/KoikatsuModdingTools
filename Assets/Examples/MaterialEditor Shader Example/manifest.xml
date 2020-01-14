@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<manifest schema-ver="1">
+  <guid>KK_MaterialEditor.Wireframe</guid>
+  <name>KK_MaterialEditor Wireframe Shaders</name>
+  <version>1.0</version>
+  <author>IllusionMods</author>
+  <description>Shaders for KK_MaterialEditor</description>
+  <website>https://github.com/IllusionMods/KoikatsuModdingTools</website>
+  <KK_MaterialEditor>
+    <Shader Name="SuperSystems/Wireframe" AssetBundle="chara/shaders/wireframe.unity3d" Asset="asset_Wireframe">
+      <Property Name="WireThickness" Type="Float" Range="0,800" />
+      <Property Name="WireSmoothness" Type="Float" Range="0,20" />
+      <Property Name="WireColor" Type="Color" />
+      <Property Name="BaseColor" Type="Color" />
+      <Property Name="MaxTriSize" Type="Float" Range="0,200" />
+    </Shader>
+    <Shader Name="SuperSystems/Wireframe-Shaded-Unlit" AssetBundle="chara/shaders/wireframe.unity3d" Asset="asset_WireframeShadedUnlit">
+      <Property Name="MainTex" Type="Texture" />
+      <Property Name="WireThickness" Type="Float" Range="0,800" />
+      <Property Name="WireSmoothness" Type="Float" Range="0,20" />
+      <Property Name="WireColor" Type="Color" />
+      <Property Name="BaseColor" Type="Color" />
+    </Shader>
+    <Shader Name="SuperSystems/Wireframe-Transparent" AssetBundle="chara/shaders/wireframe.unity3d" Asset="asset_WireframeTransparent">
+      <Property Name="WireThickness" Type="Float" Range="0,800" />
+      <Property Name="WireSmoothness" Type="Float" Range="0,20" />
+      <Property Name="WireColor" Type="Color" />
+      <Property Name="BaseColor" Type="Color" />
+      <Property Name="MaxTriSize" Type="Float" Range="0,200" />
+    </Shader>
+    <Shader Name="SuperSystems/Wireframe-Transparent-Culled" AssetBundle="chara/shaders/wireframe.unity3d" Asset="asset_WireframeTransparentCulled">
+      <Property Name="WireThickness" Type="Float" Range="0,800" />
+      <Property Name="WireSmoothness" Type="Float" Range="0,20" />
+      <Property Name="WireColor" Type="Color" />
+      <Property Name="BaseColor" Type="Color" />
+      <Property Name="MaxTriSize" Type="Float" Range="0,200" />
+    </Shader>
+  </KK_MaterialEditor>
+</manifest>
