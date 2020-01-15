@@ -20,7 +20,14 @@ namespace IllusionMods.KoikatuModdingTools
             KoikatsuPath = koikatsuPath;
             CopyMods = copyMods;
 
-            string projectPath = Shared.GetProjectPath();
+            var manifestPath = Shared.GetManifestPath();
+            if (manifestPath == null)
+            {
+                Debug.Log("manifest.xml does not exist in the directory, mod creation aborted.");
+                return;
+            }
+
+            string projectPath = manifestPath.Replace(@"\", "/").Replace("/manifest.xml", "");
             if (BuildSingleModInternal(projectPath))
                 Debug.Log("Mod built sucessfully.");
         }

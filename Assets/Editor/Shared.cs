@@ -35,10 +35,14 @@ namespace IllusionMods.KoikatuModdingTools
         public static string GetManifestPath(string projectPath)
         {
             projectPath = projectPath.Replace(@"\", "/");
+            string manifestPath = Path.Combine(projectPath, "manifest.xml");
+            if (File.Exists(manifestPath))
+                return manifestPath;
+
             while (projectPath != "" && projectPath.Contains("/") && projectPath != "Assets/Mods" && projectPath != "Assets/Examples")
             {
                 projectPath = projectPath.Remove(projectPath.LastIndexOf("/"));
-                string manifestPath = Path.Combine(projectPath, "manifest.xml");
+                manifestPath = Path.Combine(projectPath, "manifest.xml");
                 if (File.Exists(manifestPath))
                     return manifestPath;
             }
@@ -52,16 +56,7 @@ namespace IllusionMods.KoikatuModdingTools
         /// <returns>Path to the manifest.xml if it exists or null if not</returns>
         public static string GetManifestPath()
         {
-            string projectPath = GetProjectPath();
-            projectPath = projectPath.Replace(@"\", "/");
-            while (projectPath != "" && projectPath.Contains("/") && projectPath != "Assets/Mods" && projectPath != "Assets/Examples")
-            {
-                projectPath = projectPath.Remove(projectPath.LastIndexOf("/"));
-                string manifestPath = Path.Combine(projectPath, "manifest.xml");
-                if (File.Exists(manifestPath))
-                    return manifestPath;
-            }
-            return null;
+            return GetManifestPath(GetProjectPath());
         }
     }
 }
