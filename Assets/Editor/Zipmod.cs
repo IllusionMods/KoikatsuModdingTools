@@ -77,6 +77,7 @@ namespace IllusionMods.KoikatuModdingTools
             string manifestPath = Path.Combine(projectPath, "manifest.xml");
             string makerListPath = Path.Combine(projectPath, @"List\Maker");
             string studioListPath = Path.Combine(projectPath, @"List\Studio");
+            bool exampleMod = manifestPath.Contains("Examples");
 
             HashSet<string> modABs = new HashSet<string>();
             HashSet<string> makerListFiles = new HashSet<string>();
@@ -179,14 +180,27 @@ namespace IllusionMods.KoikatuModdingTools
             if (CopyMods)
             {
                 var modsFolder = Path.Combine(KoikatsuPath, "mods");
-                var copyPath = Path.Combine(modsFolder, zipFileName);
+                var examplesFolder = Path.Combine(modsFolder, "KoikatsuModdingTools Examples");
+                string copyPath;
+                if (exampleMod)
+                    copyPath = Path.Combine(examplesFolder, zipFileName);
+                else
+                    copyPath = Path.Combine(modsFolder, zipFileName);
+
                 di = new DirectoryInfo(modsFolder);
                 if (di.Exists)
                 {
                     foreach (var file in di.GetFiles("*.zipmod"))
-                    {
                         if (file.Name.StartsWith(zipFileNamePrexix))
                             file.Delete();
+
+                    if (exampleMod)
+                    {
+                        var examplesFolderDirectory = new DirectoryInfo(examplesFolder);
+                        examplesFolderDirectory.Create();
+                        foreach (var file in examplesFolderDirectory.GetFiles("*.zipmod"))
+                            if (file.Name.StartsWith(zipFileNamePrexix))
+                                file.Delete();
                     }
                     File.Copy(zipPath, copyPath);
                 }
