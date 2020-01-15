@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.IO;
 using Debug = UnityEngine.Debug;
 
 namespace IllusionMods.KoikatuModdingTools
@@ -24,6 +25,43 @@ namespace IllusionMods.KoikatuModdingTools
                 Debug.LogWarning(exception.Message);
                 return string.Empty;
             }
+        }
+
+        /// <summary>
+        /// Get the path to the manifest.xml for the specified folder or from its parent folder.
+        /// </summary>
+        /// <param name="projectPath">Folder to search for manifest.xml</param>
+        /// <returns>Path to the manifest.xml if it exists or null if not</returns>
+        public static string GetManifestPath(string projectPath)
+        {
+            projectPath = projectPath.Replace(@"\", "/");
+            while (projectPath != "" && projectPath.Contains("/") && projectPath != "Assets/Mods" && projectPath != "Assets/Examples")
+            {
+                projectPath = projectPath.Remove(projectPath.LastIndexOf("/"));
+                string manifestPath = Path.Combine(projectPath, "manifest.xml");
+                if (File.Exists(manifestPath))
+                    return manifestPath;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Get the path to the manifest.xml for the current folder or from its parent folder.
+        /// </summary>
+        /// <param name="projectPath">Folder to search for manifest.xml</param>
+        /// <returns>Path to the manifest.xml if it exists or null if not</returns>
+        public static string GetManifestPath()
+        {
+            string projectPath = GetProjectPath();
+            projectPath = projectPath.Replace(@"\", "/");
+            while (projectPath != "" && projectPath.Contains("/") && projectPath != "Assets/Mods" && projectPath != "Assets/Examples")
+            {
+                projectPath = projectPath.Remove(projectPath.LastIndexOf("/"));
+                string manifestPath = Path.Combine(projectPath, "manifest.xml");
+                if (File.Exists(manifestPath))
+                    return manifestPath;
+            }
+            return null;
         }
     }
 }
