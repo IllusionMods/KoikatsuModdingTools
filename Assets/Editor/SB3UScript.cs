@@ -65,20 +65,17 @@ namespace IllusionMods.KoikatuModdingTools
                             sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
                             sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
                             sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
-                            sb.AppendLine("animatorIndexMainAB = unityEditorMainAB.ComponentIndex(name=\"" + go.name + "\", clsIDname=\"GameObject\")");
+                            sb.AppendLine("shaderIndexMainAB = unityEditorMainAB.ComponentIndex(name=\"" + shaderName + "\", clsIDname=\"Shader\")");
 
                             sb.AppendLine("unityParserShaderAB = OpenUnity3d(path=\"" + shaderABPath + "\")");
                             sb.AppendLine("unityEditorShaderAB = Unity3dEditor(parser=unityParserShaderAB)");
                             sb.AppendLine("unityEditorShaderAB.GetAssetNames(filter=True)");
                             sb.AppendLine("shaderIndexShaderAB = unityEditorShaderAB.ComponentIndex(name=\"" + shaderName + "\", clsIDname=\"Shader\")");
 
-                            sb.AppendLine("virtualAnimatorMainAB = unityEditorMainAB.OpenVirtualAnimator(componentIndex=animatorIndexMainAB)");
-                            sb.AppendLine("animatorEditorMainAB = AnimatorEditor(parser=virtualAnimatorMainAB)");
-                            sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
-                            sb.AppendLine("unityEditorShaderAB.GetAssetNames(filter=True)");
+                            sb.AppendLine("assetMainAB = unityEditorMainAB.LoadWhenNeeded(componentIndex=shaderIndexMainAB)");
+                            sb.AppendLine("assetShaderAB = unityEditorShaderAB.LoadWhenNeeded(componentIndex=shaderIndexShaderAB)");
 
-                            sb.AppendLine("sh = unityEditorShaderAB.LoadWhenNeeded(componentIndex=shaderIndexShaderAB)");
-                            sb.AppendLine("animatorEditorMainAB.SetMaterialShader(id=0, shader=sh)");
+                            sb.AppendLine("unityEditorMainAB.CopyInPlace(src=assetShaderAB, dest=assetMainAB)");
                             sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
                             wroteScript = true;
                         }
