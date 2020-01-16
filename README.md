@@ -23,7 +23,9 @@ How to compile a shader and configure it for use with KK_MaterialEditor.
 How to override a vanilla asset, for example when fixing or improving an asset from the base game.
 
 ## Creating your own mod
-To create your own mod, you can use an example project as a base. Copy an example project to the Mods folder, then edit the manifest.xml and insert your own information. Add your textures, select them, and set a path inside the chara folder, such as chara\[your_name]\[mod_name].unity3d. Do the same for your thumbnails. Edit the list file with the correct category number, fields, and content. Then click Build->Build All Asset Bundles and then Build->Build All Mods. Only mods within the Mods folder will be built this way to keep your stuff separate from the example projects.
+To create your own mod, you can use an example project as a base. Copy an example project to the Mods folder, then edit the manifest.xml and insert your own information. Add your textures, select them, and set a path inside the chara folder, such as chara\[your_name]\[mod_name].unity3d. Do the same for your thumbnails. Edit the list file with the correct category number, fields, and content.
+
+Once you have assets assigned to the asset bundles, click Window->AssetBundle Browser to bring up the build menu. Click Build All Assets and then Build All Zipmods. Only mods within the Mods folder will be built this way to keep your stuff separate from the example projects.
 
 ## Work in progress
 Koikatsu Modding Tools is a work in progress, please report any bugs you may find. If you are interested in contributing to development, these are the things that need to be done.
