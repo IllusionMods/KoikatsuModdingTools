@@ -6,6 +6,8 @@ namespace IllusionMods.KoikatuModdingTools
     {
         internal const string ModsPath = @"Assets\Mods";
         internal const string ExamplesPath = @"Assets\Examples";
+        internal const string ScriptsPath = @"Assets\Scripts";
+        internal const string ShadersPath = @"Assets\Shaders";
         internal const string SB3UtilityScriptPath = @"Tools\SB3UGS\SB3UtilityScript.exe";
 
         internal static readonly HashSet<string> GameNameList = new HashSet<string>() { "koikatsu", "koikatu", "コイカツ" };
