@@ -9,19 +9,29 @@ ModelImporter:
     100002: o_feather_0
     100004: default
     100006: o_feather
+    100008: example_accessory
+    100010: example_accessory_example_accessory_mesh
     400000: //RootNode
     400002: o_feather_0
     400004: default
     400006: o_feather
+    400008: example_accessory
+    400010: example_accessory_example_accessory_mesh
     2300000: o_feather_0
     2300002: default
     2300004: o_feather
+    2300006: example_accessory
+    2300008: example_accessory_example_accessory_mesh
     3300000: o_feather_0
     3300002: default
     3300004: o_feather
+    3300006: example_accessory
+    3300008: example_accessory_example_accessory_mesh
     4300000: o_feather_0
     4300002: default
     4300004: o_feather
+    4300006: example_accessory
+    4300008: example_accessory_example_accessory_mesh
   materials:
     importMaterials: 0
     materialName: 0
