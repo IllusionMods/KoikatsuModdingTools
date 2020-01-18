@@ -14,11 +14,13 @@ namespace IllusionMods.KoikatuModdingTools
         private static readonly RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
         private static string BuildPath;
         private static string KoikatsuPath;
+        private static bool Compression;
 
-        public static bool BuildAndRunScripts(string buildPath, string koikatsuPath, List<string> changedFiles)
+        public static bool BuildAndRunScripts(string buildPath, string koikatsuPath, bool compression, List<string> changedFiles)
         {
             BuildPath = buildPath;
             KoikatsuPath = koikatsuPath;
+            Compression = compression;
 
             string script = GenerateScript(changedFiles);
             if (script == "")
@@ -34,6 +36,7 @@ namespace IllusionMods.KoikatuModdingTools
         /// </summary>
         private static string GenerateScript(List<string> changedFiles)
         {
+            List<string> bundlesToCompress = changedFiles.ToList();
             bool wroteScript = false;
             var bundlesToRandomize = GetBundlesToRandomize();
             StringBuilder sb = new StringBuilder();
@@ -77,13 +80,12 @@ namespace IllusionMods.KoikatuModdingTools
             {
                 string modAB = ab.Key;
                 string mainABPath = new FileInfo(modAB).FullName;
-                sb.AppendLine("Log(\"Replacing shaders for: " + modAB + "\")");
-                Debug.Log("mainABPath:" + mainABPath);
+                bundlesToCompress.Remove(mainABPath);
+
+                sb.AppendLine("Log(\"Replacing shaders for: " + modAB.Replace("/", @"\") + "\")");
 
                 foreach (string shaderName in ab.Value)
                 {
-                    Debug.Log("shader:" + shaderName);
-
                     string shaderAB;
                     if (Constants.ShaderABs.TryGetValue(shaderName, out shaderAB))
                     {
@@ -107,8 +109,16 @@ namespace IllusionMods.KoikatuModdingTools
                         wroteScript = true;
                     }
                 }
-                sb.AppendLine("Log(\"Saving...\")");
-                sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
+                if (Compression)
+                {
+                    sb.AppendLine("Log(\"Compresing...\")");
+                    sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
+                }
+                else
+                {
+                    sb.AppendLine("Log(\"Saving...\")");
+                    sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1)");
+                }
             }
 
             //Randomize asset bundle CAB strings where configured in the mod settings
@@ -118,15 +128,36 @@ namespace IllusionMods.KoikatuModdingTools
                 string mainABPath = new FileInfo(modAB).FullName;
                 if (!changedFiles.Contains(mainABPath))
                     continue;
+                bundlesToCompress.Remove(mainABPath);
 
                 var cab = GetRandomCABString();
-                sb.AppendLine("Log(\"Randomizing CAB for " + modAB + "\")");
+                sb.AppendLine("Log(\"Randomizing CAB for " + modAB.Replace("/", @"\") + "\")");
                 sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
                 sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
                 sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
                 sb.AppendLine("unityEditorMainAB.RenameCabinet(cabinetIndex=0, name=\"" + cab + "\")");
-                sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
+                if (Compression)
+                    sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
+                else
+                    sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1)");
                 wroteScript = true;
+            }
+
+            if (Compression)
+            {
+                foreach (string bundlePath in bundlesToCompress)
+                {
+                    string bundle = bundlePath;
+                    int index = bundle.Replace("/", @"\").IndexOf(BuildPath.Replace("/", @"\"));
+                    if (index > 0)
+                        bundle = bundle.Substring(index);
+
+                    sb.AppendLine("Log(\"Compresing " + bundle + "...\")");
+                    sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + bundlePath + "\")");
+                    sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
+                    sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
+                    sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
+                }
             }
 
             if (wroteScript)

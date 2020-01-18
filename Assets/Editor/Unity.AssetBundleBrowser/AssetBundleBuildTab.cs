@@ -56,14 +56,6 @@ namespace AssetBundleBrowser
             ChunkBasedCompression,
         }
 
-        readonly GUIContent[] m_CompressionOptions =
-        {
-            new GUIContent("No Compression"),
-            new GUIContent("Standard Compression (LZMA)"),
-            new GUIContent("Chunk Based Compression (LZ4)")
-        };
-        readonly int[] m_CompressionValues = { 0, 1, 2 };
-
         internal AssetBundleBuildTab()
         {
             m_AdvancedSettings = false;
@@ -145,7 +137,7 @@ namespace AssetBundleBrowser
                 "Will wipe out all contents of build directory.",
                 m_UserData.m_OnToggles);
 
-            m_CompressionContent = new GUIContent("Compression", "Choose no compress, standard (LZMA), or chunk based (LZ4)");
+            m_CompressionContent = new GUIContent("Compression", "Whether to build asset bundles uncompressed or with LZ4 compression. LZ4 takes longer to build but results in smaller file size with no performance impact. Use this for distributing mods.");
 
             if (m_UserData.m_UseDefaultPath)
             {
@@ -231,24 +223,15 @@ namespace AssetBundleBrowser
                 {
                     var indent = EditorGUI.indentLevel;
                     EditorGUI.indentLevel = 1;
-                    CompressOptions cmp = (CompressOptions)EditorGUILayout.IntPopup(
-                        m_CompressionContent,
-                        (int)m_UserData.m_Compression,
-                        m_CompressionOptions,
-                        m_CompressionValues);
-
+                    bool cmp = EditorGUILayout.ToggleLeft(m_CompressionContent, m_UserData.m_Compression);
                     if (cmp != m_UserData.m_Compression)
-                    {
                         m_UserData.m_Compression = cmp;
-                    }
+
                     foreach (var tog in m_ToggleData)
                     {
-                        newState = EditorGUILayout.ToggleLeft(
-                            tog.content,
-                            tog.state);
+                        newState = EditorGUILayout.ToggleLeft(tog.content, tog.state);
                         if (newState != tog.state)
                         {
-
                             if (newState)
                                 m_UserData.m_OnToggles.Add(tog.content.text);
                             else
@@ -327,10 +310,8 @@ namespace AssetBundleBrowser
 
             if (AssetBundleModel.Model.DataSource.CanSpecifyBuildOptions)
             {
-                if (m_UserData.m_Compression == CompressOptions.Uncompressed)
-                    opt |= BuildAssetBundleOptions.UncompressedAssetBundle;
-                else if (m_UserData.m_Compression == CompressOptions.ChunkBasedCompression)
-                    opt |= BuildAssetBundleOptions.ChunkBasedCompression;
+                opt |= BuildAssetBundleOptions.UncompressedAssetBundle;
+
                 foreach (var tog in m_ToggleData)
                 {
                     if (tog.state)
@@ -358,7 +339,7 @@ namespace AssetBundleBrowser
 
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
 
-            SB3UScript.BuildAndRunScripts(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath, changedFiles);
+            SB3UScript.BuildAndRunScripts(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath, m_UserData.m_Compression, changedFiles);
         }
 
         private void BrowseForFolder()
@@ -432,7 +413,7 @@ namespace AssetBundleBrowser
         {
             internal List<string> m_OnToggles;
             internal ValidBuildTarget m_BuildTarget = ValidBuildTarget.StandaloneWindows;
-            internal CompressOptions m_Compression = CompressOptions.ChunkBasedCompression;
+            internal bool m_Compression = true;
             internal string m_OutputPath = "Build/abdata";
             internal bool m_UseDefaultPath = false;
             internal string m_KoikatsuPath = KoikatsuPathDefault;
