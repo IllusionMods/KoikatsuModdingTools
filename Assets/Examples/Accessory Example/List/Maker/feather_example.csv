@@ -2,5 +2,5 @@
 0
 0
 ID,Kind,Possess,Name,MainManifest,MainAB,MainData,Parent,ThumbAB,ThumbTex
-1,0,1,Example Accessory,,chara/illusionmods/example_accessory.unity3d,p_acs_feather,a_n_headtop,chara/illusionmods/example_accessory_thumb.unity3d,example_accessory_thumb
+1,0,1,Example Accessory,,chara/illusionmods/example_accessory.unity3d,example_accessory,a_n_headtop,chara/illusionmods/example_accessory_thumb.unity3d,example_accessory_thumb
 
