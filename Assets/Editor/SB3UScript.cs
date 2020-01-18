@@ -39,12 +39,15 @@ namespace IllusionMods.KoikatuModdingTools
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("LoadPlugin(PluginDirectory+\"UnityPlugin.dll\")");
 
-            //Perform shader replacement for anything using a dummy shader
+            Dictionary<string, HashSet<string>> shaderABs = new Dictionary<string, HashSet<string>>();
+
+            //Create a list of asset bundles and all the shaders inside it that need replacement
             foreach (var assetguid in AssetDatabase.FindAssets("t:Prefab", new string[] { Constants.ModsPath, Constants.ExamplesPath }))
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
                 string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
-                string mainABPath = new FileInfo(Path.Combine(BuildPath, modAB)).FullName;
+                modAB = Path.Combine(BuildPath, modAB);
+                string mainABPath = new FileInfo(modAB).FullName;
                 if (!changedFiles.Contains(mainABPath))
                     continue;
 
@@ -54,43 +57,70 @@ namespace IllusionMods.KoikatuModdingTools
                 {
                     foreach (var material in renderer.sharedMaterials)
                     {
-                        string materialName = material.name;
-                        string shaderName = material.shader.name;
-
                         string shaderAB;
-                        if (Constants.ShaderABs.TryGetValue(shaderName, out shaderAB))
+                        if (Constants.ShaderABs.TryGetValue(material.shader.name, out shaderAB))
                         {
-                            string shaderABPath = KoikatsuPath + "/" + "abdata" + "/" + shaderAB;
-
-                            sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
-                            sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
-                            sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
-                            sb.AppendLine("shaderIndexMainAB = unityEditorMainAB.ComponentIndex(name=\"" + shaderName + "\", clsIDname=\"Shader\")");
-
-                            sb.AppendLine("unityParserShaderAB = OpenUnity3d(path=\"" + shaderABPath + "\")");
-                            sb.AppendLine("unityEditorShaderAB = Unity3dEditor(parser=unityParserShaderAB)");
-                            sb.AppendLine("unityEditorShaderAB.GetAssetNames(filter=True)");
-                            sb.AppendLine("shaderIndexShaderAB = unityEditorShaderAB.ComponentIndex(name=\"" + shaderName + "\", clsIDname=\"Shader\")");
-
-                            sb.AppendLine("assetMainAB = unityEditorMainAB.LoadWhenNeeded(componentIndex=shaderIndexMainAB)");
-                            sb.AppendLine("assetShaderAB = unityEditorShaderAB.LoadWhenNeeded(componentIndex=shaderIndexShaderAB)");
-
-                            sb.AppendLine("unityEditorMainAB.CopyInPlace(src=assetShaderAB, dest=assetMainAB)");
-                            sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
-                            wroteScript = true;
+                            HashSet<string> shaderList;
+                            if (!shaderABs.TryGetValue(modAB, out shaderList))
+                            {
+                                shaderList = new HashSet<string>();
+                                shaderABs[modAB] = shaderList;
+                            }
+                            shaderList.Add(material.shader.name);
                         }
                     }
                 }
             }
 
-            //Randomize asset bundle CAB strings where configured in the mod settings
-            foreach (var modAB in bundlesToRandomize)
+            //Generate the shader replacement script
+            foreach (var ab in shaderABs)
             {
-                string mainABPath = new FileInfo(Path.Combine(BuildPath, modAB)).FullName;
+                string modAB = ab.Key;
+                string mainABPath = new FileInfo(modAB).FullName;
+                sb.AppendLine("Log(\"Replacing shaders for: " + modAB + "\")");
+                Debug.Log("mainABPath:" + mainABPath);
+
+                foreach (string shaderName in ab.Value)
+                {
+                    Debug.Log("shader:" + shaderName);
+
+                    string shaderAB;
+                    if (Constants.ShaderABs.TryGetValue(shaderName, out shaderAB))
+                    {
+                        string shaderABPath = KoikatsuPath + "/" + "abdata" + "/" + shaderAB;
+
+                        sb.AppendLine("Log(\"Replacing shader: " + shaderName + "\")");
+                        sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
+                        sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
+                        sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
+                        sb.AppendLine("shaderIndexMainAB = unityEditorMainAB.ComponentIndex(name=\"" + shaderName + "\", clsIDname=\"Shader\")");
+
+                        sb.AppendLine("unityParserShaderAB = OpenUnity3d(path=\"" + shaderABPath + "\")");
+                        sb.AppendLine("unityEditorShaderAB = Unity3dEditor(parser=unityParserShaderAB)");
+                        sb.AppendLine("unityEditorShaderAB.GetAssetNames(filter=True)");
+                        sb.AppendLine("shaderIndexShaderAB = unityEditorShaderAB.ComponentIndex(name=\"" + shaderName + "\", clsIDname=\"Shader\")");
+
+                        sb.AppendLine("assetMainAB = unityEditorMainAB.LoadWhenNeeded(componentIndex=shaderIndexMainAB)");
+                        sb.AppendLine("assetShaderAB = unityEditorShaderAB.LoadWhenNeeded(componentIndex=shaderIndexShaderAB)");
+
+                        sb.AppendLine("unityEditorMainAB.CopyInPlace(src=assetShaderAB, dest=assetMainAB)");
+                        wroteScript = true;
+                    }
+                }
+                sb.AppendLine("Log(\"Saving...\")");
+                sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
+            }
+
+            //Randomize asset bundle CAB strings where configured in the mod settings
+            foreach (var bundle in bundlesToRandomize)
+            {
+                string modAB = Path.Combine(BuildPath, bundle);
+                string mainABPath = new FileInfo(modAB).FullName;
                 if (!changedFiles.Contains(mainABPath))
                     continue;
 
                 var cab = GetRandomCABString();
+                sb.AppendLine("Log(\"Randomizing CAB for " + modAB + "\")");
                 sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
                 sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
                 sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
