@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest schema-ver="1">
-  <guid>com.DeathWeasel.SmallerHeartPupil</guid>
-  <name>Smaller Heart Pupil</name>
-  <version>1.1</version>
-  <author>DeathWeasel</author>
-  <description>Makes the heart pupil 50% smaller</description>
+  <guid>IllusionMods.AssetOverrideExample</guid>
+  <name>Asset Override Example</name>
+  <version>1.0</version>
+  <author>IllusionMods</author>
+  <description>Asset Override Example</description>
   <website>https://github.com/IllusionMods/KoikatsuModdingTools</website>
   <game>Koikatsu</game>
 </manifest>
