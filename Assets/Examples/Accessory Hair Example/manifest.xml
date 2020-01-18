@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest schema-ver="1">
+  <guid>com.DeathWeasel.AccessoryHairFront</guid>
+  <name>Accessory Hair Front</name>
+  <version>0.1</version>
+  <author>DeathWeasel</author>
+  <description>Front hairs converted to accessories</description>
+  <website>https://mega.nz/#F!upYGBTAZ!S1lMalC33LYEditk7GwzgQ!GpJEiLwK</website>
+  <game>Koikatsu</game>
+  <migrationInfo>
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="507" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="002" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="509" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="007" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="508" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="008" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="510" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="010" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="511" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="015" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="609" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="020" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="512" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="021" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="513" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="026" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="608" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="027" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="514" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="032" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="776" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="036" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="777" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="037" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="515" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="039" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="516" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="045" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="517" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="047" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="518" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="051" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="519" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="055" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="520" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="061" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="521" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="067" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="522" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="068" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="523" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="069" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="524" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="070" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="525" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="071" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="526" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="078" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="527" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="083" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="528" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="089" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="529" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="090" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="530" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="092" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="531" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="093" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="532" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="095" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="533" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="105" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="534" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="112" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="535" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="117" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="536" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="129" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="543" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="144" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="584" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="147" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="585" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="148" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="586" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="149" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="592" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="150" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="593" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="151" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="544" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="152" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="545" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="153" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="625" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="159" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="626" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="161" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="628" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="166" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="629" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="167" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="635" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="175" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="751" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="176" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="752" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="178" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="636" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="180" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="753" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="181" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="754" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="182" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="755" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="183" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="756" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="184" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="637" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="185" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="759" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="186" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="760" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="187" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="757" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="188" />
+    <info category="ao_face" guidOld="yamadamod.acchairF2" idOld="758" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="189" />
+    <info category="ao_face" guidOld="yamadamod.acchairF" idOld="638" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="190" />
+    <info category="ao_face" guidOld="yamadamod.acchairS" idOld="609" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="020" />
+    <info category="ao_face" guidOld="yamadamod.acchairS" idOld="513" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="026" />
+    <info category="ao_face" guidOld="yamadamod.acchairS" idOld="521" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="067" />
+    <info category="ao_face" guidOld="yamadamod.acchairS" idOld="528" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="089" />
+    <info category="ao_face" guidOld="yamadamod.acchairS" idOld="530" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="092" />
+    <info category="ao_face" guidOld="yamadamod.acchairS" idOld="532" guidNew="com.DeathWeasel.AccessoryHairFront" idNew="095" />
+  </migrationInfo>
+</manifest>
