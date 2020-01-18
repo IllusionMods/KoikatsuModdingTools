@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest schema-ver="1">
+  <guid>com.DeathWeasel.Bras</guid>
+  <name>Bras</name>
+  <version>0.1</version>
+  <author>DeathWeasel</author>
+  <description>Bras Pack</description>
+  <website>https://mega.nz/#F!upYGBTAZ!S1lMalC33LYEditk7GwzgQ!GpJEiLwK</website>
+  <game>Koikatsu</game>
+  <migrationInfo>
+    <info category="co_bra" guidOld="Lesbianon.aiunderwear" idOld="121" idNew="06" />
+    <info category="co_bra" guidOld="Lesbianon.aiunderwear" idOld="122" idNew="07" />
+    <info category="co_bra" guidOld="Lesbianon.aiunderwear" idOld="123" idNew="15" />
+    <info category="co_bra" guidOld="Lesbianon.aiunderwear" idOld="124" idNew="10" />
+    <info category="co_bra" guidOld="Lesbianon.aiunderwear" idOld="125" idNew="12" />
+    <info category="co_bra" guidOld="Lesbianon.aiunderwear" idOld="126" idNew="14" />
+    <info category="co_bra" guidOld="Lesbianon.aiunderwear" idOld="127" idNew="16" />
+  </migrationInfo>
+</manifest>
