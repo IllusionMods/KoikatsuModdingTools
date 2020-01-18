@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <manifest schema-ver="1">
-  <guid>KK_MaterialEditor.Wireframe</guid>
-  <name>KK_MaterialEditor Wireframe Shaders</name>
+  <guid>IllusionMods.MaterialEditorShaderExample</guid>
+  <name>Material Editor Shader Example</name>
   <version>1.0</version>
   <author>IllusionMods</author>
-  <description>Shaders for KK_MaterialEditor</description>
+  <description>MaterialEditorShaderExample</description>
   <website>https://github.com/IllusionMods/KoikatsuModdingTools</website>
   <KK_MaterialEditor>
     <Shader Name="SuperSystems/Wireframe" AssetBundle="chara/shaders/wireframe.unity3d" Asset="asset_Wireframe">
@@ -36,4 +36,5 @@
       <Property Name="MaxTriSize" Type="Float" Range="0,200" />
     </Shader>
   </KK_MaterialEditor>
+  <game>Koikatsu</game>
 </manifest>
