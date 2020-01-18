@@ -83,7 +83,8 @@ namespace IllusionMods.KoikatuModdingTools
                 bundlesToCompress.Remove(mainABPath);
 
                 sb.AppendLine("Log(\"Replacing shaders for: " + modAB.Replace("/", @"\") + "\")");
-
+                sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
+                sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
                 foreach (string shaderName in ab.Value)
                 {
                     string shaderAB;
@@ -92,8 +93,6 @@ namespace IllusionMods.KoikatuModdingTools
                         string shaderABPath = KoikatsuPath + "/" + "abdata" + "/" + shaderAB;
 
                         sb.AppendLine("Log(\"Replacing shader: " + shaderName + "\")");
-                        sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
-                        sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
                         sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
                         sb.AppendLine("shaderIndexMainAB = unityEditorMainAB.ComponentIndex(name=\"" + shaderName + "\", clsIDname=\"Shader\")");
 
@@ -106,7 +105,6 @@ namespace IllusionMods.KoikatuModdingTools
                         sb.AppendLine("assetShaderAB = unityEditorShaderAB.LoadWhenNeeded(componentIndex=shaderIndexShaderAB)");
 
                         sb.AppendLine("unityEditorMainAB.CopyInPlace(src=assetShaderAB, dest=assetMainAB)");
-                        wroteScript = true;
                     }
                 }
                 if (Compression)
@@ -119,6 +117,7 @@ namespace IllusionMods.KoikatuModdingTools
                     sb.AppendLine("Log(\"Saving...\")");
                     sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1)");
                 }
+                wroteScript = true;
             }
 
             //Randomize asset bundle CAB strings where configured in the mod settings
