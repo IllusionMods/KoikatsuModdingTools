@@ -2,4 +2,4 @@
 0
 0
 ID,Kind,Possess,Name,MainManifest,MainAB,MainData,NormalData,StateType,Coordinate,Sex,OverBodyMaskAB,OverBodyMask,OverBraMaskAB,OverBraMask,MainTexAB,MainTex,ColorMaskAB,ColorMaskTex,MainTex02AB,MainTex02,ColorMask02AB,ColorMask02Tex,KokanHide,ThumbAB,ThumbTex
-1,1,1,Example Bra,,chara/illusionmods/bras_pack.unity3d,example_bra,0,0,0,3,0,0,0,0,0,example_bra_t,0,example_bra_ms,0,0,0,0,0,chara/illusionmods/bras_pack_thumb.unity3d,example_bra_thumb
+1,1,1,Example Bra,,chara/illusionmods/bras_pack.unity3d,example_bra,0,0,0,3,0,0,0,0,0,example_bra_t,0,example_bra_mc,0,0,0,0,0,chara/illusionmods/bras_pack_thumb.unity3d,example_bra_thumb
