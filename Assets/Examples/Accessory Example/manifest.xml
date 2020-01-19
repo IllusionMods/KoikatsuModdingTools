@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest schema-ver="1">
-  <guid>com.DeathWeasel.XIII</guid>
-  <name>XIII</name>
-  <version>1.3</version>
-  <author>DeathWeasel</author>
-  <description>XIII</description>
-  <website>https://mega.nz/#F!upYGBTAZ!S1lMalC33LYEditk7GwzgQ!GpJEiLwK</website>
+  <guid>IllusionMods.AccessoryExample</guid>
+  <name>Accessory Example</name>
+  <version>1.0</version>
+  <author>IllusionMods</author>
+  <description>Accessory Example</description>
+  <website>https://github.com/IllusionMods/KoikatsuModdingTools</website>
   <game>Koikatsu</game>
 </manifest>
