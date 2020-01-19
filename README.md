@@ -20,7 +20,7 @@ How to create an accessory mod.
 How to create hair as an accessory with KK_HairAccessoryCustomizer compatibility.
 
 #### Clothes Example
-How to create a clothes mods.
+How to create a clothes mod.
 
 #### MaterialEditor Shader Example
 How to compile a shader and configure it for use with KK_MaterialEditor.
