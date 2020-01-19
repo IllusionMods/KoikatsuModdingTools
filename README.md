@@ -16,6 +16,12 @@ How to create a body paint mod. Creating any type of 2D texture mod such as sunt
 #### Accessory Example
 How to create an accessory mod.
 
+#### Accessory Hair Example
+How to create hair as an accessory with KK_HairAccessoryCustomizer compatibility.
+
+#### Clothes Example
+How to create a clothes mods.
+
 #### MaterialEditor Shader Example
 How to compile a shader and configure it for use with KK_MaterialEditor.
 
@@ -39,7 +45,7 @@ Koikatsu Modding Tools is a work in progress, please report any bugs you may fin
 * Make a pretty readme file
 * Write instructions and tutorials for all types of mods with pictures and explanations of all parts of the mod
 * Generate hard mods for testing purposes so that asset bundles can be replaced while the game is running and reloaded with RuntimeUnityEditor
-* Asset bundle extractor which can dump assets from exist asset bundles in to a KKModTools project
+* ~Asset bundle extractor which can dump assets from exist asset bundles in to a KKModTools project~
 
 ## Credits
 Enimaroah for SB3UGS and updating it to support shader replacement.
