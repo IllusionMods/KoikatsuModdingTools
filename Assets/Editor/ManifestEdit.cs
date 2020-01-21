@@ -64,6 +64,8 @@ namespace IllusionMods.KoikatuModdingTools
         string modName = "";
         string modVersion = "";
         string modAuthor = "";
+        string modDescription = "";
+        string modWebsite = "";
         GameName modGame = GameName.Any;
 
         string filename = "";
@@ -83,6 +85,10 @@ namespace IllusionMods.KoikatuModdingTools
                 modVersion = manifestDocument.Root.Element("version").Value;
             if (manifestDocument.Root.Element("author") != null)
                 modAuthor = manifestDocument.Root.Element("author").Value;
+            if (manifestDocument.Root.Element("description") != null)
+                modDescription = manifestDocument.Root.Element("description").Value;
+            if (manifestDocument.Root.Element("website") != null)
+                modWebsite = manifestDocument.Root.Element("website").Value;
             if (manifestDocument.Root.Element("game") != null)
             {
                 var game = manifestDocument.Root.Element("game").Value;
@@ -99,6 +105,8 @@ namespace IllusionMods.KoikatuModdingTools
             var modNameNew = EditorGUILayout.TextField("Name", modName);
             var modVersionNew = EditorGUILayout.TextField("Version", modVersion);
             var modAuthorNew = EditorGUILayout.TextField("Author", modAuthor);
+            var modDescriptionNew = EditorGUILayout.TextField("Description", modDescription);
+            var modWebsiteNew = EditorGUILayout.TextField("Website", modWebsite);
             var modGameNew = (GameName)EditorGUILayout.Popup("Game", (int)modGame, Enum.GetNames(typeof(GameName)));
 
             if (!string.IsNullOrEmpty(modGUIDNew) && modGUIDNew != modGUID)
@@ -131,6 +139,22 @@ namespace IllusionMods.KoikatuModdingTools
                 if (manifestDocument.Root.Element("author") == null)
                     manifestDocument.Root.Add(new XElement("author"));
                 manifestDocument.Root.Element("author").Value = modAuthor;
+                manifestDocument.Save(filename);
+            }
+            if (modDescriptionNew != modDescription)
+            {
+                modDescription = modDescriptionNew;
+                if (manifestDocument.Root.Element("description") == null)
+                    manifestDocument.Root.Add(new XElement("description"));
+                manifestDocument.Root.Element("description").Value = modDescription;
+                manifestDocument.Save(filename);
+            }
+            if (modWebsiteNew != modWebsite)
+            {
+                modWebsite = modWebsiteNew;
+                if (manifestDocument.Root.Element("website") == null)
+                    manifestDocument.Root.Add(new XElement("website"));
+                manifestDocument.Root.Element("website").Value = modWebsite;
                 manifestDocument.Save(filename);
             }
             if (modGameNew != modGame)
