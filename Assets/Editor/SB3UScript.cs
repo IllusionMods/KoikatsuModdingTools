@@ -75,6 +75,33 @@ namespace IllusionMods.KoikatuModdingTools
                 }
             }
 
+            //find shaders assigned to materials that are not assigned to game objects
+            foreach (var assetguid in AssetDatabase.FindAssets("t:Material", new string[] { Constants.ModsPath, Constants.ExamplesPath }))
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
+                string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
+                if (string.IsNullOrEmpty(modAB))
+                    continue;
+                modAB = Path.Combine(BuildPath, modAB);
+                string mainABPath = new FileInfo(modAB).FullName;
+                if (!changedFiles.Contains(mainABPath))
+                    continue;
+
+                var material = AssetDatabase.LoadAssetAtPath<Material>(assetPath);
+
+                string shaderAB;
+                if (Constants.ShaderABs.TryGetValue(material.shader.name, out shaderAB))
+                {
+                    HashSet<string> shaderList;
+                    if (!shaderABs.TryGetValue(modAB, out shaderList))
+                    {
+                        shaderList = new HashSet<string>();
+                        shaderABs[modAB] = shaderList;
+                    }
+                    shaderList.Add(material.shader.name);
+                }
+            }
+
             //Generate the shader replacement script
             foreach (var ab in shaderABs)
             {
