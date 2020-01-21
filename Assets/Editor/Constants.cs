@@ -32,6 +32,7 @@ namespace IllusionMods.KoikatuModdingTools
             { "Shader Forge/main_item_studio_add", "chara/ao_head_08.unity3d" },
             { "Shader Forge/main_opaque", "chara/co_bra_00.unity3d" },
             { "Shader Forge/main_opaque2", "chara/co_bra_10.unity3d" },
+            { "Shader Forge/main_skin", "chara/mm_base.unity3d" },
             { "Shader Forge/main_opaque_low", "chara/co_bra_00.unity3d" },
             { "Shader Forge/main_opaque_low2", "chara/co_bra_10.unity3d" },
             { "Shader Forge/main_texture", "chara/ao_hair_00.unity3d" },
