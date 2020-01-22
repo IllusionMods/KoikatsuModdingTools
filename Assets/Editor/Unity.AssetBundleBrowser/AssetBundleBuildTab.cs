@@ -265,7 +265,10 @@ namespace AssetBundleBrowser
             {
                 EditorApplication.delayCall += delegate { AssetBundleImport.Import(Path.Combine(m_UserData.m_KoikatsuPath, "Import")); };
             }
-
+            if (GUILayout.Button("Build Test Zipmod (Current Folder)"))
+            {
+                EditorApplication.delayCall += delegate { Zipmod.BuildSingleMod(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath, m_UserData.m_CopyMods, true); };
+            }
 
             GUILayout.EndVertical();
             EditorGUILayout.EndScrollView();

@@ -14,7 +14,7 @@ namespace IllusionMods.KoikatuModdingTools
         private static string KoikatsuPath;
         private static bool CopyMods;
 
-        public static void BuildSingleMod(string buildPath, string koikatsuPath, bool copyMods)
+        public static void BuildSingleMod(string buildPath, string koikatsuPath, bool copyMods, bool testMod = false)
         {
             BuildPath = buildPath;
             KoikatsuPath = koikatsuPath;
@@ -28,7 +28,7 @@ namespace IllusionMods.KoikatuModdingTools
             }
 
             string projectPath = manifestPath.Replace(@"\", "/").Replace("/manifest.xml", "");
-            if (BuildSingleModInternal(projectPath))
+            if (BuildSingleModInternal(projectPath, testMod))
                 Debug.Log("Mod built successfully.");
         }
 
@@ -68,11 +68,13 @@ namespace IllusionMods.KoikatuModdingTools
             }
         }
 
+
         /// <summary>
         /// Packs up a mod including its manifest.xml, list files, and asset bundles. Copies the mod to the user's install folder.
         /// </summary>
         /// <param name="projectPath">Path of the project containing the mod, manifest.xml should be in the root.</param>
-        private static bool BuildSingleModInternal(string projectPath)
+        /// <param name="testMod">Whether the asset bundles will be included in the zipmod. If false, zipmod will be build with no asset bundles and asset bundles will be copied to the game folder.</param>
+        private static bool BuildSingleModInternal(string projectPath, bool testMod = false)
         {
             string manifestPath = Path.Combine(projectPath, "manifest.xml");
             string makerListPath = Path.Combine(projectPath, @"List\Maker");
@@ -133,7 +135,7 @@ namespace IllusionMods.KoikatuModdingTools
             if (modVersion != "")
                 zipFileName += " v" + modVersion;
             zipFileName += ".zipmod";
-            string zipPath = Path.Combine("Build", zipFileName);
+            string zipPath = Path.Combine(BuildPath, zipFileName);
 
             //Find all the asset bundles for this mod
             foreach (var assetguid in AssetDatabase.FindAssets("", new string[] { projectPath }))
@@ -163,11 +165,14 @@ namespace IllusionMods.KoikatuModdingTools
             zipFile.AddFile(manifestPath, "");
 
             //Add asset bundles
-            foreach (var modAB in modABs)
+            if (!testMod)
             {
-                string folderAB = modAB.Replace("/", @"\").Replace(@"Build\", "");
-                folderAB = folderAB.Remove(folderAB.LastIndexOf(@"\")); //Remove the .unity3d filename
-                zipFile.AddFile(modAB, folderAB);
+                foreach (var modAB in modABs)
+                {
+                    string folderAB = modAB.Replace("/", @"\").Replace(@"Build\", "");
+                    folderAB = folderAB.Remove(folderAB.LastIndexOf(@"\")); //Remove the .unity3d filename
+                    zipFile.AddFile(modAB, folderAB);
+                }
             }
 
             //Add list files
@@ -192,7 +197,18 @@ namespace IllusionMods.KoikatuModdingTools
                 {
                     foreach (var file in di.GetFiles("*.zipmod"))
                         if (file.Name.StartsWith(zipFileNamePrexix))
-                            file.Delete();
+                            try
+                            {
+                                file.Delete();
+                            }
+                            catch (IOException)
+                            {
+                                if (!testMod)
+                                {
+                                    Debug.Log("Could not copy mod, likely file is in use. Close the game before copying.");
+                                    return false;
+                                }
+                            }
 
                     if (exampleMod)
                     {
@@ -200,12 +216,50 @@ namespace IllusionMods.KoikatuModdingTools
                         examplesFolderDirectory.Create();
                         foreach (var file in examplesFolderDirectory.GetFiles("*.zipmod"))
                             if (file.Name.StartsWith(zipFileNamePrexix))
-                                file.Delete();
+                                try
+                                {
+                                    file.Delete();
+                                }
+                                catch (IOException)
+                                {
+                                    if (!testMod)
+                                    {
+                                        Debug.Log("Could not copy mod, likely file is in use. Close the game before copying.");
+                                        return false;
+                                    }
+                                }
                     }
-                    File.Copy(zipPath, copyPath);
+                    try
+                    {
+                        File.Copy(zipPath, copyPath);
+                    }
+                    catch (IOException)
+                    {
+                        if (!testMod)
+                        {
+                            Debug.Log("Could not copy mod, likely file is in use. Close the game before copying.");
+                            return false;
+                        }
+                    }
                 }
                 else
+                {
                     Debug.Log("Mods folder not found, could not copy .zipmod files to game install.");
+                    return false;
+                }
+
+                //Copy asset bundles
+                if (testMod)
+                {
+                    foreach (var modAB in modABs)
+                    {
+                        FileInfo sourceFileInfo = new FileInfo(modAB);
+                        FileInfo destinationFileInfo = new FileInfo(Path.Combine(KoikatsuPath, modAB.Replace(BuildPath, "abdata")));
+
+                        destinationFileInfo.Directory.Create();
+                        File.Copy(sourceFileInfo.FullName, destinationFileInfo.FullName, true);
+                    }
+                }
             }
             return true;
         }
