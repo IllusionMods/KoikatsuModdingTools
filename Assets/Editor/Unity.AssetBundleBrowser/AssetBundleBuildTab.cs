@@ -340,6 +340,11 @@ namespace AssetBundleBrowser
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
 
             SB3UScript.BuildAndRunScripts(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath, m_UserData.m_Compression, changedFiles);
+
+            if (changedFiles.Count == 1)
+                Debug.Log("Successfully built 1 asset bundle.");
+            else
+                Debug.Log("Successfully built " + changedFiles.Count + " asset bundles.");
         }
 
         private void BrowseForFolder()
