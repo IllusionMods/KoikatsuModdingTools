@@ -29,7 +29,7 @@ namespace IllusionMods.KoikatuModdingTools
 
             string projectPath = manifestPath.Replace(@"\", "/").Replace("/manifest.xml", "");
             if (BuildSingleModInternal(projectPath))
-                Debug.Log("Mod built sucessfully.");
+                Debug.Log("Mod built successfully.");
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace IllusionMods.KoikatuModdingTools
                 if (count > 1)
                     s = "s were";
 
-                Debug.Log(count + " mod" + s + " built sucessfully.");
+                Debug.Log(count + " mod" + s + " built successfully.");
             }
         }
 
