@@ -143,7 +143,7 @@ namespace IllusionMods.KoikatuModdingTools
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
                 string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
                 if (modAB != string.Empty)
-                    modABs.Add(Path.Combine(BuildPath, modAB));
+                    modABs.Add(Path.Combine(BuildPath, modAB).Replace("/", @"\"));
             }
 
             var di = new DirectoryInfo(makerListPath);

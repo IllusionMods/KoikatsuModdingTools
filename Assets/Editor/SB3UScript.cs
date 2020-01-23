@@ -18,8 +18,8 @@ namespace IllusionMods.KoikatuModdingTools
 
         public static bool BuildAndRunScripts(string buildPath, string koikatsuPath, bool compression, List<string> changedFiles)
         {
-            BuildPath = buildPath;
-            KoikatsuPath = koikatsuPath;
+            BuildPath = buildPath.Replace("/", @"\");
+            KoikatsuPath = koikatsuPath.Replace("/", @"\");
             Compression = compression;
 
             string script = GenerateScript(changedFiles);
@@ -49,7 +49,9 @@ namespace IllusionMods.KoikatuModdingTools
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
                 string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
-                modAB = Path.Combine(BuildPath, modAB);
+                if (string.IsNullOrEmpty(modAB))
+                    continue;
+                modAB = Path.Combine(BuildPath, modAB).Replace("/", @"\");
                 string mainABPath = new FileInfo(modAB).FullName;
                 if (!changedFiles.Contains(mainABPath))
                     continue;
@@ -82,7 +84,7 @@ namespace IllusionMods.KoikatuModdingTools
                 string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
                 if (string.IsNullOrEmpty(modAB))
                     continue;
-                modAB = Path.Combine(BuildPath, modAB);
+                modAB = Path.Combine(BuildPath, modAB).Replace("/", @"\");
                 string mainABPath = new FileInfo(modAB).FullName;
                 if (!changedFiles.Contains(mainABPath))
                     continue;
@@ -109,7 +111,7 @@ namespace IllusionMods.KoikatuModdingTools
                 string mainABPath = new FileInfo(modAB).FullName;
                 bundlesToCompress.Remove(mainABPath);
 
-                sb.AppendLine("Log(\"Replacing shaders for: " + modAB.Replace("/", @"\") + "\")");
+                sb.AppendLine("Log(\"Replacing shaders for: " + modAB + "\")");
                 sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
                 sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
                 foreach (string shaderName in ab.Value)
@@ -117,7 +119,7 @@ namespace IllusionMods.KoikatuModdingTools
                     string shaderAB;
                     if (Constants.ShaderABs.TryGetValue(shaderName, out shaderAB))
                     {
-                        string shaderABPath = KoikatsuPath + "/" + "abdata" + "/" + shaderAB;
+                        string shaderABPath = KoikatsuPath + @"\" + "abdata" + @"\" + shaderAB;
 
                         sb.AppendLine("Log(\"Replacing shader: " + shaderName + "\")");
                         sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
@@ -157,7 +159,7 @@ namespace IllusionMods.KoikatuModdingTools
                 bundlesToCompress.Remove(mainABPath);
 
                 var cab = GetRandomCABString();
-                sb.AppendLine("Log(\"Randomizing CAB for " + modAB.Replace("/", @"\") + "\")");
+                sb.AppendLine("Log(\"Randomizing CAB for " + modAB + "\")");
                 sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + mainABPath + "\")");
                 sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
                 sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
@@ -174,7 +176,7 @@ namespace IllusionMods.KoikatuModdingTools
                 foreach (string bundlePath in bundlesToCompress)
                 {
                     string bundle = bundlePath;
-                    int index = bundle.Replace("/", @"\").IndexOf(BuildPath.Replace("/", @"\"));
+                    int index = bundle.IndexOf(BuildPath);
                     if (index > 0)
                         bundle = bundle.Substring(index);
 

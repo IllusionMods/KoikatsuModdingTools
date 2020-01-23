@@ -32,7 +32,7 @@ namespace IllusionMods.KoikatuModdingTools
                 manifestPath = Shared.GetManifestPath(projectPath);
                 if (manifestPath != null)
                 {
-                    Debug.Log("manifest.xml cannot be created, one exists in a parent folder: " + manifestPath.Replace(@"\", "/"));
+                    Debug.Log("manifest.xml cannot be created, one exists in a parent folder: " + manifestPath);
                     return;
                 }
             }
