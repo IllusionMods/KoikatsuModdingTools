@@ -27,7 +27,7 @@ namespace IllusionMods.KoikatuModdingTools
                 return;
             }
 
-            string projectPath = manifestPath.Replace(@"\", "/").Replace("/manifest.xml", "");
+            string projectPath = manifestPath.Replace(@"\manifest.xml", "");
             if (BuildSingleModInternal(projectPath, testMod))
                 Debug.Log("Mod built successfully.");
         }
@@ -179,6 +179,14 @@ namespace IllusionMods.KoikatuModdingTools
             foreach (var listFile in makerListFiles)
                 zipFile.AddFile(listFile, @"abdata\list\characustom\" + modAuthor.ToLower() + @"\");
 
+            //Add Studio list files
+            foreach (var listFile in studioListFiles)
+            {
+                FileInfo listFileInfo = new FileInfo(listFile);
+                string listFolder = @"abdata\studio\info\" + ReplaceInvalidChars(modGUID.ToLower().Replace(".", "_")) + @"\" + listFileInfo.Directory.Name;
+                zipFile.AddFile(listFile, listFolder);
+            }
+
             zipFile.Save();
             zipFile.Dispose();
 
@@ -262,6 +270,11 @@ namespace IllusionMods.KoikatuModdingTools
                 }
             }
             return true;
+        }
+
+        public static string ReplaceInvalidChars(string filename)
+        {
+            return string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
         }
     }
 }
