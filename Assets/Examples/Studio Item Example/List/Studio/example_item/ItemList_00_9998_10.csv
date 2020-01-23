@@ -1,0 +1,3 @@
+ID,Group Number,Category Number,Name,Manifest,Bundle Path,File Name,Child Attachment Transform,Animation,Color 1,Pattern 1,Color 2,Pattern 2,Color 3,Pattern 3,Scaling,Emission
+1,9998,10,Example Pencil,,studio/illusionmods/example_studio_item.unity3d,example_studio_item_1,,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,FALSE
+2,9998,10,Example Feather (colorable),,studio/illusionmods/example_studio_item.unity3d,example_studio_item_2,,FALSE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE
