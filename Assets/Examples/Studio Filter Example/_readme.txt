@@ -12,3 +12,5 @@ ID: ID of the item. Can be any number but must not be the same as another filter
 Name: Name of the item that will appear in the dropdown menu in game.
 Bundle Path: Asset bundle of the filter texture.
 File Name: File name of the filter texture.
+
+Filter textures should use "None" for the compression type on the image due to very fine gradients these textures often use. The textures are typically small enough that having them uncompressed doesn't add much extra file size.
