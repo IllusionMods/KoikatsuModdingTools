@@ -28,6 +28,12 @@ How to compile a shader and configure it for use with KK_MaterialEditor.
 #### Asset Override Example
 How to override a vanilla asset, for example when fixing or improving an asset from the base game.
 
+#### Studio Item Example
+How to create an item for Studio.
+
+#### Studio Filter Example
+How to create a color filter for Studio.
+
 ## Creating your own mod
 To create your own mod, you can use an example project as a base. Copy an example project to the Mods folder, then edit the manifest.xml and insert your own information. Add your textures, select them, and set a path inside the chara folder, such as chara\[your_name]\[mod_name].unity3d. Do the same for your thumbnails. Edit the list file with the correct category number, fields, and content.
 
