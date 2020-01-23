@@ -45,7 +45,7 @@ Koikatsu Modding Tools is a work in progress, please report any bugs you may fin
 * Create dummy shaders for all vanilla shaders (Anon11)
 * Create a pretty UI for creating list files (Marco)
 * ~Create a UI for generating manifest.xml files~
-* Add example projects for all types of items such as clothes, accessories, hair, and Studio items
+* ~Add example projects for all types of items such as clothes, accessories, hair, and Studio items~
 * Add an example project for creating maps for use in Free H and Studio
 * Load vanilla shaders for objects in the scene so that previews are more accurate OR edit the dummy shaders to be closer to the original
 * Make a pretty readme file
