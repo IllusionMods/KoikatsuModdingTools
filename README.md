@@ -52,6 +52,7 @@ Koikatsu Modding Tools is a work in progress, please report any bugs you may fin
 * Write instructions and tutorials for all types of mods with pictures and explanations of all parts of the mod
 * ~Generate hard mods for testing purposes so that asset bundles can be replaced while the game is running and reloaded with RuntimeUnityEditor~
 * ~Asset bundle extractor which can dump assets from exist asset bundles in to a KKModTools project~
+* Automatically apply color correction to textures
 
 ## Credits
 Enimaroah for SB3UGS and updating it to support shader replacement.
