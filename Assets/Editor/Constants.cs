@@ -13,6 +13,7 @@ namespace IllusionMods.KoikatuModdingTools
         internal static readonly HashSet<string> GameNameList = new HashSet<string>() { "koikatsu", "koikatu", "コイカツ" };
         internal static readonly Dictionary<string, string> ShaderABs = new Dictionary<string, string>()
         {
+            { "Custom/Silhouette", "chara/oo_base.unity3d" },
             { "Shader Forge/create_body", "chara/mm_base.unity3d" },
             { "Shader Forge/create_eye", "chara/mm_base.unity3d" },
             { "Shader Forge/create_hair", "chara/mm_base.unity3d" },
@@ -31,13 +32,23 @@ namespace IllusionMods.KoikatuModdingTools
             { "Shader Forge/main_item_low", "chara/bo_hair_b_00.unity3d" },
             { "Shader Forge/main_item_studio", "studio/mat/00.unity3d" },
             { "Shader Forge/main_item_studio_add", "studio/mat/00.unity3d" },
+            { "Shader Forge/main_item_studio_alpha", "studio/mat/00.unity3d" },
             { "Shader Forge/main_opaque", "chara/co_bra_00.unity3d" },
             { "Shader Forge/main_opaque2", "chara/co_bra_10.unity3d" },
             { "Shader Forge/main_skin", "chara/mm_base.unity3d" },
+            { "Shader Forge/main_skin_low", "chara/mm_base.unity3d" },
+            { "Shader Forge/main_StandardMDK_studio", "studio/mat/00.unity3d" },
             { "Shader Forge/main_opaque_low", "chara/co_bra_00.unity3d" },
             { "Shader Forge/main_opaque_low2", "chara/co_bra_10.unity3d" },
             { "Shader Forge/main_texture", "chara/ao_hair_00.unity3d" },
-            { "Shader Forge/toon_glasses_lod0", "chara/ao_face_00.unity3d" },
+            { "Shader Forge/main_texture_studio", "studio/mat/00.unity3d" },
+            { "Shader Forge/mnpb", "chara/oo_base.unity3d" },
+            { "Shader Forge/shadowcast", "chara/oo_base.unity3d" },
+            { "Shader Forge/toon_eye_lod0", "chara/bo_head_00.unity3d" },
+            { "Shader Forge/toon_eyew_lod0", "chara/bo_head_00.unity3d" },
+            { "Shader Forge/toon_glasses_lod0", "chara/bo_head_00.unity3d" },
+            { "Shader Forge/toon_nose_lod0", "chara/bo_head_00.unity3d" },
+            { "Shader Forge/toon_textureanimation", "chara/mm_base.unity3d" },
         };
     }
 }
