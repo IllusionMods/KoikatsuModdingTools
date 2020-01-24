@@ -42,7 +42,7 @@ Once you have assets assigned to the asset bundles, click Window->AssetBundle Br
 ## Work in progress
 Koikatsu Modding Tools is a work in progress, please report any bugs you may find. If you are interested in contributing to development, these are the things that need to be done.
 
-* Create dummy shaders for all vanilla shaders (Anon11)
+* ~Create dummy shaders for all vanilla shaders~
 * Create a pretty UI for creating list files (Marco)
 * ~Create a UI for generating manifest.xml files~
 * ~Add example projects for all types of items such as clothes, accessories, hair, and Studio items~
