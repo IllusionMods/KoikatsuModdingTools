@@ -12,4 +12,4 @@ cf_anmShapeHead_00
 Texture:
 cf_face_00_mc, cf_face_00_mc_low, cf_face_00_t, cf_face_00_t_low
 
-Everything else is assigned to a material which is part of the prefab and will be compiled to the asset bundle automatically. The material and the two textures are part of the list file.
+Everything else is assigned to a material which is part of the prefab and will be compiled to the asset bundle automatically. The material, textures, and text asset are part of the list file and not attached to anything directly, the game loads these in code from the list.
