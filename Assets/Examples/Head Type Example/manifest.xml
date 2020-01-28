@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest schema-ver="1">
+  <guid>IllusionMods.HeadTypeExample</guid>
+  <name>Head Type Example</name>
+  <version>1.0</version>
+  <author>IllusionMods</author>
+  <description>Head Type Example</description>
+  <website>https://github.com/IllusionMods/KoikatsuModdingTools</website>
+  <game>Koikatsu</game>
+</manifest>

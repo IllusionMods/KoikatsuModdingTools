@@ -1,0 +1,5 @@
+﻿100
+0
+0
+ID,Kind,Possess,Name,MainManifest,MainAB,MainData,ShapeAnime,MatManifest,MatAB,MatData,MainTexAB,MainTex,ColorMaskAB,ColorMaskTex,ThumbAB,ThumbTex
+1,0,2,Example,,chara/illusionmods/head_type_example.unity3d,p_cf_head_00,cf_anmShapeHead_00,,chara/illusionmods/head_type_example.unity3d,cf_m_face_00,chara/illusionmods/head_type_example.unity3d,cf_face_00_t,chara/illusionmods/head_type_example.unity3d,cf_face_00_mc,chara/illusionmods/head_type_example_thumb.unity3d,head_type_example_thumb
