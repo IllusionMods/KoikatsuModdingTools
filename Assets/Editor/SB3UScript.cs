@@ -185,6 +185,7 @@ namespace IllusionMods.KoikatuModdingTools
                     sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
                     sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
                     sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
+                    wroteScript = true;
                 }
             }
 

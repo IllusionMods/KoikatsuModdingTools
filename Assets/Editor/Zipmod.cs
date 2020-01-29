@@ -79,11 +79,13 @@ namespace IllusionMods.KoikatuModdingTools
             string manifestPath = Path.Combine(projectPath, "manifest.xml");
             string makerListPath = Path.Combine(projectPath, @"List\Maker");
             string studioListPath = Path.Combine(projectPath, @"List\Studio");
+            string mapListPath = Path.Combine(projectPath, @"List\Map");
             bool exampleMod = manifestPath.Contains("Examples");
 
             HashSet<string> modABs = new HashSet<string>();
             HashSet<string> makerListFiles = new HashSet<string>();
             HashSet<string> studioListFiles = new HashSet<string>();
+            HashSet<string> mapListFiles = new HashSet<string>();
 
             if (!File.Exists(manifestPath))
             {
@@ -156,6 +158,11 @@ namespace IllusionMods.KoikatuModdingTools
                 foreach (var file in di.GetFiles("*.csv", SearchOption.AllDirectories))
                     studioListFiles.Add(file.FullName);
 
+            di = new DirectoryInfo(mapListPath);
+            if (di.Exists)
+                foreach (var file in di.GetFiles("*.csv", SearchOption.AllDirectories))
+                    mapListFiles.Add(file.FullName);
+
             //Build the zip file
             File.Delete(zipPath);
             ZipFile zipFile = new ZipFile(zipPath, Encoding.UTF8);
@@ -186,6 +193,10 @@ namespace IllusionMods.KoikatuModdingTools
                 string listFolder = @"abdata\studio\info\" + ReplaceInvalidChars(modGUID.ToLower().Replace(".", "_")) + @"\" + listFileInfo.Directory.Name;
                 zipFile.AddFile(listFile, listFolder);
             }
+
+            //Add map list files
+            foreach (var listFile in mapListFiles)
+                zipFile.AddFile(listFile, @"abdata\map\list\mapinfo\");
 
             zipFile.Save();
             zipFile.Dispose();
