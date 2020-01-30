@@ -16,7 +16,7 @@ namespace IllusionMods.KoikatuModdingTools
 
         public static void BuildSingleMod(string buildPath, string koikatsuPath, bool copyMods, bool testMod = false)
         {
-            BuildPath = buildPath;
+            BuildPath = buildPath.Replace("/", @"\");
             KoikatsuPath = koikatsuPath;
             CopyMods = copyMods;
 
@@ -38,7 +38,7 @@ namespace IllusionMods.KoikatuModdingTools
         /// <param name="buildPath"></param>
         public static void BuildAllMods(string buildPath, string koikatsuPath, bool copyMods)
         {
-            BuildPath = buildPath;
+            BuildPath = buildPath.Replace("/", @"\");
             KoikatsuPath = koikatsuPath;
             CopyMods = copyMods;
 
@@ -145,7 +145,7 @@ namespace IllusionMods.KoikatuModdingTools
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
                 string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
                 if (modAB != string.Empty)
-                    modABs.Add(Path.Combine(BuildPath, modAB).Replace("/", @"\"));
+                    modABs.Add(Path.Combine(BuildPath, modAB));
             }
 
             var di = new DirectoryInfo(makerListPath);
