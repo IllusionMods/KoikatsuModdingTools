@@ -62,6 +62,9 @@ namespace IllusionMods.KoikatuModdingTools
                 {
                     foreach (var material in renderer.sharedMaterials)
                     {
+                        if (material == null) continue;
+                        if (material.shader == null) continue;
+
                         string shaderAB;
                         if (Constants.ShaderABs.TryGetValue(material.shader.name, out shaderAB))
                         {
