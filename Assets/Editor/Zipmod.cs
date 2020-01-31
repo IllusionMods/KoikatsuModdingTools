@@ -32,6 +32,22 @@ namespace IllusionMods.KoikatuModdingTools
                 Debug.Log("Mod built successfully.");
         }
 
+        public static void CleanUpTestMod(string buildPath, string koikatsuPath)
+        {
+            BuildPath = buildPath.Replace("/", @"\");
+            KoikatsuPath = koikatsuPath;
+
+            var manifestPath = Shared.GetManifestPath();
+            if (manifestPath == null)
+            {
+                Debug.Log("manifest.xml does not exist in the directory, mod clean up aborted.");
+                return;
+            }
+
+            string projectPath = manifestPath.Replace(@"\manifest.xml", "");
+            CleanUpTestModInternal(projectPath);
+        }
+
         /// <summary>
         /// Pack up all mods including their manifest.xml, list files, and asset bundles.
         /// </summary>
@@ -67,7 +83,6 @@ namespace IllusionMods.KoikatuModdingTools
                 Debug.Log(count + " mod" + s + " built successfully.");
             }
         }
-
 
         /// <summary>
         /// Packs up a mod including its manifest.xml, list files, and asset bundles. Copies the mod to the user's install folder.
@@ -281,6 +296,28 @@ namespace IllusionMods.KoikatuModdingTools
                 }
             }
             return true;
+        }
+
+        private static void CleanUpTestModInternal(string projectPath)
+        {
+            HashSet<string> modABs = new HashSet<string>();
+
+            //Find all the asset bundles for this mod
+            foreach (var assetguid in AssetDatabase.FindAssets("", new string[] { projectPath }))
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
+                string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
+                if (modAB != string.Empty)
+                    modABs.Add(Path.Combine(BuildPath, modAB));
+            }
+
+            //Copy asset bundles
+            foreach (var modAB in modABs)
+            {
+                FileInfo destinationFileInfo = new FileInfo(Path.Combine(KoikatsuPath, modAB.Replace(BuildPath, "abdata")));
+                Debug.Log("Removing " + destinationFileInfo.FullName);
+                File.Delete(destinationFileInfo.FullName);
+            }
         }
 
         public static string ReplaceInvalidChars(string filename)
