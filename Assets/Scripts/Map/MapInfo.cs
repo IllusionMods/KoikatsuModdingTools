@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New MapInfo", menuName = "MAP", order = 51)]
+[CreateAssetMenu(fileName = "New MapInfo", menuName = "Map List Info", order = 51)]
 public class MapInfo : ScriptableObject
 {
     public List<MapInfo.Param> param = new List<MapInfo.Param>();
