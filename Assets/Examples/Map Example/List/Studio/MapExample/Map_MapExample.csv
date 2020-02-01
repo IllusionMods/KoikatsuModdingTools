@@ -1,0 +1,3 @@
+Map							  Colliders
+ID,Name,Bundle Path,File Path,Manifest,Bundle Path,File Path
+6900,Purple Room,map/scene/purpleroom.unity3d,PurpleRoom,,h/list/,map_col_6900
