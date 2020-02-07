@@ -70,7 +70,7 @@ namespace IllusionMods.KoikatuModdingTools.Lists
             }
 
             using (StreamWriter writer = new StreamWriter(Path.Combine(path, fileName)))
-                writer.WriteLine(sb.ToString());
+                writer.Write(sb.ToString());
         }
     }
 
