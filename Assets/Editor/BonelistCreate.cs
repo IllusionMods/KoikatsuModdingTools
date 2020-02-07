@@ -11,15 +11,24 @@ namespace IllusionMods.KoikatuModdingTools
         internal static void Create()
         {
             string projectPath = Shared.GetProjectPath();
-            var sb = new StringBuilder();
+            string searchFolder = projectPath;
 
-            var prefabs = AssetDatabase.FindAssets("t:Prefab", new string[] { projectPath });
+            //If inside the list folder search the root directory for prefabs instead of the current
+            if (projectPath.Contains(@"List\Studio"))
+            {
+                string manifestFolder = Shared.GetManifestPath();
+                if (!string.IsNullOrEmpty(manifestFolder))
+                    searchFolder = manifestFolder;
+            }
+
+            var prefabs = AssetDatabase.FindAssets("t:Prefab", new string[] { searchFolder });
             if (prefabs.Length == 0)
             {
                 Debug.Log("No prefabs were were found.");
                 return;
             }
 
+            var sb = new StringBuilder();
             foreach (var assetguid in prefabs)
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
