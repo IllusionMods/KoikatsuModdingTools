@@ -1,9 +1,7 @@
-﻿using System.IO;
-using System.Text;
-using UnityEditor;
-using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace IllusionMods.KoikatuModdingTools.Lists
 {
