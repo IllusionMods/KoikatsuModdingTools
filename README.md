@@ -34,6 +34,9 @@ How to create an item for Studio.
 #### Studio Filter Example
 How to create a color filter for Studio.
 
+#### Map Example
+How to create a map for use in Free H and Studio, complete with H Points, map masking, lighting, etc.
+
 ## Creating your own mod
 To create your own mod, you can use an example project as a base. Copy an example project to the Mods folder, then edit the manifest.xml and insert your own information. Add your textures, select them, and set a path inside the chara folder, such as chara\[your_name]\[mod_name].unity3d. Do the same for your thumbnails. Edit the list file with the correct category number, fields, and content.
 
@@ -46,7 +49,7 @@ Koikatsu Modding Tools is a work in progress, please report any bugs you may fin
 * Create a pretty UI for creating list files (Marco)
 * ~Create a UI for generating manifest.xml files~
 * ~Add example projects for all types of items such as clothes, accessories, hair, and Studio items~
-* Add an example project for creating maps for use in Free H and Studio
+* ~Add an example project for creating maps for use in Free H and Studio~
 * Load vanilla shaders for objects in the scene so that previews are more accurate OR edit the dummy shaders to be closer to the original
 * Make a pretty readme file
 * Write instructions and tutorials for all types of mods with pictures and explanations of all parts of the mod
