@@ -53,11 +53,19 @@ namespace IllusionMods.KoikatuModdingTools
         /// <summary>
         /// Get the path to the manifest.xml for the current folder or from its parent folder.
         /// </summary>
-        /// <param name="projectPath">Folder to search for manifest.xml</param>
         /// <returns>Path to the manifest.xml if it exists or null if not</returns>
-        public static string GetManifestPath()
+        public static string GetManifestFilePath()
         {
             return GetManifestPath(GetProjectPath());
+        }
+
+        /// <summary>
+        /// Get the folder containing the manifest.xml for the current folder or from its parent folder.
+        /// </summary>
+        /// <returns>Folder containing the manifest.xml if it exists or null if not</returns>
+        public static string GetManifestPath()
+        {
+            return GetManifestPath(GetProjectPath()).Replace(@"\manifest.xml", "");
         }
     }
 }
