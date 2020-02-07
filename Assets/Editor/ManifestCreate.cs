@@ -10,7 +10,7 @@ namespace IllusionMods.KoikatuModdingTools
     /// </summary>
     class ManifestCreate
     {
-        [MenuItem("Assets/Create Manifest.xml")]
+        [MenuItem("Assets/Create/Manifest.xml")]
         public static void CreateManifest()
         {
             string projectPath = Shared.GetProjectPath();
