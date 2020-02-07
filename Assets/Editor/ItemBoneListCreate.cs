@@ -24,7 +24,7 @@ namespace IllusionMods.KoikatuModdingTools
             var prefabs = AssetDatabase.FindAssets("t:Prefab", new string[] { searchFolder });
             if (prefabs.Length == 0)
             {
-                Debug.Log("No prefabs were were found.");
+                Debug.Log("No prefabs were found.");
                 return;
             }
 
