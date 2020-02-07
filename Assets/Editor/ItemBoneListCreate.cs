@@ -76,7 +76,8 @@ namespace IllusionMods.KoikatuModdingTools
                 List<string> bones = new List<string>();
 
                 foreach (var transform in go.GetComponentsInChildren<Transform>())
-                    bones.Add(transform.name);
+                    if (transform.name != go.name)
+                        bones.Add(transform.name);
                 itemListInfo.BoneList = bones;
             }
 
