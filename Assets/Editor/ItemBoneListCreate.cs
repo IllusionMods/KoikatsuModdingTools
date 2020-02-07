@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace IllusionMods.KoikatuModdingTools
 {
-    class BonelistCreate
+    class ItemBoneListCreate
     {
-        [MenuItem("Assets/Create/Bonelist")]
+        [MenuItem("Assets/Create/ItemBoneList.csv")]
         internal static void Create()
         {
             string projectPath = Shared.GetProjectPath();
@@ -29,6 +29,7 @@ namespace IllusionMods.KoikatuModdingTools
             }
 
             var sb = new StringBuilder();
+            sb.AppendLine("ItemBoneList");
             foreach (var assetguid in prefabs)
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
@@ -45,7 +46,7 @@ namespace IllusionMods.KoikatuModdingTools
                 sb.AppendLine();
             }
 
-            using (StreamWriter file = new StreamWriter(Path.Combine(projectPath, "Bonelist.csv")))
+            using (StreamWriter file = new StreamWriter(Path.Combine(projectPath, "ItemBoneList_00_00.csv")))
                 file.WriteLine(sb.ToString());
 
             AssetDatabase.Refresh();
