@@ -1,64 +1,12 @@
-﻿//Code adapted from https://answers.unity.com/questions/1167941/writing-a-custom-inspector-for-a-filetype.html
-using System;
+﻿using System;
 using System.Xml.Linq;
 using UnityEditor;
 using UnityEngine;
 
 namespace IllusionMods.KoikatuModdingTools
 {
-    [InitializeOnLoad]
-    public class ManifestFileGlobal
-    {
-        private static ManifestFileWrapper wrapper = null;
-        private static bool selectionChanged = false;
-
-        static ManifestFileGlobal()
-        {
-            Selection.selectionChanged += SelectionChanged;
-            EditorApplication.update += Update;
-        }
-
-        private static void SelectionChanged()
-        {
-            selectionChanged = true;
-            // can't do the wrapper stuff here. it does not work 
-            // when you Selection.activeObject = wrapper
-            // so do it in Update
-        }
-
-        private static void Update()
-        {
-            if (selectionChanged == false) return;
-
-            selectionChanged = false;
-            if (Selection.activeObject != wrapper)
-            {
-                string fn = AssetDatabase.GetAssetPath(Selection.activeInstanceID);
-                if (fn.ToLower().EndsWith("manifest.xml"))
-                {
-                    if (wrapper == null)
-                    {
-                        wrapper = ScriptableObject.CreateInstance<ManifestFileWrapper>();
-                        wrapper.hideFlags = HideFlags.DontSave;
-                    }
-
-                    wrapper.fileName = fn;
-                    Selection.activeObject = wrapper;
-
-                    Editor[] ed = Resources.FindObjectsOfTypeAll<ManifestFileWrapperInspector>();
-                    if (ed.Length > 0) ed[0].Repaint();
-                }
-            }
-        }
-    }
-
-    public class ManifestFileWrapper : ScriptableObject
-    {
-        [NonSerialized] public string fileName; // path is relative to Assets/
-    }
-
-    [CustomEditor(typeof(ManifestFileWrapper))]
-    public class ManifestFileWrapperInspector : Editor
+    [CustomEditor(typeof(TextAsset))]
+    public class ManifestEditor : Editor
     {
         string modGUID = "";
         string modName = "";
@@ -73,8 +21,7 @@ namespace IllusionMods.KoikatuModdingTools
 
         internal void OnEnable()
         {
-            ManifestFileWrapper Target = (ManifestFileWrapper)target;
-            filename = Target.fileName;
+            filename = AssetDatabase.GetAssetPath(target);
 
             manifestDocument = XDocument.Load(filename);
             if (manifestDocument.Root.Element("guid") != null)
@@ -99,7 +46,8 @@ namespace IllusionMods.KoikatuModdingTools
 
         public override void OnInspectorGUI()
         {
-            GUILayout.Label("Editing: " + filename);
+            GUI.enabled = true;
+            GUILayout.Label("Editing: " + filename.Replace("Assets/Mods/", "").Replace("Assets/Examples/", ""));
 
             var modGUIDNew = EditorGUILayout.TextField("GUID", modGUID);
             var modNameNew = EditorGUILayout.TextField("Name", modName);
