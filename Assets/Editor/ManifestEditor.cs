@@ -114,6 +114,11 @@ namespace IllusionMods.KoikatuModdingTools
                     ManifestDocument.Root.Element("game").Value = "";
                 ManifestDocument.Save(Path);
             }
+
+            EditorGUILayout.Space();
+            GUI.enabled = false;
+            GUILayout.TextArea(ManifestDocument.ToString(), GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true), GUILayout.MinHeight(70), GUILayout.MaxHeight(250));
+            GUI.enabled = true;
         }
 
         public enum GameName { KoikatsuAndEmotionCreators, Koikatsu }
