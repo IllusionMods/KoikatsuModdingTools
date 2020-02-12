@@ -8,36 +8,19 @@ using UnityEngine;
 
 namespace IllusionMods.KoikatuModdingTools
 {
-    [CustomEditor(typeof(TextAsset))]
-    public class CSVEditor : Editor
+    public static class MakerListfileEditor
     {
         public static MakerListFile makerListFile;
-        public static CSVEditor instance;
+        public static TextAssetEditor TextAssetEditorInstance;
 
-        internal void OnEnable()
+        public static void OnEnable(string path, TextAssetEditor instance)
         {
-            instance = this;
-            string path = AssetDatabase.GetAssetPath(target);
-            if (path.ToLower().Contains("list/maker/") && path.ToLower().EndsWith(".csv"))
-                makerListFile = new MakerListFile(new FileInfo(path));
-            else
-                makerListFile = null;
+            TextAssetEditorInstance = instance;
+
+            makerListFile = new MakerListFile(new FileInfo(path));
         }
 
-        public override void OnInspectorGUI()
-        {
-            if (makerListFile != null)
-            {
-                CSVInspectorGUI();
-                base.OnInspectorGUI();
-            }
-            else
-            {
-                base.OnInspectorGUI();
-            }
-        }
-
-        private void CSVInspectorGUI()
+        public static void OnInspectorGUI()
         {
             GUI.enabled = true;
 
@@ -66,7 +49,7 @@ namespace IllusionMods.KoikatuModdingTools
 
         internal void OnEnable()
         {
-            categoryListPosition = categoryListLookup2.IndexOf(CSVEditor.makerListFile.Category);
+            categoryListPosition = categoryListLookup2.IndexOf(MakerListfileEditor.makerListFile.Category);
         }
 
         internal void OnGUI()
@@ -78,13 +61,13 @@ namespace IllusionMods.KoikatuModdingTools
                 categoryListPosition = EditorGUILayout.Popup(categoryListPosition, categoryListLookup);
                 if (GUI.changed)
                 {
-                    CSVEditor.makerListFile.Category = categoryListLookup2[categoryListPosition];
-                    CSVEditor.makerListFile.Save();
+                    MakerListfileEditor.makerListFile.Category = categoryListLookup2[categoryListPosition];
+                    MakerListfileEditor.makerListFile.Save();
                 }
             }
             GUILayout.EndHorizontal();
 
-            if (CSVEditor.makerListFile.CategoryKeys == null)
+            if (MakerListfileEditor.makerListFile.CategoryKeys == null)
             {
                 GUILayout.Label("The selected listfile type is not supported");
                 return;
@@ -93,7 +76,7 @@ namespace IllusionMods.KoikatuModdingTools
             var totalW = position.width;
             var hashW = 12;
             var spaceW = 20;
-            var columnW = (int)((totalW - hashW) / CSVEditor.makerListFile.CategoryKeys.Length) - spaceW;
+            var columnW = (int)((totalW - hashW) / MakerListfileEditor.makerListFile.CategoryKeys.Length) - spaceW;
 
             GUILayout.BeginVertical(GUI.skin.box);
             {
@@ -101,7 +84,7 @@ namespace IllusionMods.KoikatuModdingTools
                 GUILayout.BeginHorizontal();
                 {
                     GUILayout.Label("#", GUILayout.Width(hashW));
-                    foreach (var column in CSVEditor.makerListFile.CategoryKeys)
+                    foreach (var column in MakerListfileEditor.makerListFile.CategoryKeys)
                         GUILayout.Label(column.ToString(), GUILayout.Width(columnW));
                 }
                 GUILayout.EndHorizontal();
@@ -110,14 +93,14 @@ namespace IllusionMods.KoikatuModdingTools
 
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, false, true);
             {
-                for (var rowIndex = 0; rowIndex < CSVEditor.makerListFile.Data.Count; rowIndex++)
+                for (var rowIndex = 0; rowIndex < MakerListfileEditor.makerListFile.Data.Count; rowIndex++)
                 {
-                    var row = CSVEditor.makerListFile.Data[rowIndex];
+                    var row = MakerListfileEditor.makerListFile.Data[rowIndex];
                     GUILayout.BeginHorizontal(GUI.skin.box);
                     {
                         GUILayout.Label((rowIndex + 1).ToString(), GUILayout.Width(hashW));
 
-                        foreach (var key in CSVEditor.makerListFile.CategoryKeys)
+                        foreach (var key in MakerListfileEditor.makerListFile.CategoryKeys)
                         {
                             GUI.changed = false;
                             string data;
@@ -127,8 +110,8 @@ namespace IllusionMods.KoikatuModdingTools
                             if (GUI.changed)
                             {
                                 row[key] = value;
-                                CSVEditor.instance.Repaint();
-                                CSVEditor.makerListFile.Save();
+                                MakerListfileEditor.TextAssetEditorInstance.Repaint();
+                                MakerListfileEditor.makerListFile.Save();
                             }
                         }
                     }
@@ -139,16 +122,16 @@ namespace IllusionMods.KoikatuModdingTools
                 {
                     if (GUILayout.Button("Add row"))
                     {
-                        CSVEditor.makerListFile.AddDataRow();
-                        CSVEditor.instance.Repaint();
+                        MakerListfileEditor.makerListFile.AddDataRow();
+                        MakerListfileEditor.TextAssetEditorInstance.Repaint();
                     }
 
-                    GUI.enabled = CSVEditor.makerListFile.Data.Count > 0;
+                    GUI.enabled = MakerListfileEditor.makerListFile.Data.Count > 0;
                     if (GUILayout.Button("Remove last row"))
                     {
-                        CSVEditor.makerListFile.Data.RemoveAt(CSVEditor.makerListFile.Data.Count - 1);
-                        CSVEditor.instance.Repaint();
-                        CSVEditor.makerListFile.Save();
+                        MakerListfileEditor.makerListFile.Data.RemoveAt(MakerListfileEditor.makerListFile.Data.Count - 1);
+                        MakerListfileEditor.TextAssetEditorInstance.Repaint();
+                        MakerListfileEditor.makerListFile.Save();
                     }
                     GUI.enabled = true;
                 }
