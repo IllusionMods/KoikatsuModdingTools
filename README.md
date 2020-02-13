@@ -2,7 +2,7 @@
 This is a set of tools for creating Koikatsu mods in Unity Editor.
 
 ## How to use it
-1. Download Unity 5.6.2f1 which is the version that Koikatsu uses.
+1. Download [Unity 5.6.2](https://unity3d.com/get-unity/download/archive) which is the version that Koikatsu uses.
 2. Download the repository by clicking the green "Clone or download" button on Github, up in the top right.
 3. Open the project in Unity.
 4. Try the example projects.
