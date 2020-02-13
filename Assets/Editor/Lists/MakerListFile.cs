@@ -4,8 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using UnityEditor;
-using UnityEngine;
 
 namespace IllusionMods.KoikatuModdingTools.Lists
 {
@@ -192,6 +190,13 @@ namespace IllusionMods.KoikatuModdingTools.Lists
             {CategoryNo.facepaint_layout, new[] {KeyType.ID, KeyType.Kind, KeyType.Name, KeyType.PosX, KeyType.PosY, KeyType.Rot, KeyType.Scale, KeyType.ThumbAB, KeyType.ThumbTex}},
             {CategoryNo.mole_layout, new[] {KeyType.ID, KeyType.Kind, KeyType.Name, KeyType.PosX, KeyType.PosY, KeyType.Rot, KeyType.Scale, KeyType.ThumbAB, KeyType.ThumbTex}},
             {CategoryNo.bo_head, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainManifest, KeyType.MainAB, KeyType.MainData, KeyType.ShapeAnime, KeyType.MatManifest, KeyType.MatData, KeyType.MainTexAB, KeyType.MainTex, KeyType.ColorMaskAB, KeyType.ColorMaskTex, KeyType.ThumbAB, KeyType.ThumbTex}},
+            {CategoryNo.bo_hair_b, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainManifest, KeyType.MainAB, KeyType.MainData, KeyType.ThumbAB, KeyType.ThumbTex}},
+            {CategoryNo.bo_hair_f, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainManifest, KeyType.MainAB, KeyType.MainData, KeyType.ThumbAB, KeyType.ThumbTex}},
+            {CategoryNo.bo_hair_s, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainManifest, KeyType.MainAB, KeyType.MainData, KeyType.ThumbAB, KeyType.ThumbTex}},
+            {CategoryNo.bo_hair_o, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainManifest, KeyType.MainAB, KeyType.MainData, KeyType.ThumbAB, KeyType.ThumbTex}},
+            {CategoryNo.co_top, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainManifest, KeyType.MainAB, KeyType.MainData, KeyType.NormalData, KeyType.StateType, KeyType.Coordinate, KeyType.NotBra, KeyType.Sex, KeyType.OverBodyMaskAB, KeyType.OverBodyMask, KeyType.OverBraMaskAB, KeyType.OverBraMask, KeyType.MainTexAB, KeyType.MainTex, KeyType.ColorMaskAB, KeyType.ColorMaskTex, KeyType.MainTex02AB, KeyType.MainTex02, KeyType.ColorMask02AB, KeyType.ColorMask02Tex, KeyType.KokanHide, KeyType.ThumbAB, KeyType.ThumbTex}},
+
+
             {CategoryNo.mt_emblem, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainTexAB, KeyType.MainTex, KeyType.ThumbAB, KeyType.ThumbTex}},
         };
 
@@ -202,25 +207,43 @@ namespace IllusionMods.KoikatuModdingTools.Lists
             {KeyType.CenterX, DataType.Float },
             {KeyType.CenterY, DataType.Float },
             {KeyType.ID, DataType.ID },
-            {KeyType.ColorMaskAB, DataType.AssetBundle },
             {KeyType.ColorMaskTex, DataType.TextureAsset },
+            {KeyType.ColorMaskAB, DataType.AssetBundle },
+            {KeyType.ColorMask02Tex, DataType.TextureAsset },
+            {KeyType.ColorMask02AB, DataType.AssetBundle },
+            {KeyType.ColorMask03Tex, DataType.TextureAsset },
+            {KeyType.ColorMask03AB, DataType.AssetBundle },
+            {KeyType.Coordinate, DataType.Int },
             {KeyType.Kind, DataType.Int },
+            {KeyType.KokanHide, DataType.Int },
             {KeyType.MainAB, DataType.AssetBundle },
             {KeyType.MainData, DataType.PrefabAsset },
             {KeyType.MainManifest, DataType.Manifest },
             {KeyType.MainTex, DataType.TextureAsset },
             {KeyType.MainTexAB, DataType.AssetBundle },
+            {KeyType.MainTex02, DataType.TextureAsset },
+            {KeyType.MainTex02AB, DataType.AssetBundle },
+            {KeyType.MainTex03, DataType.TextureAsset },
+            {KeyType.MainTex03AB, DataType.AssetBundle },
             {KeyType.MatData, DataType.MaterialAsset },
             {KeyType.MatManifest, DataType.Manifest },
             {KeyType.MoveX, DataType.Float },
             {KeyType.MoveY, DataType.Float },
             {KeyType.Name, DataType.String },
+            {KeyType.NormalData, DataType.String },
+            {KeyType.NotBra, DataType.Int },
+            {KeyType.OverBraMask, DataType.TextureAsset },
+            {KeyType.OverBraMaskAB, DataType.AssetBundle },
+            {KeyType.OverBodyMask, DataType.TextureAsset },
+            {KeyType.OverBodyMaskAB, DataType.AssetBundle },
             {KeyType.Possess, DataType.Int },
             {KeyType.PosX, DataType.Float },
             {KeyType.PosY, DataType.Float },
             {KeyType.Rot, DataType.Float },
+            {KeyType.Sex, DataType.Int },
             {KeyType.ShapeAnime, DataType.Asset },
             {KeyType.Scale, DataType.Float },
+            {KeyType.StateType, DataType.Int },
             {KeyType.ThumbAB, DataType.AssetBundle },
             {KeyType.ThumbTex, DataType.TextureAsset },
         };
