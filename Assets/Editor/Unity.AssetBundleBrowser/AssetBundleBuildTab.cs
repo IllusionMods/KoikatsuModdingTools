@@ -61,7 +61,6 @@ namespace AssetBundleBrowser
             m_AdvancedSettings = false;
             m_UserData = new BuildTabData();
             m_UserData.m_OnToggles = new List<string>();
-            m_UserData.m_UseDefaultPath = true;
             if (m_UserData.m_KoikatsuPath == null || m_UserData.m_KoikatsuPath == "")
                 m_UserData.m_KoikatsuPath = KoikatsuPathDefault;
         }
@@ -138,11 +137,6 @@ namespace AssetBundleBrowser
                 m_UserData.m_OnToggles);
 
             m_CompressionContent = new GUIContent("Compression", "Whether to build asset bundles uncompressed or with LZ4 compression. LZ4 takes longer to build but results in smaller file size with no performance impact. Use this for distributing mods.");
-
-            if (m_UserData.m_UseDefaultPath)
-            {
-                ResetPathToDefault();
-            }
         }
 
         internal void OnGUI()
@@ -161,25 +155,6 @@ namespace AssetBundleBrowser
 
             using (new EditorGUI.DisabledScope(!AssetBundleModel.Model.DataSource.CanSpecifyBuildOutputDirectory))
             {
-                //output path
-                EditorGUILayout.Space();
-                GUILayout.BeginHorizontal();
-                var newPath = EditorGUILayout.TextField("Output Path", m_UserData.m_OutputPath);
-                if (!string.IsNullOrEmpty(newPath) && newPath != m_UserData.m_OutputPath)
-                {
-                    m_UserData.m_UseDefaultPath = false;
-                    m_UserData.m_OutputPath = newPath;
-                }
-                GUILayout.EndHorizontal();
-                GUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace();
-                if (GUILayout.Button("Reset", GUILayout.MaxWidth(75f)))
-                    ResetPathToDefault();
-                if (GUILayout.Button("Browse", GUILayout.MaxWidth(75f)))
-                    BrowseForFolder();
-                GUILayout.EndHorizontal();
-                EditorGUILayout.Space();
-
                 //Koikatsu path
                 GUILayout.BeginHorizontal();
                 var newKKPath = EditorGUILayout.TextField("Koikatsu Path", m_UserData.m_KoikatsuPath);
@@ -252,12 +227,12 @@ namespace AssetBundleBrowser
 
             if (GUILayout.Button("Build All Zipmods"))
             {
-                EditorApplication.delayCall += delegate { Zipmod.BuildAllMods(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath, m_UserData.m_CopyMods); };
+                EditorApplication.delayCall += delegate { Zipmod.BuildAllMods(m_UserData.m_KoikatsuPath, m_UserData.m_CopyMods); };
             }
 
             if (GUILayout.Button("Build Zipmod (Current Folder)"))
             {
-                EditorApplication.delayCall += delegate { Zipmod.BuildSingleMod(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath, m_UserData.m_CopyMods); };
+                EditorApplication.delayCall += delegate { Zipmod.BuildSingleMod(m_UserData.m_KoikatsuPath, m_UserData.m_CopyMods); };
             }
 
             EditorGUILayout.Space();
@@ -268,12 +243,12 @@ namespace AssetBundleBrowser
 
             if (GUILayout.Button("Build Test Zipmod (Current Folder)"))
             {
-                EditorApplication.delayCall += delegate { Zipmod.BuildSingleMod(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath, m_UserData.m_CopyMods, true); };
+                EditorApplication.delayCall += delegate { Zipmod.BuildSingleMod(m_UserData.m_KoikatsuPath, m_UserData.m_CopyMods, true); };
             }
 
             if (GUILayout.Button("Clean Up Test Zipmod (Current Folder)"))
             {
-                EditorApplication.delayCall += delegate { Zipmod.CleanUpTestMod(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath); };
+                EditorApplication.delayCall += delegate { Zipmod.CleanUpTestMod(m_UserData.m_KoikatsuPath); };
             }
 
             GUILayout.EndVertical();
@@ -286,24 +261,15 @@ namespace AssetBundleBrowser
 
             if (AssetBundleModel.Model.DataSource.CanSpecifyBuildOutputDirectory)
             {
-                if (string.IsNullOrEmpty(m_UserData.m_OutputPath))
-                    BrowseForFolder();
-
-                if (string.IsNullOrEmpty(m_UserData.m_OutputPath)) //in case they hit "cancel" on the open browser
-                {
-                    Debug.LogError("AssetBundle Build: No valid output path for build.");
-                    return;
-                }
-
                 if (m_ForceRebuild.state)
                 {
-                    string message = "Do you want to delete all files in the directory " + m_UserData.m_OutputPath + "?";
+                    string message = "Do you want to delete all files in the directory " + Constants.BuildPath + "?";
                     if (EditorUtility.DisplayDialog("File delete confirmation", message, "Yes", "No"))
                     {
                         try
                         {
-                            if (Directory.Exists(m_UserData.m_OutputPath))
-                                Directory.Delete(m_UserData.m_OutputPath, true);
+                            if (Directory.Exists(Constants.BuildPath))
+                                Directory.Delete(Constants.BuildPath, true);
                         }
                         catch (System.Exception e)
                         {
@@ -311,8 +277,8 @@ namespace AssetBundleBrowser
                         }
                     }
                 }
-                if (!Directory.Exists(m_UserData.m_OutputPath))
-                    Directory.CreateDirectory(m_UserData.m_OutputPath);
+                if (!Directory.Exists(Constants.BuildPath))
+                    Directory.CreateDirectory(Constants.BuildPath);
             }
 
             BuildAssetBundleOptions opt = BuildAssetBundleOptions.None;
@@ -330,7 +296,7 @@ namespace AssetBundleBrowser
 
             ABBuildInfo buildInfo = new ABBuildInfo();
 
-            buildInfo.outputDirectory = m_UserData.m_OutputPath;
+            buildInfo.outputDirectory = Constants.BuildPath;
             buildInfo.options = opt;
             buildInfo.buildTarget = BuildTarget.StandaloneWindows;
             buildInfo.onBuild = (assetBundleName) =>
@@ -348,7 +314,7 @@ namespace AssetBundleBrowser
 
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
 
-            SB3UScript.BuildAndRunScripts(m_UserData.m_OutputPath, m_UserData.m_KoikatsuPath, m_UserData.m_Compression, changedFiles);
+            SB3UScript.BuildAndRunScripts(Constants.BuildPath, m_UserData.m_KoikatsuPath, m_UserData.m_Compression, changedFiles);
 
             if (changedFiles.Count == 1)
                 Debug.Log("Successfully built 1 asset bundle.");
@@ -356,33 +322,11 @@ namespace AssetBundleBrowser
                 Debug.Log("Successfully built " + changedFiles.Count + " asset bundles.");
         }
 
-        private void BrowseForFolder()
-        {
-            m_UserData.m_UseDefaultPath = false;
-            var newPath = EditorUtility.OpenFolderPanel("Bundle Folder", m_UserData.m_OutputPath, string.Empty);
-            if (!string.IsNullOrEmpty(newPath))
-            {
-                var gamePath = System.IO.Path.GetFullPath(".");
-                gamePath = gamePath.Replace("\\", "/");
-                if (newPath.StartsWith(gamePath) && newPath.Length > gamePath.Length)
-                    newPath = newPath.Remove(0, gamePath.Length + 1);
-                m_UserData.m_OutputPath = newPath;
-                //EditorUserBuildSettings.SetPlatformSettings(EditorUserBuildSettings.activeBuildTarget.ToString(), "AssetBundleOutputPath", m_OutputPath);
-            }
-        }
-
         private void BrowseForKoikatsuFolder()
         {
-            m_UserData.m_UseDefaultPath = false;
             var newPath = EditorUtility.OpenFolderPanel("Koikatsu Folder", m_UserData.m_KoikatsuPath, string.Empty);
             if (!string.IsNullOrEmpty(newPath))
                 m_UserData.m_KoikatsuPath = newPath;
-        }
-
-        private void ResetPathToDefault()
-        {
-            m_UserData.m_UseDefaultPath = true;
-            m_UserData.m_OutputPath = "Build/abdata";
         }
 
         //Note: this is the provided BuildTarget enum with some entries removed as they are invalid in the dropdown
@@ -428,8 +372,6 @@ namespace AssetBundleBrowser
             internal List<string> m_OnToggles;
             internal ValidBuildTarget m_BuildTarget = ValidBuildTarget.StandaloneWindows;
             internal bool m_Compression = true;
-            internal string m_OutputPath = "Build/abdata";
-            internal bool m_UseDefaultPath = false;
             internal string m_KoikatsuPath = KoikatsuPathDefault;
             internal bool m_CopyMods = true;
         }

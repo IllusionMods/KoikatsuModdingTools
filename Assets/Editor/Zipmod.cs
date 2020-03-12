@@ -10,13 +10,11 @@ namespace IllusionMods.KoikatuModdingTools
 {
     public static class Zipmod
     {
-        private static string BuildPath;
         private static string KoikatsuPath;
         private static bool CopyMods;
 
-        public static void BuildSingleMod(string buildPath, string koikatsuPath, bool copyMods, bool testMod = false)
+        public static void BuildSingleMod(string koikatsuPath, bool copyMods, bool testMod = false)
         {
-            BuildPath = buildPath.Replace("/", @"\");
             KoikatsuPath = koikatsuPath;
             CopyMods = copyMods;
 
@@ -32,9 +30,8 @@ namespace IllusionMods.KoikatuModdingTools
                 Debug.Log("Mod built successfully.");
         }
 
-        public static void CleanUpTestMod(string buildPath, string koikatsuPath)
+        public static void CleanUpTestMod(string koikatsuPath)
         {
-            BuildPath = buildPath.Replace("/", @"\");
             KoikatsuPath = koikatsuPath;
 
             var manifestPath = Shared.GetManifestFilePath();
@@ -52,9 +49,8 @@ namespace IllusionMods.KoikatuModdingTools
         /// Pack up all mods including their manifest.xml, list files, and asset bundles.
         /// </summary>
         /// <param name="buildPath"></param>
-        public static void BuildAllMods(string buildPath, string koikatsuPath, bool copyMods)
+        public static void BuildAllMods(string koikatsuPath, bool copyMods)
         {
-            BuildPath = buildPath.Replace("/", @"\");
             KoikatsuPath = koikatsuPath;
             CopyMods = copyMods;
 
@@ -152,7 +148,7 @@ namespace IllusionMods.KoikatuModdingTools
             if (modVersion != "")
                 zipFileName += " v" + modVersion;
             zipFileName += ".zipmod";
-            string zipPath = Path.Combine(BuildPath, zipFileName);
+            string zipPath = Path.Combine(Constants.BuildPath, zipFileName);
 
             //Find all the asset bundles for this mod
             foreach (var assetguid in AssetDatabase.FindAssets("", new string[] { projectPath }))
@@ -160,7 +156,7 @@ namespace IllusionMods.KoikatuModdingTools
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
                 string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
                 if (modAB != string.Empty)
-                    modABs.Add(Path.Combine(BuildPath, modAB));
+                    modABs.Add(Path.Combine(Constants.BuildPath, modAB));
             }
 
             var di = new DirectoryInfo(makerListPath);
@@ -288,7 +284,7 @@ namespace IllusionMods.KoikatuModdingTools
                     foreach (var modAB in modABs)
                     {
                         FileInfo sourceFileInfo = new FileInfo(modAB);
-                        FileInfo destinationFileInfo = new FileInfo(Path.Combine(KoikatsuPath, modAB.Replace(BuildPath, "abdata")));
+                        FileInfo destinationFileInfo = new FileInfo(Path.Combine(KoikatsuPath, modAB.Replace(Constants.BuildPath, "abdata")));
 
                         destinationFileInfo.Directory.Create();
                         File.Copy(sourceFileInfo.FullName, destinationFileInfo.FullName, true);
@@ -308,13 +304,13 @@ namespace IllusionMods.KoikatuModdingTools
                 string assetPath = AssetDatabase.GUIDToAssetPath(assetguid);
                 string modAB = AssetDatabase.GetImplicitAssetBundleName(assetPath);
                 if (modAB != string.Empty)
-                    modABs.Add(Path.Combine(BuildPath, modAB));
+                    modABs.Add(Path.Combine(Constants.BuildPath, modAB));
             }
 
             //Copy asset bundles
             foreach (var modAB in modABs)
             {
-                FileInfo destinationFileInfo = new FileInfo(Path.Combine(KoikatsuPath, modAB.Replace(BuildPath, "abdata")));
+                FileInfo destinationFileInfo = new FileInfo(Path.Combine(KoikatsuPath, modAB.Replace(Constants.BuildPath, "abdata")));
                 Debug.Log("Removing " + destinationFileInfo.FullName);
                 File.Delete(destinationFileInfo.FullName);
             }
