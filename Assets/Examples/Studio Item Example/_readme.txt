@@ -26,7 +26,7 @@ Name - The name of the category which will appear in Add->Items->(Group Name)->(
 ItemList list:
 ItemList list files are named in the format ItemList_(Unique Number)_(Group Number)_(Category Number).csv. The (Unique Number) part can be any number, typically just 00. (Group Number) is the Group Number of the group as configured in the ItemGroup list file. (Category Number) is the Category Number as configured in the ItemCategory list file.
 
-ItemCategory list files consist of many fields:
+ItemList list files consist of many fields:
 ID - ID of the item. Can be any number but must not be the same as another item within the same mod. Other mods can use the same ID without conflict due to Sideloader.
 Group Number - Group Number as configured in the ItemGroup list file
 Category Number - Category Number as configured in the ItemCategory list file
