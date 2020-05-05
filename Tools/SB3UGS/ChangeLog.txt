@@ -1,8 +1,114 @@
-﻿[20.1.4]
+﻿[20.3.6]
+  - Fixed out of memory when compressing big Unity files with LZ4 and LZ4High. LZMA not fixed yet.
+  - Fixed unchecking of animation tracks missing childs (20.3.5)
+
+[20.3.5]
+  - Added partial support for BC7_UNORM_SRGB (unflipped and DXT5 options)
+  - Added unchecking of animation tracks in a workspace inside the animation replacement dialog
+
+[20.3.4]
+  - Added Ctrl-F key looks at the selected joint / animation track in Object Tree and Animation editor
+    Known issue: non-joints are looked at non-animated positions although the animation is shown
+  - Changed Escape key in Animation editor pauses instead of unselecting all clips
+  - Fixed ConvertRenderer in Unity2018.2 which didn't adapt the Mesh channels and left it skinned
+  - Added generation of Stream curves for morph tracks (see also 1.15.10)
+    Curves for flat in-between blend-shapes still require to be unsimplified (DENSE)
+  - Fixed morph replacement for non-Identity transformed meshes imported from FbxSDK
+    (changed internal morph positions to relative values)
+  - Fixed animation import of morph tracks for Blender. Requires to keep the mesh Transform!
+  - Fixed FBX fake morphs for Blender (1.15.1)
+  - Fixed Transform path adaption for animation replacements
+  - Changed "Replace" and "Add" in Texture editor to use GUItexture (partially reverted 20.1.4)
+
+Known issues:
+  - Mesh replacement in combined hierarchies requires to open the root Animator (PC, PH, VRK)
+  - The last keyframe seems to be missing in exports of Stream curves - general or morph only?
+
+[20.3.3]
+  - Fixed "No Avatar" error by creating one in childless hierarchies
+  - Changed searching in the "Blue Area" to default to the root instead of replacing the hierarchy
+  - Fixed replacing the hierarchy with MergeFrame
+  - Added display bone size to renderer
+  - Changed FBX export bone sizing to allow automatic sizing for Animation and Mesh exports
+  - Fixed parent side plane orientation, changed joint and bone display
+  - Added all editors support Ctrl-S and F12 for focusing their file for saving
+
+[20.3.2]
+  - Fixed missing refresh of Unity file after deletion of MBs, LinkedByGameObjects, materials and textures
+    (Deleted MBs were edited instead of new created ones).
+  - Fixed error showing a file unfiltered with a RenderTexture inside
+  - Fixed MB and LoadedByTypeDefinition editors still dirty after saving
+  - Fixed FBX imported normals and tangents for meshes with non-Identity transformation (20.1.1)
+  - Fixed mesh replacement creating wrong normals and tangents with WorldCoordinate option
+
+[20.3.1]
+  - Fixed Shader replacement with CopyInPlace. Similar errors using CopyInPlace for other types are possible!
+
+[20.3]
+  - Fixed crash playing AudioClips in compressed files
+  - Fixed missing entries in preload table of AssetBundle asset for virtual Animators (since 20.2.1)
+  - Added Workspace context menu for the ImportedMesh and mesh nodes to set options for selected submeshes
+  - Added flipping binormals and tangents of both colours simultaneously
+    API changed: AnimatorEditor.FlipTangents()
+  - Fixed double tooltips in Animator editor
+  - Changed Texture editor doesn't require keyboard focus to reach UVmaps 4-7
+  - Changed mouse wheel no longer zooms in the renderer when the mouse is outside
+  - Fixed "Go to" in MB editor to jump only to the originally referenced asset
+  - Fixed "Go to" and "Edit" in MB editor not working after assigning new asset
+  - Added reference change to GameObject in MB and LoadedByTypeDefinition editors
+  - Fixed storing LZ4 High compression type even when compressing with LZ4
+  - Fixed slow selection of meshes, materials and textures (since 1.19.8)
+  - Fixed flickering from rendering assertion when selecting meshes (since 0.4.42.22)
+  - Changed image preview moving to front when refreshing Unity asset lists
+
+[20.2.2]
+  - Added indicator in the UV preview for UVs being not in the unit square
+  - Changed temporary name for writing files. The extension is no longer changed.
+
+[20.2.1]
+  - Fixed deleting various assets or creating virtual Avatars and Animators
+    to cause "Uncommitted asset ..." error when saving the file (since 20.1.5)
+  - Changed assigning the already assigned Shader to a Material throws out unused attributes
+  - Changed Animator editor handling of cross-references and "Refresh" in Object Tree in hope to fix:
+    "The given key was not present in the dictionary." and although not selected a mesh is rendered 
+    and changing the mesh selection doesn't change anything in the renderer.
+    Workaround: close and reopen Animator editor
+  - Fixed duplication in "Used" lists after "Refresh" and "Remove Material"
+  - Added class name to references in LoadedByTypeDefinition and MB editors
+  - Fixed crashes after operations in which skinned meshes were removed (Bone editor)
+
+[20.2]
+  - Fixed crash in mesh replacement when vertex colours were not existant in all submeshes
+  - Fixed additional compression method for file chunks in parsing (Unity 2018.3+ ?)
+  - Fixed freezing in MoveFrame with visible meshes
+  - Fixed crash when enabling Editors in the main menu if any editor had been opened before
+  - Fixed vanishing windows when double clicked after dragging (Dockpanel Suite updated)
+  - Fixed Files and Editor panes to remain visible when childs float or get closed
+  - Fixed SpriteRenderer for Unity 2018.2+
+  - Fixed FBX import and export to support non-ASCII characters in names and paths
+  - Removed FBX Namespace from imported objects
+  - Fixed bold text font in wrong EditTextBox by removing ObjectTree refresh in
+    SetGameObjectLayer, SetGameObjectTag, SetGameObjectIsActive, SetMeshName
+  - Changed replacement dialog accepts Enter for confirmation
+
+Known issue: RecreateFrames -> InitFrames cant handle duplicate frame names
+
+[20.1.5]
+  - Fixed crashes after opening an "empty" MonoBehaviour
+  - Fixed display of PathID=0 in MB editor after saving the file and opening the MB again
+  - Fixed inability to reference new assets in MB and LoadedByTypeDefinition editors
+  - Fixed drag 'n drop of Renderers without Material being ignored
+  - Fixed lost "[category]" extension in editor title after saving
+Known Issues:
+ - MB editor not showing external asset name although external file has been opened
+ - Floating windows can vanish and get inaccessible
+ - Imported submeshes mixed with vertex colours and without crash replacement
+
+[20.1.4]
   - Fixed crash when AnimatorController editor was used after Animation editor was closed
   - Fixed crash in "Replace" in Texture editor when no image was selected from the Image window
   - Fixed remaining .resS file when saving is aborted because of wrong path
-  - Added CopyInPlace script function
+  - Added Unity3dEditor.CopyInPlace script function
 
 [20.1.3]
   - Fixed crash in FBX animation import which aborted the import completely for negative keyframe times
