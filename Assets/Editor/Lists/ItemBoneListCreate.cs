@@ -8,8 +8,18 @@ namespace IllusionMods.KoikatuModdingTools
 {
     class ItemBoneListCreate
     {
-        [MenuItem("Assets/Create/ItemBoneList.csv")]
-        internal static void Create()
+        [MenuItem("Assets/Create/ItemBoneList.csv (SMR only)")]
+        internal static void CreateBoneList()
+        {
+            Create(true);
+        }
+        [MenuItem("Assets/Create/ItemBoneList.csv (all transforms)")]
+        internal static void CreateBoneListTransform()
+        {
+            Create(false);
+        }
+
+        internal static void Create(bool smrOnly = true)
         {
             string projectPath = Shared.GetProjectPath();
             string manifestFolder = Shared.GetManifestPath();
@@ -74,15 +84,22 @@ namespace IllusionMods.KoikatuModdingTools
 
                 if (itemListInfo == null) continue;
                 List<string> bones = new List<string>();
+                List<string> transforms = new List<string>();
+
+                foreach (var renderer in go.GetComponentsInChildren<SkinnedMeshRenderer>())
+                    foreach (var transform in renderer.bones)
+                        if (!bones.Contains(transform.name))
+                            bones.Add(transform.name);
+                itemListInfo.BoneList = bones;
 
                 foreach (var transform in go.GetComponentsInChildren<Transform>())
-                    if (transform.name != go.name)
-                        bones.Add(transform.name);
-                itemListInfo.BoneList = bones;
+                    if (transform.name != go.name && !transforms.Contains(transform.name))
+                        transforms.Add(transform.name);
+                itemListInfo.TransformList = transforms;
             }
 
             foreach (var itemListFile in ItemListFiles)
-                itemListFile.WriteBoneList(projectPath);
+                itemListFile.WriteBoneList(projectPath, smrOnly);
 
             AssetDatabase.Refresh();
         }

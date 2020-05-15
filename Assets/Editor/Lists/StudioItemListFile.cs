@@ -50,25 +50,38 @@ namespace IllusionMods.KoikatuModdingTools.Lists
             }
         }
 
-        public void WriteBoneList(string path)
+        public void WriteBoneList(string path, bool smrOnly = true)
         {
             string[] fileNameSplit = FileName.Replace(".csv", "").Split('_');
-            string fileName = "ItemBoneList_" + fileNameSplit[2] + "_" + fileNameSplit[3] + "_generated.csv";
+            string fileName = "ItemBoneList_" + fileNameSplit[2] + "_" + fileNameSplit[3] + ".csv";
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("ID,Bones");
 
             foreach (var data in Lines.Values.OrderBy(x => x.Order))
             {
-                if (data.BoneList.Count > 0)
+                List<string> list;
+                if (smrOnly)
+                    list = data.BoneList;
+                else
+                    list = data.TransformList;
+
+                if (list.Count > 0)
                 {
-                    sb.Append(data.ID);
-                    foreach (var bone in data.BoneList)
-                        sb.Append("," + bone);
+                    List<string> boneList = new List<string>();
+                    boneList.Add(data.ID.ToString());
+                    foreach (var bone in list)
+                    {
+                        if (!boneList.Contains(bone))
+                            boneList.Add(bone);
+                    }
+                    string csv = string.Join(",", boneList.ToArray());
+                    sb.AppendLine(csv);
                 }
-                sb.AppendLine();
             }
 
+            if (File.Exists(Path.Combine(path, fileName)))
+                fileName = fileName.Replace(".csv", "_generated.csv");
             using (StreamWriter writer = new StreamWriter(Path.Combine(path, fileName)))
                 writer.Write(sb.ToString());
         }
@@ -92,6 +105,7 @@ namespace IllusionMods.KoikatuModdingTools.Lists
         public bool Emission;
         public bool Glass;
         public List<string> BoneList = new List<string>();
+        public List<string> TransformList = new List<string>();
 
         public StudioItemListData() { }
 
