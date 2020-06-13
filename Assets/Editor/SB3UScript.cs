@@ -141,7 +141,7 @@ namespace IllusionMods.KoikatuModdingTools
                 }
                 if (Compression)
                 {
-                    sb.AppendLine("Log(\"Compresing...\")");
+                    sb.AppendLine("Log(\"Compressing...\")");
                     sb.AppendLine("unityEditorMainAB.SaveUnity3d(keepBackup=False, backupExtension=\".unit-y3d\", background=False, clearMainAsset=True, pathIDsMode=-1, compressionLevel=2, compressionBufferSize=262144)");
                 }
                 else
@@ -183,7 +183,7 @@ namespace IllusionMods.KoikatuModdingTools
                     if (index > 0)
                         bundle = bundle.Substring(index);
 
-                    sb.AppendLine("Log(\"Compresing " + bundle + "...\")");
+                    sb.AppendLine("Log(\"Compressing " + bundle + "...\")");
                     sb.AppendLine("unityParserMainAB = OpenUnity3d(path=\"" + bundlePath + "\")");
                     sb.AppendLine("unityEditorMainAB = Unity3dEditor(parser=unityParserMainAB)");
                     sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
