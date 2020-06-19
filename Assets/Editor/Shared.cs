@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Reflection;
 using System.IO;
+using System.Reflection;
 using Debug = UnityEngine.Debug;
 
 namespace IllusionMods.KoikatuModdingTools
@@ -65,6 +65,9 @@ namespace IllusionMods.KoikatuModdingTools
         /// <returns>Folder containing the manifest.xml if it exists or null if not</returns>
         public static string GetManifestPath()
         {
+            string path = GetManifestPath(GetProjectPath());
+            if (path == null)
+                return null;
             return GetManifestPath(GetProjectPath()).Replace(@"\manifest.xml", "");
         }
     }
