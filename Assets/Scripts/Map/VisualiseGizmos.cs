@@ -15,7 +15,7 @@ namespace Assets.Map.Editor
             if (spawn)
             {
                 Gizmos.DrawIcon(spawn.position + Vector3.up * 0.5f, "h_free");
-                GizmosHelper.Axis(spawn);
+                GizmosHelper.DrawAxis(spawn);
             }
 
             if (HPoint_Container)
