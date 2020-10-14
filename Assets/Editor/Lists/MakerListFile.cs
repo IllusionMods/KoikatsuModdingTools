@@ -196,7 +196,8 @@ namespace IllusionMods.KoikatuModdingTools.Lists
             {CategoryNo.bo_hair_o, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainManifest, KeyType.MainAB, KeyType.MainData, KeyType.ThumbAB, KeyType.ThumbTex}},
             {CategoryNo.co_top, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainManifest, KeyType.MainAB, KeyType.MainData, KeyType.NormalData, KeyType.StateType, KeyType.Coordinate, KeyType.NotBra, KeyType.Sex, KeyType.OverBodyMaskAB, KeyType.OverBodyMask, KeyType.OverBraMaskAB, KeyType.OverBraMask, KeyType.MainTexAB, KeyType.MainTex, KeyType.ColorMaskAB, KeyType.ColorMaskTex, KeyType.MainTex02AB, KeyType.MainTex02, KeyType.ColorMask02AB, KeyType.ColorMask02Tex, KeyType.KokanHide, KeyType.ThumbAB, KeyType.ThumbTex}},
 
-
+            {CategoryNo.mt_face_paint, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainAB, KeyType.PaintTex, KeyType.ThumbAB, KeyType.ThumbTex}},
+            {CategoryNo.mt_body_paint, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainAB, KeyType.PaintTex, KeyType.ThumbAB, KeyType.ThumbTex}},
             {CategoryNo.mt_emblem, new[] {KeyType.ID, KeyType.Kind, KeyType.Possess, KeyType.Name, KeyType.MainTexAB, KeyType.MainTex, KeyType.ThumbAB, KeyType.ThumbTex}},
         };
 
