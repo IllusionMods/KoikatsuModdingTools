@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,10 +12,9 @@ namespace IllusionMods.KoikatuModdingTools
         private static string ModAuthor = "";
         private static string ModDescription = "";
         private static string ModWebsite = "";
-        private static GameName ModGame = GameName.KoikatsuAndEmotionCreators;
 
         private static string Path = "";
-        private static XDocument ManifestDocument = null;
+        private static XDocument ManifestDocument;
 
         public static void OnEnable(string path)
         {
@@ -34,12 +32,6 @@ namespace IllusionMods.KoikatuModdingTools
                 ModDescription = ManifestDocument.Root.Element("description").Value;
             if (ManifestDocument.Root.Element("website") != null)
                 ModWebsite = ManifestDocument.Root.Element("website").Value;
-            if (ManifestDocument.Root.Element("game") != null)
-            {
-                var game = ManifestDocument.Root.Element("game").Value;
-                if (Constants.GameNameList.Contains(game.ToLower()))
-                    ModGame = GameName.Koikatsu;
-            }
         }
 
         public static void OnInspectorGUI()
@@ -53,7 +45,6 @@ namespace IllusionMods.KoikatuModdingTools
             var modAuthorNew = EditorGUILayout.TextField("Author", ModAuthor);
             var modDescriptionNew = EditorGUILayout.TextField("Description", ModDescription);
             var modWebsiteNew = EditorGUILayout.TextField("Website", ModWebsite);
-            var modGameNew = (GameName)EditorGUILayout.Popup("Game", (int)ModGame, Enum.GetNames(typeof(GameName)));
 
             if (!string.IsNullOrEmpty(modGUIDNew) && modGUIDNew != ModGUID)
             {
@@ -103,24 +94,11 @@ namespace IllusionMods.KoikatuModdingTools
                 ManifestDocument.Root.Element("website").Value = ModWebsite;
                 ManifestDocument.Save(Path);
             }
-            if (modGameNew != ModGame)
-            {
-                ModGame = modGameNew;
-                if (ManifestDocument.Root.Element("game") == null)
-                    ManifestDocument.Root.Add(new XElement("game"));
-                if (ModGame == GameName.Koikatsu)
-                    ManifestDocument.Root.Element("game").Value = "Koikatsu";
-                else
-                    ManifestDocument.Root.Element("game").Value = "";
-                ManifestDocument.Save(Path);
-            }
 
             EditorGUILayout.Space();
             GUI.enabled = false;
             GUILayout.TextArea(ManifestDocument.ToString(), GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true), GUILayout.MinHeight(70), GUILayout.MaxHeight(250));
             GUI.enabled = true;
         }
-
-        public enum GameName { KoikatsuAndEmotionCreators, Koikatsu }
     }
 }
