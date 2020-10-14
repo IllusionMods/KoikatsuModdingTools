@@ -65,8 +65,7 @@ namespace IllusionMods.KoikatuModdingTools
                         if (material == null) continue;
                         if (material.shader == null) continue;
 
-                        string shaderAB;
-                        if (Constants.ShaderABs.TryGetValue(material.shader.name, out shaderAB))
+                        if (Constants.ShaderABs.ContainsKey(material.shader.name))
                         {
                             HashSet<string> shaderList;
                             if (!shaderABs.TryGetValue(modAB, out shaderList))
@@ -94,8 +93,7 @@ namespace IllusionMods.KoikatuModdingTools
 
                 var material = AssetDatabase.LoadAssetAtPath<Material>(assetPath);
 
-                string shaderAB;
-                if (Constants.ShaderABs.TryGetValue(material.shader.name, out shaderAB))
+                if (Constants.ShaderABs.ContainsKey(material.shader.name))
                 {
                     HashSet<string> shaderList;
                     if (!shaderABs.TryGetValue(modAB, out shaderList))
@@ -122,7 +120,11 @@ namespace IllusionMods.KoikatuModdingTools
                     string shaderAB;
                     if (Constants.ShaderABs.TryGetValue(shaderName, out shaderAB))
                     {
-                        string shaderABPath = KoikatsuPath + @"\" + "abdata" + @"\" + shaderAB;
+                        string shaderABPath;
+                        if (shaderAB == Constants.ShaderABPath)
+                            shaderABPath = Path.Combine(Directory.GetCurrentDirectory(), shaderAB);
+                        else
+                            shaderABPath = KoikatsuPath + @"\" + "abdata" + @"\" + shaderAB;
 
                         sb.AppendLine("Log(\"Replacing shader: " + shaderName + "\")");
                         sb.AppendLine("unityEditorMainAB.GetAssetNames(filter=True)");
