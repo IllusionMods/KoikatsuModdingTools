@@ -42,20 +42,29 @@ To create your own mod, you can use an example project as a base. Copy an exampl
 
 Once you have assets assigned to the asset bundles, click Window->AssetBundle Browser to bring up the build menu. Click Build All Assets and then Build All Zipmods. Only mods within the Mods folder will be built this way to keep your stuff separate from the example projects.
 
+## Features
+#### Shaders
+Included in this project are a set of placeholder shaders with all the properties of a vanilla game shader. Most of these are non functional and will simply display black and white textures on objects in the Scene view, though the main_item shader is close to functional. Use these shaders to set up your materials and when you build the asset bundles these shaders will be replaced by a copy of the original game shaders by an SB3UGS script.
+
+#### Meshes
+When .fbx files are imported by placing them within the project structure scripts run which:
+* Automatically remove excess bones (improved Blender compatiblity)
+* Automatically set the layer to Chara, the layer most items need to use
+
+#### Textures
+Normal map textures are converted to the transparent-red style instead of the transparent-grey style typically created by Unity 5.6.2. This improves compatiblity with EmotionCreators for all mods built using KoikatsuModdingTools.
+
+Note: Generally, using High Quality compression for textures is prefered, except where textures extract from game files already used Normal Quality compression (DXT5, DXT1).
+
 ## Work in progress
 Koikatsu Modding Tools is a work in progress, please report any bugs you may find. If you are interested in contributing to development, these are the things that need to be done.
 
-* ~Create dummy shaders for all vanilla shaders~
-* Create a pretty UI for creating list files (Marco)
-* ~Create a UI for generating manifest.xml files~
-* ~Add example projects for all types of items such as clothes, accessories, hair, and Studio items~
-* ~Add an example project for creating maps for use in Free H and Studio~
+* Create a pretty UI for creating list files
 * Load vanilla shaders for objects in the scene so that previews are more accurate OR edit the dummy shaders to be closer to the original
-* Make a pretty readme file
 * Write instructions and tutorials for all types of mods with pictures and explanations of all parts of the mod
-* ~Generate hard mods for testing purposes so that asset bundles can be replaced while the game is running and reloaded with RuntimeUnityEditor~
-* ~Asset bundle extractor which can dump assets from exist asset bundles in to a KKModTools project~
 * Automatically apply color correction to textures
+* Automatically generate textures for low poly
 
 ## Credits
-Enimaroah for SB3UGS and updating it to support shader replacement.
+Enimaroah for SB3UGS and updating it to support shader replacement, and also for the script which removes excess bones from imported .fbx files (for Blender .fbx compatibility)
+Marco for the list file editor UI which I still have yet to finish
