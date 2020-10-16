@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Automnatically set the layer of imported models to 10 (Chara)
+/// Automatically set the layer of imported models to 10 (Chara)
 /// </summary>
 public class SetLayerPostprocessor : AssetPostprocessor
 {
