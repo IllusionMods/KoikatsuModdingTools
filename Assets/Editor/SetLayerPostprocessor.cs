@@ -9,7 +9,7 @@ public class SetLayerPostprocessor : AssetPostprocessor
     void OnPostprocessModel(GameObject g)
     {
         g.layer = 10;
-        foreach (var child in g.GetComponentsInChildren<GameObject>(true))
-            child.layer = 10;
+        foreach (var child in g.GetComponentsInChildren<Transform>(true))
+            child.gameObject.layer = 10;
     }
 }
