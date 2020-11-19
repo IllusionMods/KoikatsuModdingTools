@@ -16,54 +16,6 @@ namespace Studio
             public bool defClamp = true;
             public Vector4 defUV = Vector4.zero;
             public float defRot;
-
-            public float ut
-            {
-                get
-                {
-                    return defUV.x;
-                }
-                set
-                {
-                    defUV.x = value;
-                }
-            }
-
-            public float vt
-            {
-                get
-                {
-                    return defUV.y;
-                }
-                set
-                {
-                    defUV.y = value;
-                }
-            }
-
-            public float us
-            {
-                get
-                {
-                    return defUV.z;
-                }
-                set
-                {
-                    defUV.z = value;
-                }
-            }
-
-            public float vs
-            {
-                get
-                {
-                    return defUV.w;
-                }
-                set
-                {
-                    defUV.w = value;
-                }
-            }
         }
 
         [Header("Normal Parts")]
@@ -89,5 +41,31 @@ namespace Studio
 
         [Space]
         public int setcolor;
+
+#if UNITY_EDITOR
+        private void Awake()
+        {
+            PreviewShaders.Preview(rendNormal);
+            PreviewShaders.Preview(rendAlpha);
+            PreviewShaders.Preview(rendGlass);
+
+            SetColors(rendNormal);
+            SetColors(rendAlpha);
+            SetColors(rendGlass);
+        }
+
+        private void SetColors(Renderer[] renderers)
+        {
+            foreach (var rend in renderers)
+            {
+                foreach (var mat in rend.sharedMaterials)
+                {
+                    mat.SetColor("_Color", info[0].defColor);
+                    mat.SetColor("_Color2", info[1].defColor);
+                    mat.SetColor("_Color3", info[2].defColor);
+                }
+            }
+        }
+#endif
     }
 }
