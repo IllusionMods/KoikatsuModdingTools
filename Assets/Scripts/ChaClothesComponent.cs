@@ -50,4 +50,27 @@ public class ChaClothesComponent : MonoBehaviour
     [Space]
     public int initialize;
     public int setcolor;
+
+#if UNITY_EDITOR
+    private void Awake()
+    {
+        PreviewShaders.Preview(rendNormal01);
+        PreviewShaders.Preview(rendNormal02);
+        PreviewShaders.Preview(rendNormal03);
+
+        PreviewShaders.Preview(rendAlpha01);
+        PreviewShaders.Preview(rendAlpha02);
+
+        PreviewShaders.Preview(rendEmblem01);
+        PreviewShaders.Preview(exRendEmblem01);
+        PreviewShaders.Preview(rendEmblem02);
+        PreviewShaders.Preview(exRendEmblem02);
+
+        PreviewShaders.Preview(objOpt01);
+        PreviewShaders.Preview(objOpt02);
+        PreviewShaders.Preview(objSleeves01);
+        PreviewShaders.Preview(objSleeves02);
+        PreviewShaders.Preview(objSleeves03);
+    }
+#endif
 }
