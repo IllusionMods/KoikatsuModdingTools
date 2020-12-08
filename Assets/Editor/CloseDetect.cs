@@ -11,9 +11,7 @@ public class CloseDetect
     static CloseDetect()
     {
         var t = typeof(EditorApplication);
-        var bf = BindingFlags.NonPublic | BindingFlags.Static;
-        var f = t.GetField("editorApplicationQuit", bf);
-        var ev = f.GetValue(null);
+        var f = t.GetField("editorApplicationQuit", BindingFlags.NonPublic | BindingFlags.Static);
 
         UnityAction ua = Quitting;
         f.SetValue(null, ua);
