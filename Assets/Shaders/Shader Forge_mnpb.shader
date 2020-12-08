@@ -53,5 +53,5 @@ Shader "Shader Forge/mnpb" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

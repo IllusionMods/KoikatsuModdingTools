@@ -181,5 +181,5 @@ Shader "Shader Forge/main_StandardMDK_studio" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

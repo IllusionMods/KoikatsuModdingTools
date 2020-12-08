@@ -154,5 +154,5 @@ Shader "Shader Forge/toon_textureanimation" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

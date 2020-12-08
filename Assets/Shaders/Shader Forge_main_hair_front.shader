@@ -184,5 +184,5 @@ Shader "Shader Forge/main_hair_front" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

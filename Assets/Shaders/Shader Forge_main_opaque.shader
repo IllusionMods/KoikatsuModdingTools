@@ -197,5 +197,5 @@ Shader "Shader Forge/main_opaque" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

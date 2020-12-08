@@ -154,5 +154,5 @@ Shader "Shader Forge/create_eye" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

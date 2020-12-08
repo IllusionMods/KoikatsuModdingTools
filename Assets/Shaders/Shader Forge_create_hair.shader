@@ -152,5 +152,5 @@ Shader "Shader Forge/create_hair" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

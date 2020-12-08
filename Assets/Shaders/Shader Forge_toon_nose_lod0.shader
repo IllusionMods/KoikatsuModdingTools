@@ -150,5 +150,5 @@ Shader "Shader Forge/toon_nose_lod0" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

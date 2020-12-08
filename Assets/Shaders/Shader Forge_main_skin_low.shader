@@ -193,5 +193,5 @@ Shader "Shader Forge/main_skin_low" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

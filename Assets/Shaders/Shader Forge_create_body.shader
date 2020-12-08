@@ -161,5 +161,5 @@ Shader "Shader Forge/create_body" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

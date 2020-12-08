@@ -165,5 +165,5 @@ Shader "Shader Forge/create_topN" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

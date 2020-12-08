@@ -52,5 +52,5 @@ Shader "Shader Forge/shadowcast" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

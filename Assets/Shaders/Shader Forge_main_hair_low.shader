@@ -180,5 +180,5 @@ Shader "Shader Forge/main_hair_low" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

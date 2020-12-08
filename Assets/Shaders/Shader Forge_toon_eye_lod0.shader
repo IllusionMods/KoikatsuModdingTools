@@ -158,5 +158,5 @@ Shader "Shader Forge/toon_eye_lod0" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

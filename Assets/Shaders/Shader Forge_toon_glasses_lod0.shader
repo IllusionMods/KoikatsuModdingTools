@@ -177,5 +177,5 @@ Shader "Shader Forge/toon_glasses_lod0" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

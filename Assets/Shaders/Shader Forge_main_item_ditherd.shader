@@ -153,5 +153,5 @@ Shader "Shader Forge/main_item_ditherd" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

@@ -31,21 +31,8 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
     /// </summary>
     public static void SetAllMaterialsOriginal()
     {
-        foreach (var gameObject in GetRootObjects())
-        {
-            ChaCustomHairComponent chaCustomHairComponent = gameObject.GetComponentInChildren<ChaCustomHairComponent>();
-            if (chaCustomHairComponent != null)
-                chaCustomHairComponent.SetMaterialsOriginal();
-            ChaClothesComponent chaClothesComponent = gameObject.GetComponentInChildren<ChaClothesComponent>();
-            if (chaClothesComponent != null)
-                chaClothesComponent.SetMaterialsOriginal();
-            Studio.ItemComponent itemComponent = gameObject.GetComponentInChildren<Studio.ItemComponent>();
-            if (itemComponent != null)
-                itemComponent.SetMaterialsOriginal();
-            ChaAccessoryComponent chaAccessoryComponent = gameObject.GetComponentInChildren<ChaAccessoryComponent>();
-            if (chaAccessoryComponent != null)
-                chaAccessoryComponent.SetMaterialsOriginal();
-        }
+        foreach (var go in GetRootObjects())
+            SetMaterialsOriginal(go);
     }
 
     /// <summary>
@@ -53,21 +40,58 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
     /// </summary>
     public static void SetAllMaterialsPreview()
     {
-        foreach (var gameObject in GetRootObjects())
-        {
-            ChaCustomHairComponent chaCustomHairComponent = gameObject.GetComponentInChildren<ChaCustomHairComponent>();
-            if (chaCustomHairComponent != null)
-                chaCustomHairComponent.SetMaterialsPreview();
-            ChaClothesComponent chaClothesComponent = gameObject.GetComponentInChildren<ChaClothesComponent>();
-            if (chaClothesComponent != null)
-                chaClothesComponent.SetMaterialsPreview();
-            Studio.ItemComponent itemComponent = gameObject.GetComponentInChildren<Studio.ItemComponent>();
-            if (itemComponent != null)
-                itemComponent.SetMaterialsPreview();
-            ChaAccessoryComponent chaAccessoryComponent = gameObject.GetComponentInChildren<ChaAccessoryComponent>();
-            if (chaAccessoryComponent != null)
-                chaAccessoryComponent.SetMaterialsPreview();
-        }
+        foreach (var go in GetRootObjects())
+            SetMaterialsPreview(go);
+    }
+
+    /// <summary>
+    /// Set all the materials of the currently selected objects to the original placeholder shaders
+    /// </summary>
+    public static void SetSelectedMaterialsOriginal()
+    {
+        foreach (var selected in Selection.gameObjects)
+            SetMaterialsOriginal(GetGameObjectRoot(selected));
+    }
+
+    /// <summary>
+    /// Set all the materials of the currently selected objects to the functional shaders
+    /// </summary>
+    public static void SetSelectedMaterialsPreview()
+    {
+        foreach (var selected in Selection.gameObjects)
+            SetMaterialsPreview(GetGameObjectRoot(selected));
+    }
+
+    private static void SetMaterialsOriginal(GameObject go)
+    {
+        ChaCustomHairComponent chaCustomHairComponent = go.GetComponentInChildren<ChaCustomHairComponent>();
+        if (chaCustomHairComponent != null)
+            chaCustomHairComponent.SetMaterialsOriginal();
+        ChaClothesComponent chaClothesComponent = go.GetComponentInChildren<ChaClothesComponent>();
+        if (chaClothesComponent != null)
+            chaClothesComponent.SetMaterialsOriginal();
+        Studio.ItemComponent itemComponent = go.GetComponentInChildren<Studio.ItemComponent>();
+        if (itemComponent != null)
+            itemComponent.SetMaterialsOriginal();
+        ChaAccessoryComponent chaAccessoryComponent = go.GetComponentInChildren<ChaAccessoryComponent>();
+        if (chaAccessoryComponent != null)
+            chaAccessoryComponent.SetMaterialsOriginal();
+    }
+
+    private static void SetMaterialsPreview(GameObject go)
+    {
+        ChaCustomHairComponent chaCustomHairComponent = go.GetComponentInChildren<ChaCustomHairComponent>();
+        if (chaCustomHairComponent != null)
+            chaCustomHairComponent.SetMaterialsPreview();
+        ChaClothesComponent chaClothesComponent = go.GetComponentInChildren<ChaClothesComponent>();
+        if (chaClothesComponent != null)
+            chaClothesComponent.SetMaterialsPreview();
+        Studio.ItemComponent itemComponent = go.GetComponentInChildren<Studio.ItemComponent>();
+        if (itemComponent != null)
+            itemComponent.SetMaterialsPreview();
+        ChaAccessoryComponent chaAccessoryComponent = go.GetComponentInChildren<ChaAccessoryComponent>();
+        if (chaAccessoryComponent != null)
+            chaAccessoryComponent.SetMaterialsPreview();
     }
 
     /// <summary>
@@ -80,6 +104,18 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
         Scene scene = SceneManager.GetActiveScene();
         scene.GetRootGameObjects(rootObjects);
         return rootObjects;
+    }
+
+    /// <summary>
+    /// Get the root GameObject of the specified GameObject
+    /// </summary>
+    /// <param name="go"></param>
+    /// <returns></returns>
+    public static GameObject GetGameObjectRoot(GameObject go)
+    {
+        if (go.transform.parent == null)
+            return go;
+        return GetGameObjectRoot(go.transform.parent.gameObject);
     }
 
     /// <summary>

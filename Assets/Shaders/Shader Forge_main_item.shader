@@ -190,5 +190,5 @@ Shader "Shader Forge/main_item" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

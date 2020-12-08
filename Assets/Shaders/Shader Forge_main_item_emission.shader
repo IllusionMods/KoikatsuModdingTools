@@ -192,5 +192,5 @@ Shader "Shader Forge/main_item_emission" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

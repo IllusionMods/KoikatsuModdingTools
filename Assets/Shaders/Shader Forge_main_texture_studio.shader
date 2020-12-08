@@ -154,5 +154,5 @@ Shader "Shader Forge/main_texture_studio" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }

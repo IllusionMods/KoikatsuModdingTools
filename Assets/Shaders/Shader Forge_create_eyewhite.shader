@@ -150,5 +150,5 @@ Shader "Shader Forge/create_eyewhite" {
         }
     }
     FallBack "Diffuse"
-    CustomEditor "ShaderForgeMaterialInspector"
+    CustomEditor "PlaceholderShaderUI"
 }
