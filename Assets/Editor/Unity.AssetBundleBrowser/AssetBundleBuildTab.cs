@@ -12,7 +12,7 @@ namespace AssetBundleBrowser
     [System.Serializable]
     internal class AssetBundleBuildTab
     {
-        const string KoikatsuPathDefault = "C:/Illusion/Koikatu";
+        private const string KoikatsuPathDefault = "C:/Illusion/Koikatu";
 
         [SerializeField]
         private bool m_AdvancedSettings;
@@ -20,7 +20,7 @@ namespace AssetBundleBrowser
         [SerializeField]
         private Vector2 m_ScrollPosition;
 
-        class ToggleData
+        private class ToggleData
         {
             internal ToggleData(bool s,
                 string title,
@@ -44,10 +44,9 @@ namespace AssetBundleBrowser
 
         [SerializeField]
         private BuildTabData m_UserData;
-
-        List<ToggleData> m_ToggleData;
-        ToggleData m_ForceRebuild;
-        GUIContent m_CompressionContent;
+        private List<ToggleData> m_ToggleData;
+        private ToggleData m_ForceRebuild;
+        private GUIContent m_CompressionContent;
 
         internal enum CompressOptions
         {
@@ -307,6 +306,7 @@ namespace AssetBundleBrowser
                 m_InspectTab.RefreshBundles();
             };
 
+            PreviewShaders.SetAllMaterialsOriginal();
             AssetBundleModel.Model.DataSource.BuildAssetBundles(buildInfo);
 
             DirectoryInfo di = new DirectoryInfo(buildInfo.outputDirectory);
@@ -320,6 +320,7 @@ namespace AssetBundleBrowser
                 Debug.Log("Successfully built 1 asset bundle.");
             else
                 Debug.Log("Successfully built " + changedFiles.Count + " asset bundles.");
+            PreviewShaders.SetAllMaterialsPreview();
         }
 
         private void BrowseForKoikatsuFolder()

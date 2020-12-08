@@ -1,135 +1,207 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public static class PreviewShaders
+public class PreviewShaders : UnityEditor.AssetModificationProcessor
 {
-    private static readonly Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
-    private static bool LoadedShaders = false;
+    public static readonly Dictionary<string, Shader> Shaders = new Dictionary<string, Shader>();
+    public static Texture RampGradient = null;
+    public static float LineWidth = 0.5f;
+    public static Color AmbientShadow = Color.black;
+    public static Color LineColor = Color.black;
 
-    private static void LoadShaders()
+    static PreviewShaders()
     {
-        Shader.SetGlobalFloat(Shader.PropertyToID("_linewidthG"), 0.5f);
-        Shader.SetGlobalTexture(Shader.PropertyToID("_RampG"), null);
-        Shader.SetGlobalColor(Shader.PropertyToID("_ambientshadowG"), Color.black);
-        Shader.SetGlobalColor(Shader.PropertyToID("_LineColorG"), Color.black);
-
-        if (LoadedShaders)
-            return;
-
         var ab = AssetBundle.LoadFromFile("Assets/kk_shaders.unity3d");
         foreach (var obj in ab.LoadAllAssets<GameObject>())
-        {
             foreach (var mat in obj.GetComponentInChildren<Renderer>().sharedMaterials)
-            {
-                var sha = mat.shader;
-                shaders[mat.shader.name] = sha;
-            }
-        }
+                Shaders[mat.shader.name] = mat.shader;
         ab.Unload(false);
 
-        LoadedShaders = true;
+        Shader.SetGlobalFloat(Shader.PropertyToID("_linewidthG"), LineWidth);
+        Shader.SetGlobalTexture(Shader.PropertyToID("_RampG"), RampGradient);
+        Shader.SetGlobalColor(Shader.PropertyToID("_ambientshadowG"), AmbientShadow);
+        Shader.SetGlobalColor(Shader.PropertyToID("_LineColorG"), LineColor);
     }
 
-    public static void Preview(Renderer[] renderers)
+    /// <summary>
+    /// Set all the materials in the scene back to their original. Must be called before exiting Unity and before building asset bundles or materials will become corrupt.
+    /// </summary>
+    public static void SetAllMaterialsOriginal()
     {
-        LoadShaders();
+        foreach (var gameObject in GetRootObjects())
+        {
+            ChaCustomHairComponent chaCustomHairComponent = gameObject.GetComponentInChildren<ChaCustomHairComponent>();
+            if (chaCustomHairComponent != null)
+                chaCustomHairComponent.SetMaterialsOriginal();
+            ChaClothesComponent chaClothesComponent = gameObject.GetComponentInChildren<ChaClothesComponent>();
+            if (chaClothesComponent != null)
+                chaClothesComponent.SetMaterialsOriginal();
+            Studio.ItemComponent itemComponent = gameObject.GetComponentInChildren<Studio.ItemComponent>();
+            if (itemComponent != null)
+                itemComponent.SetMaterialsOriginal();
+            ChaAccessoryComponent chaAccessoryComponent = gameObject.GetComponentInChildren<ChaAccessoryComponent>();
+            if (chaAccessoryComponent != null)
+                chaAccessoryComponent.SetMaterialsOriginal();
+        }
+    }
 
+    /// <summary>
+    /// Set all the materials in the scene to their preview state with functional shaders
+    /// </summary>
+    public static void SetAllMaterialsPreview()
+    {
+        foreach (var gameObject in GetRootObjects())
+        {
+            ChaCustomHairComponent chaCustomHairComponent = gameObject.GetComponentInChildren<ChaCustomHairComponent>();
+            if (chaCustomHairComponent != null)
+                chaCustomHairComponent.SetMaterialsPreview();
+            ChaClothesComponent chaClothesComponent = gameObject.GetComponentInChildren<ChaClothesComponent>();
+            if (chaClothesComponent != null)
+                chaClothesComponent.SetMaterialsPreview();
+            Studio.ItemComponent itemComponent = gameObject.GetComponentInChildren<Studio.ItemComponent>();
+            if (itemComponent != null)
+                itemComponent.SetMaterialsPreview();
+            ChaAccessoryComponent chaAccessoryComponent = gameObject.GetComponentInChildren<ChaAccessoryComponent>();
+            if (chaAccessoryComponent != null)
+                chaAccessoryComponent.SetMaterialsPreview();
+        }
+    }
+
+    /// <summary>
+    /// Get all the root objects in the scene
+    /// </summary>
+    /// <returns></returns>
+    public static List<GameObject> GetRootObjects()
+    {
+        List<GameObject> rootObjects = new List<GameObject>();
+        Scene scene = SceneManager.GetActiveScene();
+        scene.GetRootGameObjects(rootObjects);
+        return rootObjects;
+    }
+
+    /// <summary>
+    /// Replace shaders on the renderers with the preview version
+    /// </summary>
+    /// <param name="renderers"></param>
+    public static void ReplaceShadersPreview(Renderer[] renderers)
+    {
         foreach (var renderer in renderers)
-            Preview(renderer);
+            ReplaceShadersPreview(renderer);
     }
 
-    public static void Preview(Renderer renderer)
+    /// <summary>
+    /// Replace shaders on all the renderers of the gameobjects with the preview version
+    /// </summary>
+    /// <param name="gameObjects"></param>
+    public static void ReplaceShadersPreview(GameObject[] gameObjects)
     {
-        if (!renderer)
+        foreach (var go in gameObjects)
+            ReplaceShadersPreview(go.GetComponentsInChildren<Renderer>());
+    }
+
+    /// <summary>
+    /// Replace shaders on the renderer with the preview version
+    /// </summary>
+    /// <param name="renderer"></param>
+    public static void ReplaceShadersPreview(Renderer renderer)
+    {
+        if (renderer == null)
             return;
 
-        LoadShaders();
-
-        foreach (var material in renderer.materials)
-            Preview(material);
+        foreach (var material in renderer.sharedMaterials)
+        {
+            Shader sha;
+            if (Shaders.TryGetValue(material.shader.name, out sha))
+                material.shader = sha;
+        }
     }
 
-    public static void Preview(GameObject[] gameObjects)
+    /// <summary>
+    /// Replace shaders on the renderers with the original placerholder version
+    /// </summary>
+    /// <param name="renderers"></param>
+    public static void ReplaceShadersOriginal(Renderer[] renderers)
     {
-        LoadShaders();
-
-        foreach (var gameObject in gameObjects)
-            Preview(gameObject.GetComponentsInChildren<Renderer>());
+        foreach (var renderer in renderers)
+            ReplaceShadersOriginal(renderer);
     }
 
-    public static void Preview(GameObject gameObject)
+    /// <summary>
+    /// Replace shaders on all the renderers of the gameobjects with the original placerholder version
+    /// </summary>
+    /// <param name="gameObjects"></param>
+    public static void ReplaceShadersOriginal(GameObject[] gameObjects)
     {
-        if (!gameObject)
+        foreach (var go in gameObjects)
+            ReplaceShadersOriginal(go.GetComponentsInChildren<Renderer>());
+    }
+
+    /// <summary>
+    /// Replace shaders on the renderer with the original placerholder version
+    /// </summary>
+    /// <param name="renderer"></param>
+    public static void ReplaceShadersOriginal(Renderer renderer)
+    {
+        if (renderer == null)
             return;
 
-        LoadShaders();
-
-        Preview(gameObject.GetComponentsInChildren<Renderer>());
+        foreach (var material in renderer.sharedMaterials)
+        {
+            string filename;
+            if (ShaderFilenames.TryGetValue(material.shader.name, out filename))
+            {
+                Shader sha = (Shader)AssetDatabase.LoadAssetAtPath("Assets/Shaders/" + filename, typeof(Shader));
+                if (sha != null)
+                    material.shader = sha;
+            }
+        }
     }
 
-    public static void Preview(Material[] materials)
-    {
-        LoadShaders();
-
-        foreach (var material in materials)
-            Preview(material);
-    }
-
-    public static void Preview(Material material)
-    {
-        if (!material)
-            return;
-
-        LoadShaders();
-
-        Shader sha;
-        if (shaders.TryGetValue(material.shader.name, out sha))
-            material.shader = sha;
-    }
+    /// <summary>
+    /// Shader names and their associated placeholder shader filenames
+    /// </summary>
+    private static readonly Dictionary<string, string> ShaderFilenames = new Dictionary<string, string>
+        {
+            { "Custom/Silhouette", "Custom_Silhouette.shader" },
+            { "Shader Forge/create_body", "Shader Forge_create_body.shader" },
+            { "Shader Forge/create_eye", "Shader Forge_create_eye.shader" },
+            { "Shader Forge/create_eyewhite", "Shader Forge_create_eyewhite.shader" },
+            { "Shader Forge/create_hair", "Shader Forge_create_hair.shader" },
+            { "Shader Forge/create_head", "Shader Forge_create_head.shader" },
+            { "Shader Forge/create_topN", "Shader Forge_create_topN.shader" },
+            { "Shader Forge/main_alpha", "Shader Forge_main_alpha.shader" },
+            { "Shader Forge/main_color", "Shader Forge_main_color.shader" },
+            { "Shader Forge/main_emblem", "Shader Forge_main_emblem.shader" },
+            { "Shader Forge/main_emblem_clothes", "Shader Forge_main_emblem_clothes.shader" },
+            { "Shader Forge/main_hair", "Shader Forge_main_hair.shader" },
+            { "Shader Forge/main_hair_front", "Shader Forge_main_hair_front.shader" },
+            { "Shader Forge/main_hair_low", "Shader Forge_main_hair_low.shader" },
+            { "Shader Forge/main_item", "Shader Forge_main_item.shader" },
+            { "Shader Forge/main_item_ditherd", "Shader Forge_main_item_ditherd.shader" },
+            { "Shader Forge/main_item_emission", "Shader Forge_main_item_emission.shader" },
+            { "Shader Forge/main_item_low", "Shader Forge_main_item_low.shader" },
+            { "Shader Forge/main_item_studio", "Shader Forge_main_item_studio.shader" },
+            { "Shader Forge/main_item_studio_add", "Shader Forge_main_item_studio_add.shader" },
+            { "Shader Forge/main_item_studio_alpha", "Shader Forge_main_item_studio_alpha.shader" },
+            { "Shader Forge/main_opaque", "Shader Forge_main_opaque.shader" },
+            { "Shader Forge/main_opaque2", "Shader Forge_main_opaque2.shader" },
+            { "Shader Forge/main_opaque_low", "Shader Forge_main_opaque_low.shader" },
+            { "Shader Forge/main_opaque_low2", "Shader Forge_main_opaque_low2.shader" },
+            { "Shader Forge/main_skin", "Shader Forge_main_skin.shader" },
+            { "Shader Forge/main_skin_low", "Shader Forge_main_skin_low.shader" },
+            { "Shader Forge/main_StandardMDK_studio","Shader Forge_main_StandardMDK_studio.shader" },
+            { "Shader Forge/main_texture", "Shader Forge_main_texture.shader" },
+            { "Shader Forge/main_texture_studio", "Shader Forge_main_texture_studio.shader" },
+            { "Shader Forge/mnpb", "Shader Forge_mnpb.shader" },
+            { "Shader Forge/shadowcast", "Shader Forge_shadowcast.shader" },
+            { "Shader Forge/toon_eye_lod0", "Shader Forge_toon_eye_lod0.shader" },
+            { "Shader Forge/toon_eyew_lod0", "Shader Forge_toon_eyew_lod0.shader" },
+            { "Shader Forge/toon_glasses_lod0", "Shader Forge_toon_glasses_lod0.shader" },
+            { "Shader Forge/toon_nose_lod0", "Shader Forge_toon_nose_lod0.shader" },
+            { "Shader Forge/toon_textureanimation", "Shader Forge_toon_textureanimation.shader" },
+        };
 }
 #endif
-
-//public class NewBehaviourScript
-//{
-//    private static readonly Dictionary<string, Shader> shaders = new Dictionary<string, Shader>();
-
-//    [MenuItem("Shaders/Preview")]
-//    private static void Preview()
-//    {
-//        var ab = AssetBundle.LoadFromFile("Assets/KK_Shaders2.unity3d");
-//        foreach (var obj in ab.LoadAllAssets<GameObject>())
-//        {
-//            foreach (var mat in obj.GetComponentInChildren<Renderer>().sharedMaterials)
-//            {
-//                var sha = mat.shader;
-//                shaders[mat.shader.name] = sha;
-//            }
-//        }
-//        ab.Unload(false);
-
-//        ab = AssetBundle.LoadFromFile("Assets/mt_ramp_00.unity3d");
-//        var rampTex = ab.LoadAsset<Texture2D>("gt_ramp_05");
-//        Debug.Log("rampTex:" + rampTex);
-//        ab.Unload(false);
-
-//        ab = AssetBundle.LoadFromFile("Assets/mt_hairgloss_00.unity3d");
-//        var glossTex = ab.LoadAsset<Texture2D>("cf_hair_00_04_mh");
-//        Debug.Log("glossTex:" + glossTex);
-//        ab.Unload(false);
-
-//        foreach (var target in Selection.gameObjects)
-//            foreach (var rend in target.GetComponentsInChildren<Renderer>())
-//                foreach (var mat in rend.sharedMaterials)
-//                {
-//                    Shader sha;
-//                    if (shaders.TryGetValue(mat.shader.name, out sha))
-//                        mat.shader = sha;
-//                }
-
-//        Shader.SetGlobalFloat(Shader.PropertyToID("_linewidthG"), 0.5f);
-//        Shader.SetGlobalTexture(Shader.PropertyToID("_RampG"), rampTex);
-//        Shader.SetGlobalColor(Shader.PropertyToID("_ambientshadowG"), Color.black);
-//        Shader.SetGlobalColor(Shader.PropertyToID("_LineColorG"), Color.black);
-//    }
-//}

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[ExecuteInEditMode]
 public class ChaCustomHairComponent : MonoBehaviour
 {
     public Renderer[] rendHair;
@@ -16,9 +17,35 @@ public class ChaCustomHairComponent : MonoBehaviour
 #if UNITY_EDITOR
     private void Awake()
     {
-        PreviewShaders.Preview(rendHair);
-        PreviewShaders.Preview(rendAccessory);
+        SetMaterialsPreview();
+    }
 
+    private void OnApplicationQuit()
+    {
+        SetMaterialsOriginal();
+    }
+
+    private void OnDestroy()
+    {
+        SetMaterialsOriginal();
+    }
+
+    public void SetMaterialsPreview()
+    {
+        PreviewShaders.ReplaceShadersPreview(rendHair);
+        PreviewShaders.ReplaceShadersPreview(rendAccessory);
+
+        SetAccessoryColor();
+    }
+
+    public void SetMaterialsOriginal()
+    {
+        PreviewShaders.ReplaceShadersOriginal(rendHair);
+        PreviewShaders.ReplaceShadersOriginal(rendAccessory);
+    }
+
+    public void SetAccessoryColor()
+    {
         foreach (var rend in rendAccessory)
             foreach (var mat in rend.sharedMaterials)
                 mat.SetColor("_Color", Color.red);

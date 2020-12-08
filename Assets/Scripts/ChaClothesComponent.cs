@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[ExecuteInEditMode]
 public class ChaClothesComponent : MonoBehaviour
 {
     [Header("Normal Parts")]
@@ -54,23 +55,49 @@ public class ChaClothesComponent : MonoBehaviour
 #if UNITY_EDITOR
     private void Awake()
     {
-        PreviewShaders.Preview(rendNormal01);
-        PreviewShaders.Preview(rendNormal02);
-        PreviewShaders.Preview(rendNormal03);
+        SetMaterialsPreview();
+    }
 
-        PreviewShaders.Preview(rendAlpha01);
-        PreviewShaders.Preview(rendAlpha02);
+    public void SetMaterialsPreview()
+    {
+        PreviewShaders.ReplaceShadersPreview(rendNormal01);
+        PreviewShaders.ReplaceShadersPreview(rendNormal02);
+        PreviewShaders.ReplaceShadersPreview(rendNormal03);
 
-        PreviewShaders.Preview(rendEmblem01);
-        PreviewShaders.Preview(exRendEmblem01);
-        PreviewShaders.Preview(rendEmblem02);
-        PreviewShaders.Preview(exRendEmblem02);
+        PreviewShaders.ReplaceShadersPreview(rendAlpha01);
+        PreviewShaders.ReplaceShadersPreview(rendAlpha02);
 
-        PreviewShaders.Preview(objOpt01);
-        PreviewShaders.Preview(objOpt02);
-        PreviewShaders.Preview(objSleeves01);
-        PreviewShaders.Preview(objSleeves02);
-        PreviewShaders.Preview(objSleeves03);
+        PreviewShaders.ReplaceShadersPreview(rendEmblem01);
+        PreviewShaders.ReplaceShadersPreview(exRendEmblem01);
+        PreviewShaders.ReplaceShadersPreview(rendEmblem02);
+        PreviewShaders.ReplaceShadersPreview(exRendEmblem02);
+
+        PreviewShaders.ReplaceShadersPreview(objOpt01);
+        PreviewShaders.ReplaceShadersPreview(objOpt02);
+        PreviewShaders.ReplaceShadersPreview(objSleeves01);
+        PreviewShaders.ReplaceShadersPreview(objSleeves02);
+        PreviewShaders.ReplaceShadersPreview(objSleeves03);
+    }
+
+    public void SetMaterialsOriginal()
+    {
+        PreviewShaders.ReplaceShadersOriginal(rendNormal01);
+        PreviewShaders.ReplaceShadersOriginal(rendNormal02);
+        PreviewShaders.ReplaceShadersOriginal(rendNormal03);
+
+        PreviewShaders.ReplaceShadersOriginal(rendAlpha01);
+        PreviewShaders.ReplaceShadersOriginal(rendAlpha02);
+
+        PreviewShaders.ReplaceShadersOriginal(rendEmblem01);
+        PreviewShaders.ReplaceShadersOriginal(exRendEmblem01);
+        PreviewShaders.ReplaceShadersOriginal(rendEmblem02);
+        PreviewShaders.ReplaceShadersOriginal(exRendEmblem02);
+
+        PreviewShaders.ReplaceShadersOriginal(objOpt01);
+        PreviewShaders.ReplaceShadersOriginal(objOpt02);
+        PreviewShaders.ReplaceShadersOriginal(objSleeves01);
+        PreviewShaders.ReplaceShadersOriginal(objSleeves02);
+        PreviewShaders.ReplaceShadersOriginal(objSleeves03);
     }
 #endif
 }

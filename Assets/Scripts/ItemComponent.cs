@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 
 namespace Studio
 {
+    [ExecuteInEditMode]
     public class ItemComponent : MonoBehaviour
     {
         [Serializable]
@@ -45,13 +45,25 @@ namespace Studio
 #if UNITY_EDITOR
         private void Awake()
         {
-            PreviewShaders.Preview(rendNormal);
-            PreviewShaders.Preview(rendAlpha);
-            PreviewShaders.Preview(rendGlass);
+            SetMaterialsPreview();
+        }
+
+        public void SetMaterialsPreview()
+        {
+            PreviewShaders.ReplaceShadersPreview(rendNormal);
+            PreviewShaders.ReplaceShadersPreview(rendAlpha);
+            PreviewShaders.ReplaceShadersPreview(rendGlass);
 
             SetColors(rendNormal);
             SetColors(rendAlpha);
             SetColors(rendGlass);
+        }
+
+        public void SetMaterialsOriginal()
+        {
+            PreviewShaders.ReplaceShadersOriginal(rendNormal);
+            PreviewShaders.ReplaceShadersOriginal(rendAlpha);
+            PreviewShaders.ReplaceShadersOriginal(rendGlass);
         }
 
         private void SetColors(Renderer[] renderers)

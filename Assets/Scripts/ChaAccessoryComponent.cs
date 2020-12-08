@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[ExecuteInEditMode]
 public class ChaAccessoryComponent : MonoBehaviour
 {
     [Header("Normal Parts")]
@@ -22,9 +23,14 @@ public class ChaAccessoryComponent : MonoBehaviour
 #if UNITY_EDITOR
     private void Awake()
     {
-        PreviewShaders.Preview(rendNormal);
-        PreviewShaders.Preview(rendAlpha);
-        PreviewShaders.Preview(rendHair);
+        SetMaterialsPreview();
+    }
+
+    public void SetMaterialsPreview()
+    {
+        PreviewShaders.ReplaceShadersPreview(rendNormal);
+        PreviewShaders.ReplaceShadersPreview(rendAlpha);
+        PreviewShaders.ReplaceShadersPreview(rendHair);
 
         SetColors(rendNormal);
         SetColors(rendAlpha);
@@ -32,9 +38,14 @@ public class ChaAccessoryComponent : MonoBehaviour
 
         var hairCmp = gameObject.GetComponent<ChaCustomHairComponent>();
         if (hairCmp)
-            foreach (var rend in hairCmp.rendAccessory)
-                foreach (var mat in rend.sharedMaterials)
-                    mat.SetColor("_Color", Color.red);
+            hairCmp.SetAccessoryColor();
+    }
+
+    public void SetMaterialsOriginal()
+    {
+        PreviewShaders.ReplaceShadersOriginal(rendNormal);
+        PreviewShaders.ReplaceShadersOriginal(rendAlpha);
+        PreviewShaders.ReplaceShadersOriginal(rendHair);
     }
 
     private void SetColors(Renderer[] renderers)
