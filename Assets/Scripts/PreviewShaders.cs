@@ -10,7 +10,7 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
     public static Texture RampGradient = null;
     public static float LineWidth = 0.5f;
     public static Color AmbientShadow = Color.black;
-    public static Color LineColor = Color.black;
+    public static Color LineColor = new Color(0.5f, 0.5f, 0.5f, 0f);
 
     static PreviewShaders()
     {
