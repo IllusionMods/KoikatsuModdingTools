@@ -28,6 +28,10 @@ public class ChaAccessoryComponent : MonoBehaviour
 
     public void SetMaterialsPreview()
     {
+        //Better handled by the ChaCustomHairComponent
+        if (gameObject.GetComponent<ChaCustomHairComponent>())
+            return;
+
         PreviewShaders.ReplaceShadersPreview(rendNormal);
         PreviewShaders.ReplaceShadersPreview(rendAlpha);
         PreviewShaders.ReplaceShadersPreview(rendHair);
@@ -35,10 +39,6 @@ public class ChaAccessoryComponent : MonoBehaviour
         SetColors(rendNormal);
         SetColors(rendAlpha);
         SetColors(rendHair);
-
-        var hairCmp = gameObject.GetComponent<ChaCustomHairComponent>();
-        if (hairCmp)
-            hairCmp.SetAccessoryColor();
     }
 
     public void SetMaterialsOriginal()

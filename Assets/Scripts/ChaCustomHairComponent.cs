@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 
 [ExecuteInEditMode]
 public class ChaCustomHairComponent : MonoBehaviour
@@ -15,14 +16,17 @@ public class ChaCustomHairComponent : MonoBehaviour
     public int setcolor;
 
 #if UNITY_EDITOR
+
+    private static Color BaseColor = new Color(0.69020f, 0.49412f, 0.31765f);
+    private static Color RootColor = new Color(0.62745f, 0.47451f, 0.45882f);
+    private static Color TipColor = new Color(0.78824f, 0.80784f, 0.75294f);
+    public static Texture HairGloss;
+
     private void Awake()
     {
+        if (!HairGloss)
+            HairGloss = TextureFromBytes(File.ReadAllBytes("Assets/HairGloss.png"));
         SetMaterialsPreview();
-    }
-
-    private void OnApplicationQuit()
-    {
-        SetMaterialsOriginal();
     }
 
     private void OnDestroy()
@@ -35,6 +39,7 @@ public class ChaCustomHairComponent : MonoBehaviour
         PreviewShaders.ReplaceShadersPreview(rendHair);
         PreviewShaders.ReplaceShadersPreview(rendAccessory);
 
+        SetHairMaterials(true);
         SetAccessoryColor();
     }
 
@@ -42,6 +47,8 @@ public class ChaCustomHairComponent : MonoBehaviour
     {
         PreviewShaders.ReplaceShadersOriginal(rendHair);
         PreviewShaders.ReplaceShadersOriginal(rendAccessory);
+
+        SetHairMaterials(false);
     }
 
     public void SetAccessoryColor()
@@ -49,6 +56,35 @@ public class ChaCustomHairComponent : MonoBehaviour
         foreach (var rend in rendAccessory)
             foreach (var mat in rend.sharedMaterials)
                 mat.SetColor("_Color", Color.red);
+    }
+
+    public void SetHairMaterials(bool enabled)
+    {
+        foreach (var rend in rendHair)
+            foreach (var mat in rend.sharedMaterials)
+            {
+                mat.SetTexture("_HairGloss", enabled ? HairGloss : null);
+
+                mat.SetColor("_Color", BaseColor);
+                mat.SetColor("_Color2", RootColor);
+                mat.SetColor("_Color3", TipColor);
+
+                float H;
+                float S;
+                float V;
+                Color.RGBToHSV(BaseColor, out H, out S, out V);
+                Color outlineColor = Color.HSVToRGB(H, S, Mathf.Max(V - 0.4f, 0f));
+                mat.SetColor("_LineColor", outlineColor);
+            }
+    }
+
+    private static Texture2D TextureFromBytes(byte[] texBytes, TextureFormat format = TextureFormat.ARGB32, bool mipmaps = true)
+    {
+        if (texBytes == null || texBytes.Length == 0) return null;
+
+        var tex = new Texture2D(2, 2, format, mipmaps);
+        tex.LoadImage(texBytes);
+        return tex;
     }
 #endif
 }

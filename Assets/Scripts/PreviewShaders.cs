@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class PreviewShaders : UnityEditor.AssetModificationProcessor
 {
     public static readonly Dictionary<string, Shader> Shaders = new Dictionary<string, Shader>();
-    public static Texture RampGradient = null;
+    public static Texture RampGradient = TextureFromBytes(File.ReadAllBytes("Assets/Ramp.png"));
     public static float LineWidth = 0.5f;
     public static Color AmbientShadow = Color.black;
     public static Color LineColor = new Color(0.5f, 0.5f, 0.5f, 0f);
@@ -239,5 +240,14 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
             { "Shader Forge/toon_nose_lod0", "Shader Forge_toon_nose_lod0.shader" },
             { "Shader Forge/toon_textureanimation", "Shader Forge_toon_textureanimation.shader" },
         };
+
+    private static Texture2D TextureFromBytes(byte[] texBytes, TextureFormat format = TextureFormat.ARGB32, bool mipmaps = true)
+    {
+        if (texBytes == null || texBytes.Length == 0) return null;
+
+        var tex = new Texture2D(2, 2, format, mipmaps);
+        tex.LoadImage(texBytes);
+        return tex;
+    }
 }
 #endif
