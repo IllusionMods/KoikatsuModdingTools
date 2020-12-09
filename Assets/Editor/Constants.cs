@@ -15,7 +15,11 @@ namespace IllusionMods.KoikatuModdingTools
         internal static readonly HashSet<string> GameNameList = new HashSet<string> { "koikatsu", "koikatu", "コイカツ" };
         internal static readonly Dictionary<string, string> ShaderABs = new Dictionary<string, string>
         {
+            { "Custom/CustomUnlit-Outline",  ShaderABPath },
+            { "Custom/Blend/Zero_Subtractive",  ShaderABPath },
+            { "Custom/Blend/Additive",  ShaderABPath },
             { "Custom/Silhouette", ShaderABPath },
+            { "CustomUnlit/Transparent DoubleSide",  ShaderABPath },
             { "Shader Forge/create_body", ShaderABPath },
             { "Shader Forge/create_eye", ShaderABPath },
             { "Shader Forge/create_eyewhite", ShaderABPath },
@@ -23,9 +27,9 @@ namespace IllusionMods.KoikatuModdingTools
             { "Shader Forge/create_head", ShaderABPath },
             { "Shader Forge/create_topN", ShaderABPath },
             { "Shader Forge/main_alpha", ShaderABPath },
+            { "Shader Forge/main_color", ShaderABPath },
             { "Shader Forge/main_emblem", ShaderABPath },
             { "Shader Forge/main_emblem_clothes", ShaderABPath },
-            { "Shader Forge/main_color", ShaderABPath },
             { "Shader Forge/main_hair", ShaderABPath },
             { "Shader Forge/main_hair_front", ShaderABPath },
             { "Shader Forge/main_hair_low", ShaderABPath },

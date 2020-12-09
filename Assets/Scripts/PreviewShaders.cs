@@ -202,7 +202,11 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
     /// </summary>
     private static readonly Dictionary<string, string> ShaderFilenames = new Dictionary<string, string>
         {
+            { "Custom/CustomUnlit-Outline",  "Custom_CustomUnlit-Outline.shader" },
+            { "Custom/Blend/Zero_Subtractive",  "Custom_Blend_Zero_Subtractive.shader" },
+            { "Custom/Blend/Additive",  "Custom_Blend_Additive.shader" },
             { "Custom/Silhouette", "Custom_Silhouette.shader" },
+            { "CustomUnlit/Transparent DoubleSide",  "CustomUnlit_Transparent DoubleSide.shader" },
             { "Shader Forge/create_body", "Shader Forge_create_body.shader" },
             { "Shader Forge/create_eye", "Shader Forge_create_eye.shader" },
             { "Shader Forge/create_eyewhite", "Shader Forge_create_eyewhite.shader" },
