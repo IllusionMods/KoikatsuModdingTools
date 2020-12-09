@@ -125,6 +125,9 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
     /// <param name="renderers"></param>
     public static void ReplaceShadersPreview(Renderer[] renderers)
     {
+        if (renderers == null)
+            return;
+
         foreach (var renderer in renderers)
             ReplaceShadersPreview(renderer);
     }
@@ -135,6 +138,9 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
     /// <param name="gameObjects"></param>
     public static void ReplaceShadersPreview(GameObject[] gameObjects)
     {
+        if (gameObjects == null)
+            return;
+
         foreach (var go in gameObjects)
             ReplaceShadersPreview(go.GetComponentsInChildren<Renderer>());
     }
@@ -162,6 +168,9 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
     /// <param name="renderers"></param>
     public static void ReplaceShadersOriginal(Renderer[] renderers)
     {
+        if (renderers == null)
+            return;
+
         foreach (var renderer in renderers)
             ReplaceShadersOriginal(renderer);
     }
@@ -172,6 +181,9 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
     /// <param name="gameObjects"></param>
     public static void ReplaceShadersOriginal(GameObject[] gameObjects)
     {
+        if (gameObjects == null)
+            return;
+
         foreach (var go in gameObjects)
             ReplaceShadersOriginal(go.GetComponentsInChildren<Renderer>());
     }

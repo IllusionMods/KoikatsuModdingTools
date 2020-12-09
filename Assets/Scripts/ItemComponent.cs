@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Studio
@@ -54,6 +55,11 @@ namespace Studio
             SetMaterialsOriginal();
         }
 
+        private void OnValidate()
+        {
+            VerifyInfo();
+        }
+
         public void SetMaterialsPreview()
         {
             PreviewShaders.ReplaceShadersPreview(rendNormal);
@@ -77,7 +83,18 @@ namespace Studio
         /// </summary>
         public void VerifyInfo()
         {
-            if (info.Length != 3)
+            if (info == null)
+            {
+                var newInfo = new Info[3];
+                for (int i = 0; i < 3; i++)
+                {
+                    newInfo[i] = new Info();
+                    newInfo[i].useColor = false;
+                }
+
+                info = newInfo;
+            }
+            else if (info.Length != 3)
             {
                 var newInfo = new Info[3];
 
@@ -91,46 +108,42 @@ namespace Studio
 
                 for (int i = 0; i < 3; i++)
                     if (newInfo[i] == null)
+                    {
                         newInfo[i] = new Info();
+                        newInfo[i].useColor = false;
+                    }
 
                 info = newInfo;
             }
         }
 
+        /// <summary>
+        /// Add all renderers to the rendNormal array
+        /// </summary>
+        public void PopulateRendNormalArray()
+        {
+            rendNormal = gameObject.GetComponentsInChildren<Renderer>().ToArray();
+            SetMaterialsPreview();
+        }
+
         private void SetColors(Renderer[] renderers)
         {
+            if (renderers == null)
+                return;
+
             foreach (var rend in renderers)
             {
                 foreach (var mat in rend.sharedMaterials)
                 {
-                    mat.SetColor("_Color", info[0].defColor);
-                    mat.SetColor("_Color2", info[1].defColor);
-                    mat.SetColor("_Color3", info[2].defColor);
+                    if (info[0].useColor)
+                        mat.SetColor("_Color", info[0].defColor);
+                    if (info[1].useColor)
+                        mat.SetColor("_Color2", info[1].defColor);
+                    if (info[2].useColor)
+                        mat.SetColor("_Color3", info[2].defColor);
                 }
             }
         }
 #endif
     }
-
-#if UNITY_EDITOR
-    internal class InfoVerifier : UnityEditor.AssetModificationProcessor
-    {
-        /// <summary>
-        /// Verify the Info array on saving assets
-        /// </summary>
-        /// <param name="paths"></param>
-        /// <returns></returns>
-        internal static string[] OnWillSaveAssets(string[] paths)
-        {
-            foreach (var selected in UnityEditor.Selection.gameObjects)
-            {
-                var go = PreviewShaders.GetGameObjectRoot(selected);
-                var itemComponent = go.GetComponent<ItemComponent>();
-                if (itemComponent)
-                    itemComponent.VerifyInfo();
-            }
-            return paths;
-        }
-    }
-#endif
 }
