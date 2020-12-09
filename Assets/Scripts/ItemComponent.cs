@@ -48,6 +48,11 @@ namespace Studio
             SetMaterialsPreview();
         }
 
+        private void OnDestroy()
+        {
+            SetMaterialsOriginal();
+        }
+
         public void SetMaterialsPreview()
         {
             PreviewShaders.ReplaceShadersPreview(rendNormal);

@@ -57,6 +57,10 @@ public class ChaClothesComponent : MonoBehaviour
     {
         SetMaterialsPreview();
     }
+    private void OnDestroy()
+    {
+        SetMaterialsOriginal();
+    }
 
     public void SetMaterialsPreview()
     {
