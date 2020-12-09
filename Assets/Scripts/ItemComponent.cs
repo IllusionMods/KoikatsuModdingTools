@@ -45,6 +45,7 @@ namespace Studio
 #if UNITY_EDITOR
         private void Awake()
         {
+            VerifyInfo();
             SetMaterialsPreview();
         }
 
@@ -71,6 +72,31 @@ namespace Studio
             PreviewShaders.ReplaceShadersOriginal(rendGlass);
         }
 
+        /// <summary>
+        /// Verify that the Info array has exactly three elements
+        /// </summary>
+        public void VerifyInfo()
+        {
+            if (info.Length != 3)
+            {
+                var newInfo = new Info[3];
+
+                //Copy existing data, if present
+                if (info.Length >= 1)
+                    newInfo[0] = info[0];
+                if (info.Length >= 2)
+                    newInfo[1] = info[1];
+                if (info.Length >= 3)
+                    newInfo[2] = info[2];
+
+                for (int i = 0; i < 3; i++)
+                    if (newInfo[i] == null)
+                        newInfo[i] = new Info();
+
+                info = newInfo;
+            }
+        }
+
         private void SetColors(Renderer[] renderers)
         {
             foreach (var rend in renderers)
@@ -85,4 +111,26 @@ namespace Studio
         }
 #endif
     }
+
+#if UNITY_EDITOR
+    internal class InfoVerifier : UnityEditor.AssetModificationProcessor
+    {
+        /// <summary>
+        /// Verify the Info array on saving assets
+        /// </summary>
+        /// <param name="paths"></param>
+        /// <returns></returns>
+        internal static string[] OnWillSaveAssets(string[] paths)
+        {
+            foreach (var selected in UnityEditor.Selection.gameObjects)
+            {
+                var go = PreviewShaders.GetGameObjectRoot(selected);
+                var itemComponent = go.GetComponent<ItemComponent>();
+                if (itemComponent)
+                    itemComponent.VerifyInfo();
+            }
+            return paths;
+        }
+    }
+#endif
 }
