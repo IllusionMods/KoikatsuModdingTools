@@ -7,6 +7,10 @@ This is a set of tools for creating Koikatsu mods in Unity Editor.
 3. Open the project in Unity.
 4. Try the example projects.
 
+## How to update
+1. Download the repository
+2. Copy your Mods folder from your old project to the newly extracted project
+
 ## Example projects
 Included in this set of modding tools are some examples that should illustrate how to create your own mods. Each example comes with a readme file explaining how it works and how to create your own.
 
@@ -44,7 +48,7 @@ Once you have assets assigned to the asset bundles, click Window->AssetBundle Br
 
 ## Features
 #### Shaders
-Included in this project are a set of placeholder shaders with all the properties of a vanilla game shader. Most of these are non functional and will simply display black and white textures on objects in the Scene view, though the main_item shader is close to functional. Use these shaders to set up your materials and when you build the asset bundles these shaders will be replaced by a copy of the original game shaders by an SB3UGS script.
+Included in this project are a set of placeholder shaders with all the properties of a vanilla game shader. These shaders are replaced in edit mode by the functional game shaders, and after asset bundles are built the placeholders are replaced by a copy of the original game shaders by an SB3UGS script.
 
 #### Meshes
 When .fbx files are imported by placing them within the project structure scripts run which:
@@ -60,12 +64,13 @@ Note: Generally, using High Quality compression for textures is prefered, except
 Koikatsu Modding Tools is a work in progress, please report any bugs you may find. If you are interested in contributing to development, these are the things that need to be done.
 
 * Create a pretty UI for creating list files
-* Load vanilla shaders for objects in the scene so that previews are more accurate OR edit the dummy shaders to be closer to the original
 * Write instructions and tutorials for all types of mods with pictures and explanations of all parts of the mod
-* Automatically apply color correction to textures
+* Option to apply color correction to textures
 * Automatically generate textures for low poly
 
 ## Credits
 Enimaroah: SB3UGS and updating it to support shader replacement, and also for the script which removes excess bones from imported .fbx files (for Blender .fbx compatibility)
 
 Marco: List file editor UI which I still have yet to finish
+
+Essu: Coding help and advice
