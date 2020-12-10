@@ -60,6 +60,9 @@ Normal map textures are converted to the transparent-red style instead of the tr
 
 Note: Generally, using High Quality compression for textures is prefered, except where textures extract from game files already used Normal Quality compression (DXT5, DXT1).
 
+#### Importing Asset Bundles
+It is possible with the use of uTinyRipper to import the contents of asset bundles you've created in the past, in case you would like to convert your existing mods to a format KoikatsuModdingTools can use. [See the guide](https://github.com/IllusionMods/KoikatsuModdingTools/wiki/Importing-Contents-Of-AssetBundles) on how to do so.
+
 ## Work in progress
 Koikatsu Modding Tools is a work in progress, please report any bugs you may find. If you are interested in contributing to development, these are the things that need to be done.
 
