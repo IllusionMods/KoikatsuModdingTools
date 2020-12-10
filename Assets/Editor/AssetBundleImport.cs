@@ -58,8 +58,6 @@ namespace IllusionMods.KoikatuModdingTools
                                 importedScripts[importedAsset] = guid;
                             else if (importedAsset.EndsWith(".shader"))
                                 importedShaders[importedAsset] = guid;
-                            else if (importedAsset.EndsWith(".prefab"))
-                                importedShaders[importedAsset] = guid;
                         }
                     }
                 }
