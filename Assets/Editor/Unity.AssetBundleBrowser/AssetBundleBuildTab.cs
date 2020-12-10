@@ -235,10 +235,6 @@ namespace AssetBundleBrowser
             }
 
             EditorGUILayout.Space();
-            if (GUILayout.Button("Import Asset Bundles (WIP)"))
-            {
-                EditorApplication.delayCall += delegate { AssetBundleImport.Import(Path.Combine(m_UserData.m_KoikatsuPath, "Import")); };
-            }
 
             if (GUILayout.Button("Build Test Zipmod (Current Folder)"))
             {
