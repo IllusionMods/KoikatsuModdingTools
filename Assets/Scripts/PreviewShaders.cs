@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,9 +7,9 @@ using UnityEngine.SceneManagement;
 public class PreviewShaders : UnityEditor.AssetModificationProcessor
 {
     public static readonly Dictionary<string, Shader> Shaders = new Dictionary<string, Shader>();
-    public static Texture RampGradient = TextureFromBytes(File.ReadAllBytes("Assets/Ramp.png"));
-    public static float LineWidth = 0.5f;
-    public static Color AmbientShadow = Color.black;
+    public static Texture RampGradient;
+    public static float LineWidth = 0.3f;
+    public static Color AmbientShadow = new Color(0f, 0f, 0f, 0.3f);
     public static Color LineColor = new Color(0.5f, 0.5f, 0.5f, 0f);
 
     static PreviewShaders()
@@ -21,10 +20,14 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
                 Shaders[mat.shader.name] = mat.shader;
         ab.Unload(false);
 
-        Shader.SetGlobalFloat(Shader.PropertyToID("_linewidthG"), LineWidth);
-        Shader.SetGlobalTexture(Shader.PropertyToID("_RampG"), RampGradient);
-        Shader.SetGlobalColor(Shader.PropertyToID("_ambientshadowG"), AmbientShadow);
-        Shader.SetGlobalColor(Shader.PropertyToID("_LineColorG"), LineColor);
+        ab = AssetBundle.LoadFromFile("Assets/ramp.unity3d");
+        RampGradient = ab.LoadAsset<Texture2D>("ramp_tex");
+        ab.Unload(false);
+
+        Shader.SetGlobalFloat("_linewidthG", LineWidth);
+        Shader.SetGlobalTexture("_RampG", RampGradient);
+        Shader.SetGlobalColor("_ambientshadowG", AmbientShadow);
+        Shader.SetGlobalColor("_LineColorG", LineColor);
     }
 
     /// <summary>
