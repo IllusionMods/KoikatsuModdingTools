@@ -72,8 +72,8 @@ Koikatsu Modding Tools is a work in progress, please report any bugs you may fin
 * Automatically generate textures for low poly
 
 ## Credits
-Enimaroah: SB3UGS and updating it to support shader replacement, and also for the script which removes excess bones from imported .fbx files (for Blender .fbx compatibility)
-
-Marco: List file editor UI which I still have yet to finish
-
-Essu: Coding help and advice
+Enimaroah: [SB3UGS](https://github.com/enimaroah/SB3Utility) and updating it to support shader replacement, and also for the script which removes excess bones from imported .fbx files (for Blender .fbx compatibility)<br/>
+Marco: List file editor UI which I still have yet to finish<br/>
+Essu: Coding help and advice<br/>
+[AmplifyColor](https://github.com/AmplifyCreations/AmplifyColor)<br/>
+[Unity Asset Bundle Browser](https://github.com/Unity-Technologies/AssetBundles-Browser)<br/>
