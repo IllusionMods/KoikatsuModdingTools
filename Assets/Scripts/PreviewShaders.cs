@@ -31,7 +31,25 @@ public class PreviewShaders : UnityEditor.AssetModificationProcessor
     }
 
     /// <summary>
-    /// Set all the materials in the scene back to their original. Must be called before exiting Unity and before building asset bundles or materials will become corrupt.
+    /// Revert materials to the original before a scene is saved
+    /// </summary>
+    /// <param name="paths"></param>
+    /// <returns></returns>
+    private static string[] OnWillSaveAssets(string[] paths)
+    {
+        foreach (string path in paths)
+        {
+            if (path.EndsWith(".unity"))
+            {
+                SetAllMaterialsOriginal();
+                break;
+            }
+        }
+        return paths;
+    }
+
+    /// <summary>
+    /// Set all the materials in the scene back to their original. Must be called before exiting Unity, before building asset bundles, and before saving a scene or materials will become corrupt.
     /// </summary>
     public static void SetAllMaterialsOriginal()
     {
