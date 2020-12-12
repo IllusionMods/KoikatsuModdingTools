@@ -29,7 +29,6 @@ namespace Studio
         public Renderer[] rendGlass;
 
         [Header("Configuration Info")]
-        [Space]
         public Info[] info;
         public Color defShadow = Color.white;
         public float alpha = 1f;
@@ -40,7 +39,7 @@ namespace Studio
         public float defEmissionPower;
         public float defLightCancel;
 
-        [Space]
+        [HideInInspector]
         public int setcolor;
 
 #if UNITY_EDITOR

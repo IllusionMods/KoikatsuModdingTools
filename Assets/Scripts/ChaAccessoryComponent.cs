@@ -16,8 +16,12 @@ public class ChaAccessoryComponent : MonoBehaviour
     public Color defColor04 = Color.white;
     [Header("Hair Parts")]
     public Renderer[] rendHair;
+
+    [HideInInspector]
     public bool noOutline;
+    [HideInInspector]
     public int initialize;
+    [HideInInspector]
     public int setcolor;
 
 #if UNITY_EDITOR

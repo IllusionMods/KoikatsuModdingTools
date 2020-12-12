@@ -48,8 +48,9 @@ public class ChaClothesComponent : MonoBehaviour
     public GameObject[] objSleeves02;
     public GameObject[] objSleeves03;
 
-    [Space]
+    [HideInInspector]
     public int initialize;
+    [HideInInspector]
     public int setcolor;
 
 #if UNITY_EDITOR

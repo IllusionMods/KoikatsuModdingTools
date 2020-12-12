@@ -12,7 +12,10 @@ public class ChaCustomHairComponent : MonoBehaviour
     [Range(0f, 1f)]
     public float lengthRate;
     public Color[] acsDefColor;
+
+    [HideInInspector]
     public int initialize;
+    [HideInInspector]
     public int setcolor;
 
 #if UNITY_EDITOR
