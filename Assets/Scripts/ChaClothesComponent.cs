@@ -4,48 +4,71 @@
 public class ChaClothesComponent : MonoBehaviour
 {
     [Header("Normal Parts")]
+    [Tooltip("Renderers affected by the first set of MainTex and ColorMask textures configured in the list file")]
     public Renderer[] rendNormal01;
+    [Tooltip("Renderers affected by the second set of MainTex and ColorMask textures configured in the list file")]
     public Renderer[] rendNormal02;
+    [Tooltip("Renderers affected by the third set of MainTex and ColorMask textures configured in the list file")]
     public Renderer[] rendNormal03;
 
+    [Tooltip("Whether to show the first color picker")]
     public bool useColorN01;
+    [Tooltip("Whether to show the second color picker")]
     public bool useColorN02;
+    [Tooltip("Whether to show the third color picker")]
     public bool useColorN03;
 
-    [Header("Transparent Parts")]
+    [HideInInspector]
     public Renderer[] rendAlpha01;
+    [HideInInspector]
     public Renderer[] rendAlpha02;
-
+    [HideInInspector]
     public bool useColorA01;
+    [HideInInspector]
     public bool useColorA02;
+    [HideInInspector]
     public bool useColorA03;
 
     [Header("Decorative Part (Uniform)")]
+    [Tooltip("Decoration parts used on the jacket or sailor uniform types")]
     public Renderer rendAccessory;
 
     [Header("Emblem Parts")]
+    [Tooltip("Renderer which uses the first emblem")]
     public Renderer rendEmblem01;
+    [Tooltip("Additional renderers which use the first emblem")]
     public Renderer[] exRendEmblem01;
 
     [Header("Emblem Parts 2")]
+    [Tooltip("Renderer which uses the second emblem")]
     public Renderer rendEmblem02;
+    [Tooltip("Additional renderers which use the second emblem")]
     public Renderer[] exRendEmblem02;
 
     [Header("Default Colors")]
+    [Tooltip("Default value for the first color")]
     public Color defMainColor01 = Color.white;
+    [Tooltip("Default value for the second color")]
     public Color defMainColor02 = Color.white;
+    [Tooltip("Default value for the third color")]
     public Color defMainColor03 = Color.white;
 
     [Header("Default Color (Decorative Part)")]
+    [Tooltip("Default value for the decoration color")]
     public Color defAccessoryColor = Color.white;
 
     [Header("Optional Parts")]
+    [Tooltip("Renderers which can be toggled off by the first option checkbox")]
     public GameObject[] objOpt01;
+    [Tooltip("Renderers which can be toggled off by the second option checkbox")]
     public GameObject[] objOpt02;
 
     [Header("Sleeve Parts")]
+    [Tooltip("Renderers for the first set of sleeves")]
     public GameObject[] objSleeves01;
+    [Tooltip("Renderers for the second set of sleeves")]
     public GameObject[] objSleeves02;
+    [Tooltip("Renderers for the third set of sleeves")]
     public GameObject[] objSleeves03;
 
     [HideInInspector]

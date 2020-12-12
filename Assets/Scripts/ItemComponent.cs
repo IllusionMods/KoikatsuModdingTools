@@ -10,33 +10,52 @@ namespace Studio
         [Serializable]
         public class Info
         {
+            [Tooltip("Whether to use this color")]
             public bool useColor = true;
+            [Tooltip("Default color")]
             public Color defColor = Color.white;
+            [Tooltip("Whether to allow pattern texture usage")]
             public bool usePattern = true;
+            [Tooltip("Default color of the pattern")]
             public Color defColorPattern = Color.white;
+            [Tooltip("Whether the pattern is clamped (does not tile) by default")]
             public bool defClamp = true;
+            [Tooltip("Default values which control pattern position and size.\nX: Horizontal position\nY: Vertical position\nZ: Horizontal scale\nW: Vertical scale")]
             public Vector4 defUV = Vector4.zero;
+            [Tooltip("Default pattern rotation")]
             public float defRot;
         }
 
         [Header("Normal Parts")]
+        [Tooltip("All renderers of the object")]
         public Renderer[] rendNormal;
 
         [Header("Transparent Parts")]
+        [Tooltip("Renderers affected by the alpha slider")]
         public Renderer[] rendAlpha;
 
         [Header("Glass Parts")]
+        [Tooltip("Glass renderers which have their own color picker")]
         public Renderer[] rendGlass;
 
         [Header("Configuration Info")]
+        [Tooltip("Array of information about the colors, must contain exactly 3 elements")]
         public Info[] info;
+        [Tooltip("Default shadow color")]
         public Color defShadow = Color.white;
+        [Tooltip("Default value of the alpha slider")]
         public float alpha = 1f;
+        [Tooltip("Default color of the glass renderers")]
         public Color defGlass = Color.white;
+        [Tooltip("Default line color")]
         public Color defLineColor = Color.white;
+        [Tooltip("Default line width")]
         public float defLineWidth = 1f;
+        [Tooltip("Default emission color")]
         public Color defEmissionColor = Color.white;
+        [Tooltip("Default emission power")]
         public float defEmissionPower;
+        [Tooltip("Default light cancel")]
         public float defLightCancel;
 
         [HideInInspector]

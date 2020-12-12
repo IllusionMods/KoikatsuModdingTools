@@ -4,15 +4,22 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class ChaCustomHairComponent : MonoBehaviour
 {
+    [Tooltip("Renderers controlled by the hair color")]
     public Renderer[] rendHair;
+    [Tooltip("Renderers controlled by the hair accessory color")]
     public Renderer[] rendAccessory;
+    [Tooltip("Transforms modified by the hair length slider")]
     public Transform[] trfLength;
+    [Tooltip("Default position of the hair length transforms")]
     public float[] baseLength;
+    [Tooltip("Rate at which the length slider affects positions of the transforms")]
     public float addLength;
+
+    [HideInInspector]
     [Range(0f, 1f)]
     public float lengthRate;
+    [HideInInspector]
     public Color[] acsDefColor;
-
     [HideInInspector]
     public int initialize;
     [HideInInspector]
