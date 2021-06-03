@@ -139,8 +139,10 @@ namespace IllusionMods.KoikatuModdingTools
                     zipFileName += "[" + modAuthor + "]";
                 if (modGame != "")
                     zipFileName += "[" + modGame + "]";
+                zipFileName += " ";
                 if (modName != "")
                     zipFileName += modName;
+                zipFileName = zipFileName.Trim();
             }
             else
                 zipFileName = modGUID;
