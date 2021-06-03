@@ -20,7 +20,7 @@ namespace IllusionMods.KoikatuModdingTools
             else if (path.ToLower().Contains("list/maker/") && path.ToLower().EndsWith(".csv"))
             {
                 AssetType = TextAssetType.MakerListFile;
-                MakerListfileEditor.OnEnable(path, this);
+                //MakerListfileEditor.OnEnable(path, this);
             }
             else
                 AssetType = TextAssetType.Other;
@@ -30,8 +30,8 @@ namespace IllusionMods.KoikatuModdingTools
         {
             if (AssetType == TextAssetType.Manifest)
                 ManifestEditor.OnInspectorGUI();
-            else if (AssetType == TextAssetType.MakerListFile)
-                MakerListfileEditor.OnInspectorGUI();
+            //else if (AssetType == TextAssetType.MakerListFile)
+            //    MakerListfileEditor.OnInspectorGUI();
             base.OnInspectorGUI();
         }
 
