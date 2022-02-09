@@ -6,7 +6,7 @@
   <author>IllusionMods</author>
   <description>MaterialEditorShaderExample</description>
   <website>https://github.com/IllusionMods/KoikatsuModdingTools</website>
-  <KK_MaterialEditor>
+  <MaterialEditor>
     <Shader Name="SuperSystems/Wireframe" AssetBundle="chara/shaders/wireframe.unity3d" Asset="asset_Wireframe">
       <Property Name="WireThickness" Type="Float" Range="0,800" />
       <Property Name="WireSmoothness" Type="Float" Range="0,20" />
@@ -35,6 +35,5 @@
       <Property Name="BaseColor" Type="Color" />
       <Property Name="MaxTriSize" Type="Float" Range="0,200" />
     </Shader>
-  </KK_MaterialEditor>
-  <game>Koikatsu</game>
+  </MaterialEditor>
 </manifest>
