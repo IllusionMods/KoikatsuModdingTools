@@ -86,9 +86,9 @@ Material:
     - _swim: 0
     m_Colors:
     - _Clock: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.9558824, g: 0.9558824, b: 0.9558824, a: 1}
-    - _Color2: {r: 0.4881055, g: 0.6770702, b: 0.8970588, a: 1}
-    - _Color3: {r: 0.3041738, g: 0.4085549, b: 0.7132353, a: 1}
+    - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _Color2: {r: 1, g: 1, b: 1, a: 1}
+    - _Color3: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _LineColor: {r: 0.5019999, g: 0.5019999, b: 0.5019999, a: 0}
     - _LiquidTiling: {r: 0, g: 0, b: 2, a: 2}
