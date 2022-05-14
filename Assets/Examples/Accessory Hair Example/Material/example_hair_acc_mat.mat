@@ -12,7 +12,7 @@ Material:
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2850
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -79,11 +79,11 @@ Material:
     - _rimpower: 0.2
     - _specular: 1
     m_Colors:
-    - _Color: {r: 0.6911765, g: 0.5629653, b: 0.5336289, a: 1}
-    - _Color2: {r: 0.6911765, g: 0.5629653, b: 0.5336289, a: 1}
-    - _Color3: {r: 0.6911765, g: 0.5629653, b: 0.5336289, a: 1}
+    - _Color: {r: 0.6902, g: 0.49412, b: 0.31765, a: 1}
+    - _Color2: {r: 0.62745, g: 0.47451, b: 0.45882, a: 1}
+    - _Color3: {r: 0.78824, g: 0.80784, b: 0.75294, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _LineColor: {r: 0.29019997, g: 0.20775661, b: 0.13355842, a: 1}
     - _LiquidTiling: {r: 0, g: 0, b: 2, a: 2}
     - _ShadowColor: {r: 0.8304498, g: 0.8662278, b: 0.9411765, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
