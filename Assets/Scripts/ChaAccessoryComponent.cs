@@ -40,6 +40,12 @@ public class ChaAccessoryComponent : MonoBehaviour
         SetMaterialsPreview();
     }
 
+	// having Start() gives Inspector enable/disable checkbox for the script
+	// needed because an exception in Awake() will disable the script
+	void Start()
+	{
+	}
+
     private void OnDestroy()
     {
         SetMaterialsOriginal();
@@ -47,7 +53,7 @@ public class ChaAccessoryComponent : MonoBehaviour
 
     public void SetMaterialsPreview()
     {
-        //Better handled by the ChaCustomHairComponent
+        // if Accessory Hair, let the hair MB do the preview
         if (gameObject.GetComponent<ChaCustomHairComponent>())
             return;
 
@@ -69,15 +75,18 @@ public class ChaAccessoryComponent : MonoBehaviour
 
     private void SetColors(Renderer[] renderers)
     {
+		if (renderers == null)
+			return;
         foreach (var rend in renderers)
         {
-            foreach (var mat in rend.sharedMaterials)
-            {
-                mat.SetColor("_Color", defColor01);
-                mat.SetColor("_Color2", defColor02);
-                mat.SetColor("_Color3", defColor03);
-                mat.SetColor("_Color4", defColor04);
-            }
+			if(rend != null)
+	            foreach (var mat in rend.sharedMaterials)
+	            {
+	                mat.SetColor("_Color", defColor01);
+	                mat.SetColor("_Color2", defColor02);
+	                mat.SetColor("_Color3", defColor03);
+	                mat.SetColor("_Color4", defColor04);
+	            }
         }
     }
 #endif

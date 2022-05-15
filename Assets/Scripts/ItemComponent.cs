@@ -68,6 +68,12 @@ namespace Studio
             SetMaterialsPreview();
         }
 
+		// having Start() gives Inspector enable/disable checkbox for the script
+		// needed because an exception in Awake() will disable the script
+		void Start()
+		{
+		}
+
         private void OnDestroy()
         {
             SetMaterialsOriginal();
@@ -151,15 +157,16 @@ namespace Studio
 
             foreach (var rend in renderers)
             {
-                foreach (var mat in rend.sharedMaterials)
-                {
-                    if (info[0].useColor)
-                        mat.SetColor("_Color", info[0].defColor);
-                    if (info[1].useColor)
-                        mat.SetColor("_Color2", info[1].defColor);
-                    if (info[2].useColor)
-                        mat.SetColor("_Color3", info[2].defColor);
-                }
+				if (rend != null)
+	                foreach (var mat in rend.sharedMaterials)
+	                {
+	                    if (info[0].useColor)
+	                        mat.SetColor("_Color", info[0].defColor);
+	                    if (info[1].useColor)
+	                        mat.SetColor("_Color2", info[1].defColor);
+	                    if (info[2].useColor)
+	                        mat.SetColor("_Color3", info[2].defColor);
+	                }
             }
         }
 #endif
