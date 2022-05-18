@@ -112,5 +112,14 @@ public class ChaClothesComponent : MonoBehaviour
         PreviewShaders.ReplaceShadersOriginal(objOpt01);
         PreviewShaders.ReplaceShadersOriginal(objOpt02);
     }
+
+	/// <summary>
+	/// Add all renderers to the rendNormal01 array
+	/// </summary>
+	public void PopulateRendNormal01Array()
+	{
+		rendNormal01 = gameObject.GetComponentsInChildren<Renderer>();
+		SetMaterialsPreview();
+	}
 #endif
 }

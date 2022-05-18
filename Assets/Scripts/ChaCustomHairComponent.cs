@@ -110,5 +110,14 @@ public class ChaCustomHairComponent : MonoBehaviour
         tex.LoadImage(texBytes);
         return tex;
     }
+
+	/// <summary>
+	/// Add all renderers to the rendHair array
+	/// </summary>
+	public void PopulateRendHairArray()
+	{
+		rendHair = gameObject.GetComponentsInChildren<Renderer>();
+		SetMaterialsPreview();
+	}
 #endif
 }

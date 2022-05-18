@@ -1,6 +1,5 @@
-﻿using System;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 namespace Studio
 {
@@ -146,7 +145,7 @@ namespace Studio
         /// </summary>
         public void PopulateRendNormalArray()
         {
-            rendNormal = gameObject.GetComponentsInChildren<Renderer>().ToArray();
+            rendNormal = gameObject.GetComponentsInChildren<Renderer>();
             SetMaterialsPreview();
         }
 

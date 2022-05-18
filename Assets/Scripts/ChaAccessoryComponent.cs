@@ -89,5 +89,14 @@ public class ChaAccessoryComponent : MonoBehaviour
 	            }
         }
     }
+
+	/// <summary>
+	/// Add all renderers to the rendNormal array
+	/// </summary>
+	public void PopulateRendNormalArray()
+	{
+		rendNormal = gameObject.GetComponentsInChildren<Renderer>();
+		SetMaterialsPreview();
+	}
 #endif
 }
