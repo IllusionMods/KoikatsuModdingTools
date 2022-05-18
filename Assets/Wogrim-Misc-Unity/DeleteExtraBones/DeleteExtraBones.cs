@@ -7,9 +7,8 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class DeleteExtraBones : MonoBehaviour {
 
-	//list of bones with bone weights
-	//TODO: change to a more efficient container
-	private List<Transform> weightedBones;
+	//set of bones with bone weights
+	private HashSet<Transform> weightedBones;
 
 	//list of bones to delete
 	private List<Transform> deletableBones;
@@ -24,13 +23,12 @@ public class DeleteExtraBones : MonoBehaviour {
 
 	private void Execute()
 	{
-		//make list of bones with bone weights
-		weightedBones = new List<Transform>();
+		//make set of bones with bone weights
+		weightedBones = new HashSet<Transform>();
 		foreach (SkinnedMeshRenderer rend in gameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true)) {
 			foreach (Transform bone in rend.bones) {
-				//add bone to weighted bones if not already in the list
-				if (!weightedBones.Contains (bone))
-					weightedBones.Add (bone);
+				//add bone to weighted bones if not already in the set
+				weightedBones.Add(bone);
 			}
 		}
 
