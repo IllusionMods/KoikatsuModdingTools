@@ -87,15 +87,22 @@ namespace IllusionMods.KoikatuModdingTools
         /// <param name="testMod">Whether the asset bundles will be included in the zipmod. If false, zipmod will be build with no asset bundles and asset bundles will be copied to the game folder.</param>
         private static bool BuildSingleModInternal(string projectPath, bool testMod = false)
         {
+			//manifest must be in root of the mod folder
             string manifestPath = Path.Combine(projectPath, "manifest.xml");
+
+			//special folder names that other things need to be in
             string makerListPath = Path.Combine(projectPath, @"List\Maker");
             string studioListPath = Path.Combine(projectPath, @"List\Studio");
+			string studioThumbsPath = Path.Combine(projectPath, "Studio_Thumbs");
             string mapListPath = Path.Combine(projectPath, @"List\Map");
+
             bool exampleMod = manifestPath.Contains("Examples");
 
+			//stuff that will be copied into the zipmod
             HashSet<string> modABs = new HashSet<string>();
             HashSet<string> makerListFiles = new HashSet<string>();
             HashSet<string> studioListFiles = new HashSet<string>();
+			HashSet<string> studioThumbFiles = new HashSet<string>();
             HashSet<string> mapListFiles = new HashSet<string>();
 
             if (!File.Exists(manifestPath))
@@ -171,6 +178,12 @@ namespace IllusionMods.KoikatuModdingTools
                 foreach (var file in di.GetFiles("*.csv", SearchOption.AllDirectories))
                     studioListFiles.Add(file.FullName);
 
+			//get all the studio thumbnails in the studio thumbs folder
+			di = new DirectoryInfo (studioListPath);
+			if (di.Exists)
+				foreach (var file in di.GetFiles("*.png", SearchOption.AllDirectories))
+					studioThumbFiles.Add(file.FullName);
+
             di = new DirectoryInfo(mapListPath);
             if (di.Exists)
                 foreach (var file in di.GetFiles("*.csv", SearchOption.AllDirectories))
@@ -206,6 +219,11 @@ namespace IllusionMods.KoikatuModdingTools
                 string listFolder = @"abdata\studio\info\" + ReplaceInvalidChars(modGUID.ToLower().Replace(".", "_")) + @"\" + listFileInfo.Directory.Name;
                 zipFile.AddFile(listFile, listFolder);
             }
+
+			//add studio thumbnails
+			string thumbFolder = @"abdata\studio_thumbs";
+			foreach (string thumbFile in studioThumbFiles)
+				zipFile.AddFile (thumbFile, thumbFolder);
 
             //Add map list files
             foreach (var listFile in mapListFiles)
