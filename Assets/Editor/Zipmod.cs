@@ -179,7 +179,7 @@ namespace IllusionMods.KoikatuModdingTools
                     studioListFiles.Add(file.FullName);
 
 			//get all the studio thumbnails in the studio thumbs folder
-			di = new DirectoryInfo (studioListPath);
+			di = new DirectoryInfo (studioThumbsPath);
 			if (di.Exists)
 				foreach (var file in di.GetFiles("*.png", SearchOption.AllDirectories))
 					studioThumbFiles.Add(file.FullName);
@@ -221,9 +221,8 @@ namespace IllusionMods.KoikatuModdingTools
             }
 
 			//add studio thumbnails
-			string thumbFolder = @"abdata\studio_thumbs";
 			foreach (string thumbFile in studioThumbFiles)
-				zipFile.AddFile (thumbFile, thumbFolder);
+				zipFile.AddFile (thumbFile, @"abdata\studio_thumbs");
 
             //Add map list files
             foreach (var listFile in mapListFiles)
