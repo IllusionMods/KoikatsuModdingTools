@@ -9,6 +9,7 @@ They must be named correctly; there are 3 parts to the name
 	Name (the display name of the item in the list file, not the prefab name)
 If you use the plugin to generate thumbnails, just drag them into the "Studio_Thumbs" folder and build the zipmod again.
 
+Studio Items usually use ItemComponent, but particle systems need ParticleComponent to be colorable.  See the examples.
 
 Studio items are 3D objects which are added to the Studio scene by selecting Add->Items. Studio items can be organized in to Groups and Categories for organization. You can add items to existing categories or create your own by creating the appropriate list files. These categories are organized Group->Category->Item.
 
