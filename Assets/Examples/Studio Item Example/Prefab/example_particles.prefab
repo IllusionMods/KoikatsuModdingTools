@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 198504673935111760}
   - component: {fileID: 199330012021198280}
   m_Layer: 11
-  m_Name: Particle System
+  m_Name: light shower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,6 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4352581645332196}
+  - component: {fileID: 114165518271483946}
   m_Layer: 11
   m_Name: example_particles
   m_TagString: Untagged
@@ -63,13 +64,28 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1247028672750800}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4352581645332196}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+--- !u!114 &114165518271483946
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1391756984699022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c314761ad0a72742a8aa2cd21b1e5fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleColor1:
+  - {fileID: 198504673935111760}
+  defColor01: {r: 0.66176474, g: 0.95801216, b: 1, a: 0.272}
+  setcolor: 0
 --- !u!198 &198504673935111760
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -127,7 +143,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 1038780868
+  randomSeed: 238343457
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -217,7 +233,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 0.66176474, g: 0.95801216, b: 1, a: 0.272}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -320,7 +336,7 @@ ParticleSystem:
     startSizeY:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -577,7 +593,7 @@ ParticleSystem:
     boxY: 1
     boxZ: 1
     radius:
-      value: 0.1
+      value: 0.08
       mode: 0
       spread: 0
       speed:
@@ -2519,12 +2535,12 @@ ParticleSystem:
         m_RotationOrder: 4
     maxLights: 20
   TrailModule:
-    enabled: 0
+    enabled: 1
     ratio: 1
     lifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.1
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -2562,7 +2578,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    minVertexDistance: 0.2
+    minVertexDistance: 0
     textureMode: 0
     worldSpace: 0
     dieWithParticles: 1
