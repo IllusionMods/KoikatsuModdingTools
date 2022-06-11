@@ -1,6 +1,5 @@
-﻿using System;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 namespace Studio
 {
@@ -67,6 +66,12 @@ namespace Studio
             VerifyInfo();
             SetMaterialsPreview();
         }
+
+		// having Start() gives Inspector enable/disable checkbox for the script
+		// needed because an exception in Awake() will disable the script
+		void Start()
+		{
+		}
 
         private void OnDestroy()
         {
@@ -140,7 +145,7 @@ namespace Studio
         /// </summary>
         public void PopulateRendNormalArray()
         {
-            rendNormal = gameObject.GetComponentsInChildren<Renderer>().ToArray();
+            rendNormal = gameObject.GetComponentsInChildren<Renderer>();
             SetMaterialsPreview();
         }
 
@@ -151,15 +156,16 @@ namespace Studio
 
             foreach (var rend in renderers)
             {
-                foreach (var mat in rend.sharedMaterials)
-                {
-                    if (info[0].useColor)
-                        mat.SetColor("_Color", info[0].defColor);
-                    if (info[1].useColor)
-                        mat.SetColor("_Color2", info[1].defColor);
-                    if (info[2].useColor)
-                        mat.SetColor("_Color3", info[2].defColor);
-                }
+				if (rend != null)
+	                foreach (var mat in rend.sharedMaterials)
+	                {
+	                    if (info[0].useColor)
+	                        mat.SetColor("_Color", info[0].defColor);
+	                    if (info[1].useColor)
+	                        mat.SetColor("_Color2", info[1].defColor);
+	                    if (info[2].useColor)
+	                        mat.SetColor("_Color3", info[2].defColor);
+	                }
             }
         }
 #endif

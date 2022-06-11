@@ -39,6 +39,12 @@ public class ChaCustomHairComponent : MonoBehaviour
         SetMaterialsPreview();
     }
 
+	// having Start() gives Inspector enable/disable checkbox for the script
+	// needed because an exception in Awake() will disable the script
+	void Start()
+	{
+	}
+
     private void OnDestroy()
     {
         SetMaterialsOriginal();
@@ -63,29 +69,37 @@ public class ChaCustomHairComponent : MonoBehaviour
 
     public void SetAccessoryColor()
     {
+		if (rendAccessory == null)
+			return;
+		
         foreach (var rend in rendAccessory)
-            foreach (var mat in rend.sharedMaterials)
-                mat.SetColor("_Color", Color.red);
+			if (rend != null)
+	            foreach (var mat in rend.sharedMaterials)
+	                mat.SetColor("_Color", Color.red);
     }
 
     public void SetHairMaterials(bool enabled)
     {
+		if (rendHair == null)
+			return;
+		
         foreach (var rend in rendHair)
-            foreach (var mat in rend.sharedMaterials)
-            {
-                mat.SetTexture("_HairGloss", enabled ? HairGloss : null);
+			if (rend != null)
+	            foreach (var mat in rend.sharedMaterials)
+	            {
+	                mat.SetTexture("_HairGloss", enabled ? HairGloss : null);
 
-                mat.SetColor("_Color", BaseColor);
-                mat.SetColor("_Color2", RootColor);
-                mat.SetColor("_Color3", TipColor);
+	                mat.SetColor("_Color", BaseColor);
+	                mat.SetColor("_Color2", RootColor);
+	                mat.SetColor("_Color3", TipColor);
 
-                float H;
-                float S;
-                float V;
-                Color.RGBToHSV(BaseColor, out H, out S, out V);
-                Color outlineColor = Color.HSVToRGB(H, S, Mathf.Max(V - 0.4f, 0f));
-                mat.SetColor("_LineColor", outlineColor);
-            }
+	                float H;
+	                float S;
+	                float V;
+	                Color.RGBToHSV(BaseColor, out H, out S, out V);
+	                Color outlineColor = Color.HSVToRGB(H, S, Mathf.Max(V - 0.4f, 0f));
+	                mat.SetColor("_LineColor", outlineColor);
+	            }
     }
 
     private static Texture2D TextureFromBytes(byte[] texBytes, TextureFormat format = TextureFormat.ARGB32, bool mipmaps = true)
@@ -96,5 +110,14 @@ public class ChaCustomHairComponent : MonoBehaviour
         tex.LoadImage(texBytes);
         return tex;
     }
+
+	/// <summary>
+	/// Add all renderers to the rendHair array
+	/// </summary>
+	public void PopulateRendHairArray()
+	{
+		rendHair = gameObject.GetComponentsInChildren<Renderer>();
+		SetMaterialsPreview();
+	}
 #endif
 }
