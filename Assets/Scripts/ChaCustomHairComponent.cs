@@ -1,6 +1,3 @@
-﻿using System.IO;
-using UnityEngine;
-
 [ExecuteInEditMode]
 public class ChaCustomHairComponent : MonoBehaviour
 {
@@ -18,8 +15,10 @@ public class ChaCustomHairComponent : MonoBehaviour
     [HideInInspector]
     [Range(0f, 1f)]
     public float lengthRate;
-    [HideInInspector]
+
+    [Tooltip("Required when using Rend Accessory")]
     public Color[] acsDefColor;
+
     [HideInInspector]
     public int initialize;
     [HideInInspector]
