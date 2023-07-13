@@ -1,3 +1,6 @@
+﻿using System.IO;
+using UnityEngine;
+
 [ExecuteInEditMode]
 public class ChaCustomHairComponent : MonoBehaviour
 {
