@@ -1,6 +1,8 @@
 ﻿using Ionic.Zip;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using UnityEditor;
@@ -220,9 +222,16 @@ namespace IllusionMods.KoikatuModdingTools
                 zipFile.AddFile(listFile, listFolder);
             }
 
-			//add studio thumbnails
+			//add studio thumbnails (compress PNG files before adding)
 			foreach (string thumbFile in studioThumbFiles)
-				zipFile.AddFile (thumbFile, @"abdata\studio_thumbs");
+			{
+				FileInfo thumbFileInfo = new FileInfo(thumbFile);
+				if (thumbFileInfo.Extension.ToLower() == ".png")
+				{
+					CompressImage(thumbFileInfo);
+				}
+				zipFile.AddFile(thumbFile, @"abdata\studio_thumbs");
+			}
 
             //Add map list files
             foreach (var listFile in mapListFiles)
@@ -338,6 +347,118 @@ namespace IllusionMods.KoikatuModdingTools
         public static string ReplaceInvalidChars(string filename)
         {
             return string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
+        }
+
+        /// <summary>
+        /// Compress a PNG file using pngcrush. Original file is replaced if compression results in smaller size.
+        /// </summary>
+        /// <param name="originalFileInfo">FileInfo of the original PNG file</param>
+        /// <returns>True if compression was successful (or skipped because original was smaller), false on error</returns>
+        private static bool CompressImage(FileInfo originalFileInfo)
+        {
+            var sw = Stopwatch.StartNew();
+
+            var originalFilename = originalFileInfo.FullName;
+            var crushedFilename = Path.Combine(originalFileInfo.Directory.FullName, Path.GetFileNameWithoutExtension(originalFileInfo.Name) + "-crushed.png");
+            var crushedFileInfo = new FileInfo(crushedFilename);
+            
+            try
+            {
+                // Compress using pngcrush
+                var process = BuildPngCrushProcess(originalFilename, crushedFilename);
+                
+                process.Start();
+                process.WaitForExit();
+
+                if (process.ExitCode != 0)
+                {
+                    Debug.LogWarning($"pngcrush exited with non-zero exit code ({process.ExitCode}) for [{originalFilename}]");
+                    return false;
+                }
+
+                crushedFileInfo.Refresh();
+                var crushedSize = crushedFileInfo.Length;
+                originalFileInfo.Refresh();
+                var origsize = originalFileInfo.Length;
+                
+                if (crushedSize == 0)
+                {
+                    Debug.LogWarning($"Compressed PNG size is 0 bytes somehow, keeping original file at {origsize} bytes [{originalFilename}]");
+                    return false;
+                }
+                else if (crushedSize < origsize)
+                {
+                    // Delete original file
+                    File.Delete(originalFilename);
+                    // Move crushed file to original location
+                    File.Move(crushedFilename, originalFilename);
+                    
+                    Debug.Log($"Compressed PNG from {origsize} to {crushedSize} bytes in {sw.ElapsedMilliseconds}ms. [{originalFilename}]");
+                }
+                else
+                {
+                    Debug.Log($"Compressed PNG is larger than original ({origsize} -> {crushedSize} bytes) in {sw.ElapsedMilliseconds}ms, keeping original. [{originalFilename}]");
+                }
+
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogWarning($"Failed to PNG compress [{originalFilename}] in {sw.ElapsedMilliseconds}ms, original file will be used. Error: {ex.Message}");
+                return false;
+            }
+            finally
+            {
+                // Always clean up the temp file if it exists
+                if (crushedFileInfo.Exists)
+                {
+                    try
+                    {
+                        crushedFileInfo.Delete();
+                    }
+                    catch
+                    {
+                        // Ignore cleanup errors
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Build a Process to run pngcrush with the specified input and output files.
+        /// </summary>
+        private static Process BuildPngCrushProcess(string inputFilename, string outputFilename)
+        {
+            // Look for pngcrush executable in the Tools directory
+            var toolsDir = Path.Combine(Directory.GetCurrentDirectory(), "Tools");
+            string pngcrushPath = null;
+            
+            if (Directory.Exists(toolsDir))
+            {
+                var exeFiles = Directory.GetFiles(toolsDir, "pngcrush*.exe", SearchOption.TopDirectoryOnly);
+                pngcrushPath = exeFiles.OrderByDescending(x => x).FirstOrDefault();
+            }
+            
+            // If not found as .exe, try looking for the Linux/Mac version
+            if (pngcrushPath == null)
+            {
+                // Try system pngcrush (for development on Linux/Mac)
+                pngcrushPath = "pngcrush";
+            }
+            
+            return new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = pngcrushPath,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    Arguments = string.Format("-reduce -brute \"{0}\" \"{1}\"", inputFilename, outputFilename),
+                },
+                EnableRaisingEvents = true,
+            };
         }
     }
 }
