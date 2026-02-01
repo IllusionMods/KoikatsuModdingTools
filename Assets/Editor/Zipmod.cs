@@ -404,7 +404,15 @@ namespace IllusionMods.KoikatuModdingTools
             }
             catch (System.Exception ex)
             {
-                Debug.LogWarning($"Failed to PNG compress [{originalFilename}] in {sw.ElapsedMilliseconds}ms, original file will be used. Error: {ex.Message}");
+                // Provide a helpful message if pngcrush is not found
+                if (ex is System.ComponentModel.Win32Exception || ex.Message.Contains("pngcrush"))
+                {
+                    Debug.LogWarning($"Failed to PNG compress [{originalFilename}]: pngcrush may not be installed or accessible. Please see Tools/README_PNGCRUSH.md for setup instructions. Original file will be used.");
+                }
+                else
+                {
+                    Debug.LogWarning($"Failed to PNG compress [{originalFilename}] in {sw.ElapsedMilliseconds}ms, original file will be used. Error: {ex.Message}");
+                }
                 return false;
             }
             finally
@@ -416,9 +424,10 @@ namespace IllusionMods.KoikatuModdingTools
                     {
                         crushedFileInfo.Delete();
                     }
-                    catch
+                    catch (System.Exception cleanupEx)
                     {
-                        // Ignore cleanup errors
+                        // Log cleanup errors but don't fail the compression
+                        Debug.LogWarning($"Failed to clean up temporary file [{crushedFilename}]: {cleanupEx.Message}");
                     }
                 }
             }
@@ -435,6 +444,9 @@ namespace IllusionMods.KoikatuModdingTools
             
             if (Directory.Exists(toolsDir))
             {
+                // Get all pngcrush executables and sort by filename (simple but works for most cases)
+                // Note: If multiple versions exist, the last one alphabetically will be used
+                // It's recommended to keep only one pngcrush executable in the Tools directory
                 var exeFiles = Directory.GetFiles(toolsDir, "pngcrush*.exe", SearchOption.TopDirectoryOnly);
                 pngcrushPath = exeFiles.OrderByDescending(x => x).FirstOrDefault();
             }
@@ -443,6 +455,7 @@ namespace IllusionMods.KoikatuModdingTools
             if (pngcrushPath == null)
             {
                 // Try system pngcrush (for development on Linux/Mac)
+                // This will work if pngcrush is installed system-wide
                 pngcrushPath = "pngcrush";
             }
             
