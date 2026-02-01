@@ -60,6 +60,9 @@ Normal map textures are converted to the transparent-red style instead of the tr
 
 Note: Generally, using High Quality compression for textures is prefered, except where textures extract from game files already used Normal Quality compression (DXT5, DXT1).
 
+#### PNG Compression
+PNG files (such as studio thumbnails) are automatically compressed using pngcrush when building zipmods. This reduces file sizes by 10-30% on average with no quality loss. To enable this feature, download pngcrush and place it in the Tools directory. See `Tools/README_PNGCRUSH.md` for setup instructions.
+
 #### Importing Asset Bundles
 It is possible with the use of uTinyRipper to import the contents of asset bundles you've created in the past, in case you would like to convert your existing mods to a format KoikatsuModdingTools can use. [See the guide](https://gitgoon.dev/IllusionMods/KoikatsuModdingTools/wiki/Importing-Contents-Of-AssetBundles) on how to do so.
 
