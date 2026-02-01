@@ -63,3 +63,5 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# pngcrush executables
+Tools/pngcrush*.exe
